@@ -1,0 +1,766 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum RoleName {
+  GUEST
+  AUTHOR
+  REVIEWER
+  COMMITTEE_MEMBER
+  SPONSOR
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum PermissionKey {
+  BROWSE_WEBSITE
+  REGISTER
+  SUBMIT_CONTACT_FORM
+  SUBMIT_ABSTRACT
+  EDIT_OWN_SUBMISSION
+  UPLOAD_FINAL_PAPER
+  DOWNLOAD_ACCEPTANCE_LETTER
+  VIEW_ASSIGNED_PAPERS
+  SUBMIT_REVIEW
+  MANAGE_ASSIGNED_TRACKS
+  MANAGE_CONFERENCE_CONTENT
+  MANAGE_SPEAKERS
+  MANAGE_SPONSORS
+  MANAGE_AGENDA
+  APPROVE_SUBMISSIONS
+  MANAGE_REGISTRATIONS
+  MANAGE_USERS
+  MANAGE_SETTINGS
+  FULL_ACCESS
+}
+
+enum ConferenceMode {
+  OFFLINE
+  VIRTUAL
+  HYBRID
+}
+
+enum RegistrationStatus {
+  DRAFT
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum AttendanceMode {
+  ONSITE
+  VIRTUAL
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum SubmissionStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  ACCEPTED
+  REJECTED
+  REVISION_REQUIRED
+}
+
+enum ReviewRecommendation {
+  ACCEPT
+  MINOR_REVISION
+  MAJOR_REVISION
+  REJECT
+}
+
+enum FileVisibility {
+  PRIVATE
+  PROTECTED
+  PUBLIC
+}
+
+enum NotificationChannel {
+  EMAIL
+  IN_APP
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  READ
+}
+
+model User {
+  id                 String               @id @default(uuid()) @db.Uuid
+  clerkUserId        String               @unique
+  email              String               @unique
+  firstName          String?
+  lastName           String?
+  isActive           Boolean              @default(true)
+  profile            Profile?
+  roles              UserRole[]
+  registrations      Registration[]
+  submissions        AbstractSubmission[] @relation("AuthorSubmissions")
+  reviewerAssignments ReviewerAssignment[]
+  reviews            Review[]
+  notifications      Notification[]
+  auditLogs          AuditLog[]
+  files              FileAsset[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  deletedAt          DateTime?
+
+  @@index([email])
+  @@index([clerkUserId])
+  @@index([deletedAt])
+}
+
+model Profile {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @unique @db.Uuid
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String?  @db.Uuid
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  countryId      String?  @db.Uuid
+  country        Country? @relation(fields: [countryId], references: [id])
+  title          String?
+  designation    String?
+  bio            String?
+  phone          String?
+  avatarUrl      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([countryId])
+}
+
+model Role {
+  id          String           @id @default(uuid()) @db.Uuid
+  name        RoleName         @unique
+  description String
+  users       UserRole[]
+  permissions RolePermission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Permission {
+  id          String           @id @default(uuid()) @db.Uuid
+  key         PermissionKey     @unique
+  description String
+  roles       RolePermission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model UserRole {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId    String   @db.Uuid
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, roleId])
+  @@index([roleId])
+}
+
+model RolePermission {
+  id           String     @id @default(uuid()) @db.Uuid
+  roleId       String     @db.Uuid
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permissionId String     @db.Uuid
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@unique([roleId, permissionId])
+  @@index([permissionId])
+}
+
+model Conference {
+  id          String          @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String          @unique
+  fullName    String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+  mode        ConferenceMode  @default(HYBRID)
+  venueId     String?         @db.Uuid
+  venue       Venue?          @relation(fields: [venueId], references: [id])
+  speakers    Speaker[]
+  committeeMembers CommitteeMember[]
+  tracks      Track[]
+  agendaDays  AgendaDay[]
+  packages    RegistrationPackage[]
+  sponsors    Sponsor[]
+  announcements Announcement[]
+  settings    SystemSetting[]
+  themeSettings ThemeSetting[]
+  registrations Registration[]
+  submissions AbstractSubmission[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  deletedAt   DateTime?
+
+  @@index([slug])
+  @@index([startDate, endDate])
+  @@index([deletedAt])
+}
+
+model Organization {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  website   String?
+  type      String?
+  profiles  Profile[]
+  speakers  Speaker[]
+  committeeMembers CommitteeMember[]
+  sponsors  Sponsor[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@index([name])
+  @@index([deletedAt])
+}
+
+model Speaker {
+  id             String        @id @default(uuid()) @db.Uuid
+  conferenceId   String        @db.Uuid
+  conference     Conference    @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  organizationId String?       @db.Uuid
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  name           String
+  role           String
+  topic          String
+  bio            String?
+  imageAssetId   String?       @db.Uuid
+  imageAsset     FileAsset?    @relation("SpeakerImage", fields: [imageAssetId], references: [id])
+  sortOrder      Int           @default(0)
+  isFeatured     Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  @@index([conferenceId, sortOrder])
+  @@index([name])
+  @@index([deletedAt])
+}
+
+model CommitteeMember {
+  id             String        @id @default(uuid()) @db.Uuid
+  conferenceId   String        @db.Uuid
+  conference     Conference    @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  organizationId String?       @db.Uuid
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  name           String
+  role           String
+  affiliation    String
+  email          String?
+  sortOrder      Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  @@index([conferenceId, sortOrder])
+  @@index([name])
+  @@index([deletedAt])
+}
+
+model Track {
+  id           String       @id @default(uuid()) @db.Uuid
+  conferenceId String       @db.Uuid
+  conference   Conference   @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  name         String
+  slug         String
+  description  String?
+  sessions     Session[]
+  submissions  AbstractSubmission[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  deletedAt    DateTime?
+
+  @@unique([conferenceId, slug])
+  @@index([name])
+  @@index([deletedAt])
+}
+
+model Session {
+  id          String      @id @default(uuid()) @db.Uuid
+  trackId     String      @db.Uuid
+  track       Track       @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  startsAt    DateTime
+  endsAt      DateTime
+  room        String?
+  agendaItems AgendaItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+
+  @@index([trackId, startsAt])
+  @@index([title])
+  @@index([deletedAt])
+}
+
+model AgendaDay {
+  id           String       @id @default(uuid()) @db.Uuid
+  conferenceId String       @db.Uuid
+  conference   Conference   @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  title        String
+  date         DateTime
+  sortOrder    Int          @default(0)
+  items        AgendaItem[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  deletedAt    DateTime?
+
+  @@index([conferenceId, date])
+  @@index([deletedAt])
+}
+
+model AgendaItem {
+  id          String     @id @default(uuid()) @db.Uuid
+  agendaDayId String     @db.Uuid
+  agendaDay   AgendaDay  @relation(fields: [agendaDayId], references: [id], onDelete: Cascade)
+  sessionId   String?    @db.Uuid
+  session     Session?   @relation(fields: [sessionId], references: [id])
+  title       String
+  description String?
+  startsAt    DateTime
+  endsAt      DateTime
+  location    String?
+  sortOrder   Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
+
+  @@index([agendaDayId, sortOrder])
+  @@index([sessionId])
+  @@index([startsAt])
+  @@index([deletedAt])
+}
+
+model Venue {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String
+  address     String
+  city        String
+  countryId   String?      @db.Uuid
+  country     Country?     @relation(fields: [countryId], references: [id])
+  latitude    Decimal?     @db.Decimal(9, 6)
+  longitude   Decimal?     @db.Decimal(9, 6)
+  description String?
+  conferences Conference[]
+  hotelPartners HotelPartner[]
+  travelGuides TravelGuide[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   DateTime?
+
+  @@index([city])
+  @@index([countryId])
+  @@index([deletedAt])
+}
+
+model SponsorTier {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String    @unique
+  priority    Int       @default(0)
+  description String?
+  sponsors    Sponsor[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+}
+
+model Sponsor {
+  id             String        @id @default(uuid()) @db.Uuid
+  conferenceId   String        @db.Uuid
+  conference     Conference    @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  sponsorTierId  String        @db.Uuid
+  sponsorTier    SponsorTier   @relation(fields: [sponsorTierId], references: [id])
+  organizationId String?       @db.Uuid
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  name           String
+  focus          String
+  website        String?
+  logoAssetId    String?       @db.Uuid
+  logoAsset      FileAsset?    @relation("SponsorLogo", fields: [logoAssetId], references: [id])
+  sortOrder      Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  @@index([conferenceId, sortOrder])
+  @@index([sponsorTierId])
+  @@index([name])
+  @@index([deletedAt])
+}
+
+model RegistrationPackage {
+  id            String         @id @default(uuid()) @db.Uuid
+  conferenceId  String         @db.Uuid
+  conference    Conference     @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  name          String
+  description   String?
+  attendanceMode AttendanceMode
+  priceCents    Int
+  currency      String         @default("USD")
+  registrations Registration[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
+
+  @@index([conferenceId])
+  @@index([attendanceMode])
+  @@index([deletedAt])
+  @@unique([conferenceId, name])
+}
+
+model Registration {
+  id                    String             @id @default(uuid()) @db.Uuid
+  conferenceId          String             @db.Uuid
+  conference            Conference         @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  userId                String?            @db.Uuid
+  user                  User?              @relation(fields: [userId], references: [id])
+  registrationPackageId String             @db.Uuid
+  registrationPackage   RegistrationPackage @relation(fields: [registrationPackageId], references: [id])
+  fullName              String
+  email                 String
+  organization          String?
+  countryId             String?            @db.Uuid
+  country               Country?           @relation(fields: [countryId], references: [id])
+  status                RegistrationStatus @default(PENDING)
+  payments              Payment[]
+  invoices              Invoice[]
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  deletedAt             DateTime?
+
+  @@index([conferenceId, status])
+  @@index([email])
+  @@index([userId])
+  @@index([deletedAt])
+}
+
+model Payment {
+  id             String        @id @default(uuid()) @db.Uuid
+  registrationId String        @db.Uuid
+  registration   Registration  @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  provider       String
+  providerRef    String?
+  amountCents    Int
+  currency       String        @default("USD")
+  status         PaymentStatus @default(PENDING)
+  paidAt         DateTime?
+  invoice        Invoice?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  @@index([registrationId])
+  @@index([status])
+  @@index([providerRef])
+}
+
+model Invoice {
+  id             String       @id @default(uuid()) @db.Uuid
+  registrationId String       @db.Uuid
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  paymentId      String?      @unique @db.Uuid
+  payment        Payment?     @relation(fields: [paymentId], references: [id])
+  invoiceNumber  String       @unique
+  amountCents    Int
+  currency       String       @default("USD")
+  issuedAt       DateTime     @default(now())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@index([registrationId])
+}
+
+model AbstractSubmission {
+  id            String           @id @default(uuid()) @db.Uuid
+  conferenceId  String           @db.Uuid
+  conference    Conference       @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  authorId      String           @db.Uuid
+  author        User             @relation("AuthorSubmissions", fields: [authorId], references: [id])
+  trackId       String?          @db.Uuid
+  track         Track?           @relation(fields: [trackId], references: [id])
+  title         String
+  abstractText  String
+  keywords      String[]
+  status        SubmissionStatus @default(SUBMITTED)
+  paper         Paper?
+  assignments   ReviewerAssignment[]
+  reviews       Review[]
+  files         FileAsset[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  deletedAt     DateTime?
+
+  @@index([conferenceId, status])
+  @@index([authorId])
+  @@index([trackId])
+  @@index([title])
+  @@index([deletedAt])
+}
+
+model Paper {
+  id                   String             @id @default(uuid()) @db.Uuid
+  abstractSubmissionId String             @unique @db.Uuid
+  abstractSubmission   AbstractSubmission @relation(fields: [abstractSubmissionId], references: [id], onDelete: Cascade)
+  finalFileAssetId     String?            @unique @db.Uuid
+  finalFileAsset       FileAsset?         @relation("FinalPaperFile", fields: [finalFileAssetId], references: [id])
+  title                String
+  status               SubmissionStatus   @default(DRAFT)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  deletedAt            DateTime?
+}
+
+model ReviewerAssignment {
+  id                   String             @id @default(uuid()) @db.Uuid
+  reviewerId           String             @db.Uuid
+  reviewer             User               @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  abstractSubmissionId String             @db.Uuid
+  abstractSubmission   AbstractSubmission @relation(fields: [abstractSubmissionId], references: [id], onDelete: Cascade)
+  dueAt                DateTime?
+  completedAt          DateTime?
+  reviews              Review[]
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  deletedAt            DateTime?
+
+  @@unique([reviewerId, abstractSubmissionId])
+  @@index([abstractSubmissionId])
+  @@index([dueAt])
+}
+
+model Review {
+  id                   String               @id @default(uuid()) @db.Uuid
+  reviewerId           String               @db.Uuid
+  reviewer             User                 @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  abstractSubmissionId String               @db.Uuid
+  abstractSubmission   AbstractSubmission   @relation(fields: [abstractSubmissionId], references: [id], onDelete: Cascade)
+  assignmentId         String?              @db.Uuid
+  assignment           ReviewerAssignment?  @relation(fields: [assignmentId], references: [id])
+  recommendation       ReviewRecommendation
+  comments             String
+  scores               ReviewScore[]
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  deletedAt            DateTime?
+
+  @@index([reviewerId])
+  @@index([abstractSubmissionId])
+  @@index([recommendation])
+}
+
+model ReviewScore {
+  id        String   @id @default(uuid()) @db.Uuid
+  reviewId  String   @db.Uuid
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  criterion String
+  score     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([reviewId, criterion])
+}
+
+model Announcement {
+  id           String     @id @default(uuid()) @db.Uuid
+  conferenceId String     @db.Uuid
+  conference   Conference @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  title        String
+  content      String
+  publishedAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?
+
+  @@index([conferenceId, publishedAt])
+  @@index([title])
+  @@index([deletedAt])
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  email     String
+  category  String
+  message   String
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@index([email])
+  @@index([category])
+  @@index([createdAt])
+}
+
+model Notification {
+  id        String              @id @default(uuid()) @db.Uuid
+  userId    String?             @db.Uuid
+  user      User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel   NotificationChannel
+  status    NotificationStatus  @default(PENDING)
+  subject   String
+  body      String
+  sentAt    DateTime?
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  @@index([userId, status])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @db.Uuid
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  entity    String?
+  entityId  String?
+  ipAddress String?
+  userAgent String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+model FileAsset {
+  id                   String              @id @default(uuid()) @db.Uuid
+  ownerId              String?             @db.Uuid
+  owner                User?               @relation(fields: [ownerId], references: [id])
+  abstractSubmissionId String?             @db.Uuid
+  abstractSubmission   AbstractSubmission? @relation(fields: [abstractSubmissionId], references: [id])
+  storageProvider      String
+  storageKey           String              @unique
+  originalName         String
+  mimeType             String
+  sizeBytes            Int
+  visibility           FileVisibility      @default(PRIVATE)
+  speakerImages        Speaker[]           @relation("SpeakerImage")
+  sponsorLogos         Sponsor[]           @relation("SponsorLogo")
+  finalPaper           Paper?              @relation("FinalPaperFile")
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  deletedAt            DateTime?
+
+  @@index([ownerId])
+  @@index([abstractSubmissionId])
+  @@index([mimeType])
+  @@index([deletedAt])
+}
+
+model Country {
+  id            String         @id @default(uuid()) @db.Uuid
+  iso2          String         @unique
+  name          String         @unique
+  profiles      Profile[]
+  venues        Venue[]
+  registrations Registration[]
+  hotelPartners HotelPartner[]
+  travelGuides  TravelGuide[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model HotelPartner {
+  id          String   @id @default(uuid()) @db.Uuid
+  venueId     String?  @db.Uuid
+  venue       Venue?   @relation(fields: [venueId], references: [id])
+  countryId   String?  @db.Uuid
+  country     Country? @relation(fields: [countryId], references: [id])
+  name        String
+  website     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  @@index([venueId])
+  @@index([countryId])
+  @@index([deletedAt])
+}
+
+model TravelGuide {
+  id          String   @id @default(uuid()) @db.Uuid
+  venueId     String?  @db.Uuid
+  venue       Venue?   @relation(fields: [venueId], references: [id])
+  countryId   String?  @db.Uuid
+  country     Country? @relation(fields: [countryId], references: [id])
+  title       String
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  @@index([title])
+  @@index([venueId])
+  @@index([deletedAt])
+}
+
+model FAQ {
+  id        String   @id @default(uuid()) @db.Uuid
+  question  String
+  answer    String
+  category  String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@index([category, sortOrder])
+  @@index([deletedAt])
+}
+
+model SystemSetting {
+  id           String      @id @default(uuid()) @db.Uuid
+  conferenceId String?     @db.Uuid
+  conference   Conference? @relation(fields: [conferenceId], references: [id])
+  key          String
+  value        Json
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@unique([conferenceId, key])
+  @@index([key])
+}
+
+model ThemeSetting {
+  id           String      @id @default(uuid()) @db.Uuid
+  conferenceId String?     @db.Uuid
+  conference   Conference? @relation(fields: [conferenceId], references: [id])
+  name         String
+  tokens       Json
+  isActive     Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([conferenceId, isActive])
+  @@index([name])
+  @@unique([conferenceId, name])
+}
