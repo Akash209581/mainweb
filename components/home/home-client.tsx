@@ -224,13 +224,10 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
               </div>
 
               <div className="aspect-video rounded-xl overflow-hidden border border-white/10 relative">
-                <Image
-                  src={heroImage}
+                <img
+                  src={`/ICGIT${heroImage}`}
                   alt="ICGIT 2026"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
 
@@ -316,12 +313,10 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
               {paragraph2}
             </p>
             <div className="rounded-xl overflow-hidden border border-white/10 relative h-52">
-              <Image
-                src={aboutImage}
+              <img
+                src={`/ICGIT${aboutImage}`}
                 alt="Conference venue"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-center"
+                className="w-full h-full object-cover object-center"
               />
             </div>
           </div>
@@ -546,12 +541,10 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
           </div>
 
           <div className="rounded-2xl border border-white/10 overflow-hidden h-72 relative group">
-            <Image
+            <img
               src="https://maps.geoapify.com/v1/staticmap?style=dark-matter&width=800&height=400&center=lonlat:55.2891,25.2141&zoom=15&marker=lonlat:55.2891,25.2141;color:%238b5cf6;size:large&apiKey=a5027e75e22649eb89d1a3c61d3b5e76"
               alt="Dubai World Trade Centre location map"
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             {/* Fallback gradient background in case image fails */}
             <div className="absolute inset-0 bg-gradient-to-br from-violet-900/60 via-slate-900/80 to-indigo-900/60 -z-10" />
