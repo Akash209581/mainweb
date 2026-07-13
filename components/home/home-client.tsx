@@ -691,7 +691,7 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     <div
       className="relative min-h-screen"
       style={{
-        backgroundImage: "url('/globe_bg.png')",
+        backgroundImage: "url('/ICGIT/globe_bg.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
