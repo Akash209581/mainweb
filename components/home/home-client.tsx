@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/buttons/button";
 import { CountdownCard } from "@/components/countdown/countdown-card";
-import Image from "next/image";
 import { submitContactAction } from "@/actions/contact.actions";
 
 /* ------------------------------------------------------------------ */

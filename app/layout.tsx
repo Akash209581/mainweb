@@ -9,6 +9,7 @@ import { DynamicTheme } from "@/components/theme/dynamic-theme";
 import { CONFERENCE } from "@/constants/conference";
 import { prisma } from "@/lib/prisma/client";
 import { memoize } from "@/lib/cache";
+import { ClientBlocker } from "@/components/security/client-blocker";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -89,6 +90,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className="min-h-screen antialiased">
         <AuthProvider>
+          <ClientBlocker />
           <ClientParticles />
           <Header items={menuItems} />
           <main>{children}</main>
