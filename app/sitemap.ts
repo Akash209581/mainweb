@@ -18,7 +18,7 @@ const routes = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({
-    url: `https://icgit2026.org${route}`,
+    url: `https://hanscinovum.com/ICGIT${route}`,
     lastModified: new Date("2026-07-03"),
     changeFrequency: "weekly",
     priority: route === "" ? 1 : 0.8

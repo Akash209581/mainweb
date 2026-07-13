@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/"
     },
-    sitemap: "https://icgit2026.org/sitemap.xml"
+    sitemap: "https://hanscinovum.com/ICGIT/sitemap.xml"
   };
 }

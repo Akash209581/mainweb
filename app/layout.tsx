@@ -12,7 +12,7 @@ import { memoize } from "@/lib/cache";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://icgit2026.org"),
+  metadataBase: new URL("https://hanscinovum.com/ICGIT"),
   title: {
     default: `${CONFERENCE.name} | ${CONFERENCE.fullName}`,
     template: `%s | ${CONFERENCE.name}`
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: CONFERENCE.fullName,
     description:
       "Hybrid conference in Dubai for global innovation, technology research, industry collaboration, and policy dialogue.",
-    url: "https://icgit2026.org",
+    url: "https://hanscinovum.com/ICGIT",
     siteName: CONFERENCE.name,
     locale: "en_US",
     type: "website"
