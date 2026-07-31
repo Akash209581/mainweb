@@ -121,40 +121,48 @@ export default function VenuePage() {
                 </GlassCard>
               </div>
 
-              {/* Right Column: High-tech Map Placeholder */}
+              {/* Right Column: Interactive Map Box */}
               <div className="space-y-6">
-                <GlassCard className="border-accent/35 bg-gradient-to-tr from-accent/5 to-transparent relative overflow-hidden min-h-[300px] flex flex-col justify-between p-6">
+                <GlassCard className="border-accent/35 bg-gradient-to-tr from-accent/5 to-transparent relative overflow-hidden flex flex-col justify-between p-6 h-full min-h-[450px]">
                   {/* Grid Graphic */}
                   <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(124,92,255,0.08),transparent)] pointer-events-none" />
                   
-                  <div className="flex justify-between items-start z-10">
+                  <div className="flex justify-between items-start z-10 mb-4">
                     <div className="flex items-center gap-2">
                       <MapPin className="size-5 text-accent animate-bounce" />
                       <div>
-                        <h4 className="font-heading text-sm font-bold text-foreground">Coordinates</h4>
+                        <h4 className="font-heading text-sm font-bold text-foreground">Dubai World Trade Centre</h4>
                         <span className="text-[10px] text-muted font-mono">25.2285° N, 55.2891° E</span>
                       </div>
                     </div>
-                    <span className="rounded bg-success/15 px-2 py-0.5 border border-success/30 text-[9px] font-bold text-success uppercase tracking-wider">Active</span>
+                    <span className="rounded bg-success/15 px-2 py-0.5 border border-success/30 text-[9px] font-bold text-success uppercase tracking-wider">Live Map</span>
                   </div>
 
-                  {/* Stylized UI map layout */}
-                  <div className="my-8 border border-dashed border-border/40 rounded-lg p-5 bg-surface/20 relative z-10">
-                    <div className="flex items-center justify-between text-xs text-muted mb-2">
-                      <span>SHEIKH ZAYED RD</span>
-                      <span className="font-mono text-[10px]">L1 METRO</span>
-                    </div>
-                    <div className="h-1 bg-border/20 rounded-full w-full relative mb-4">
-                      <div className="absolute left-1/3 top-0 h-1 w-8 bg-accent rounded-full animate-pulse" />
-                    </div>
-                    <p className="text-[10px] text-muted leading-relaxed font-mono">
-                      DWTC Metro Station, Red Line. Directly connects to Terminal 1 & 3 of Dubai International Airport (DXB).
-                    </p>
+                  {/* Interactive Embedded Google Map */}
+                  <div className="relative z-10 w-full h-[300px] sm:h-[340px] rounded-lg border border-border/40 overflow-hidden shadow-inner bg-surface/40">
+                    <iframe
+                      title="Dubai World Trade Centre Location Map"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                      src="https://maps.google.com/maps?q=Dubai%20World%20Trade%20Centre,%20Dubai&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                      className="w-full h-full grayscale-[20%] contrast-[1.05] opacity-95 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                    />
                   </div>
 
-                  <div className="z-10 flex justify-between items-end border-t border-border/20 pt-4">
-                    <span className="text-[10px] text-muted uppercase font-mono">Dubai World Trade Centre</span>
-                    <span className="text-[10px] font-semibold text-accent uppercase tracking-wider">Open in Google Maps</span>
+                  <div className="z-10 flex justify-between items-end border-t border-border/20 pt-4 mt-4">
+                    <span className="text-[10px] text-muted uppercase font-mono">Sheikh Zayed Rd, Dubai, UAE</span>
+                    <a
+                      href="https://maps.google.com/?q=Dubai+World+Trade+Centre"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-semibold text-accent hover:underline uppercase tracking-wider flex items-center gap-1"
+                    >
+                      Open in Google Maps &rarr;
+                    </a>
                   </div>
                 </GlassCard>
               </div>

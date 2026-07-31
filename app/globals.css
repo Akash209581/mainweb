@@ -64,6 +64,10 @@ html {
   scroll-behavior: smooth;
 }
 
+section[id] {
+  scroll-margin-top: 140px;
+}
+
 body {
   min-width: 320px;
   overflow-x: hidden;

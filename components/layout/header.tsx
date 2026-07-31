@@ -30,9 +30,33 @@ export function Header({ items = NAVIGATION_ITEMS }: HeaderProps) {
     if (href.startsWith("/#") && pathname === "/") {
       e.preventDefault();
       const id = href.replace("/#", "");
+      if (id === "home") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.history.pushState(null, "", href);
+        return;
+      }
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        const headerHeight = 80;
+        const viewportHeight = window.innerHeight;
+        const rect = element.getBoundingClientRect();
+        const elementTop = window.pageYOffset + rect.top;
+        const elementHeight = rect.height;
+        const availableHeight = viewportHeight - headerHeight;
+
+        let targetY: number;
+        if (elementHeight > 0 && elementHeight < availableHeight) {
+          // Center the section neatly within the available visible space below fixed header
+          targetY = elementTop - headerHeight - (availableHeight - elementHeight) / 2;
+        } else {
+          // For taller sections, offset downward so section title rests comfortably in the middle view area
+          targetY = elementTop - headerHeight - 120;
+        }
+
+        window.scrollTo({
+          top: Math.max(0, targetY),
+          behavior: "smooth"
+        });
         window.history.pushState(null, "", href);
       }
     }

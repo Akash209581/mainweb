@@ -539,28 +539,28 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 overflow-hidden h-72 relative group">
-            <img
-              src="https://maps.geoapify.com/v1/staticmap?style=dark-matter&width=800&height=400&center=lonlat:55.2891,25.2141&zoom=15&marker=lonlat:55.2891,25.2141;color:%238b5cf6;size:large&apiKey=a5027e75e22649eb89d1a3c61d3b5e76"
-              alt="Dubai World Trade Centre location map"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          <div className="rounded-2xl border border-white/10 overflow-hidden h-80 relative group bg-surface/30">
+            <iframe
+              title="Dubai World Trade Centre location map"
+              src="https://maps.google.com/maps?q=Dubai%20World%20Trade%20Centre,%20Dubai&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              className="w-full h-full border-0 grayscale-[25%] contrast-[1.05] opacity-90 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500"
+              loading="lazy"
+              allowFullScreen
             />
-            {/* Fallback gradient background in case image fails */}
-            <div className="absolute inset-0 bg-gradient-to-br from-violet-900/60 via-slate-900/80 to-indigo-900/60 -z-10" />
 
             {/* Overlay card */}
-            <div className="absolute inset-0 flex flex-col justify-end p-5">
-              <div className="rounded-xl bg-black/50 backdrop-blur-md border border-white/10 p-4 flex items-center justify-between gap-4">
+            <div className="absolute bottom-4 left-4 right-4 pointer-events-none z-10">
+              <div className="rounded-xl bg-slate-950/80 backdrop-blur-md border border-white/15 p-4 flex items-center justify-between gap-4 pointer-events-auto shadow-2xl">
                 <div>
                   <p className="text-[10px] text-violet-400 font-bold uppercase tracking-wider mb-1">📍 Venue Location</p>
                   <p className="text-white font-semibold text-sm">Dubai World Trade Centre</p>
-                  <p className="text-white/50 text-[11px] mt-0.5">Sheikh Zayed Rd, Trade Centre 2, Dubai, UAE</p>
+                  <p className="text-white/60 text-[11px] mt-0.5">Sheikh Zayed Rd, Trade Centre 2, Dubai, UAE</p>
                 </div>
                 <a
                   href="https://maps.google.com/?q=Dubai+World+Trade+Centre"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 rounded-lg bg-violet-600 hover:bg-violet-500 transition-colors px-3 py-2 text-white text-[11px] font-bold whitespace-nowrap"
+                  className="shrink-0 rounded-lg bg-violet-600 hover:bg-violet-500 transition-colors px-3.5 py-2 text-white text-[11px] font-bold whitespace-nowrap shadow-lg hover-lift"
                 >
                   Get Directions &rarr;
                 </a>
