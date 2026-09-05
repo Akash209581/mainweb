@@ -149,7 +149,7 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
   /* ------------------------------------------------------------------ */
 
   function renderHero(fields: Record<string, string>) {
-    const badge = fields.badge || "★ December 8\u201310, 2026 | Dubai, UAE";
+    const badge = fields.badge || "DECEMBER 8–10, 2026  •  DUBAI, UAE";
     const title = fields.title || "8th International Conference on";
     const titleColor = fields.titleColor || "Global Innovation & Technology";
     const description = fields.description || "Bringing together 2,000+ visionaries, researchers, and industry leaders from 80+ countries to shape the future of global innovation and emerging technologies.";
@@ -157,87 +157,48 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     const ctaLink1 = fields.ctaLink1 || "/abstracts";
     const ctaText2 = fields.ctaText2 || "Register Now";
     const ctaLink2 = fields.ctaLink2 || "/registration";
-    const heroImage = fields.heroImage || "/new_hero_banner.png";
+    const heroImage = fields.heroImage || "/about_banner.png";
 
     return (
-      <section
-        id="home"
-        key="hero"
-        className="min-h-[92vh] flex items-center pt-28 sm:pt-36"
-      >
-        <div className="container grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-          {/* Left column */}
-          <div>
-            <span className="inline-flex rounded-full border border-violet-500/40 bg-violet-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-violet-300 mb-6 block w-fit">
-              {badge}
+      <section id="home" key="hero" className="home-hero flex items-center pt-20">
+        <div className="container relative z-10 grid items-start gap-12 py-0 lg:grid-cols-[0.92fr_1.08fr] lg:py-0">
+          <div className="max-w-2xl">
+            <span className="mb-7 inline-flex w-fit items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-violet-400">
+              <CalendarDays className="mr-2 size-3.5 text-amber-600" /> {badge}
             </span>
-
-            <h1 className="font-heading text-4xl font-extrabold sm:text-5xl lg:text-6xl leading-tight text-white">
+            <h1 className="font-heading text-5xl font-bold leading-[0.98] text-white sm:text-6xl lg:text-[4.25rem]">
               {title}
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-400 to-blue-400 mt-1">
-                {titleColor}
-              </span>
+              <span className="mt-2 block text-violet-400">{titleColor}</span>
             </h1>
-
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/60">
-              {description}
-            </p>
-
-            <div className="mt-8 space-y-3 text-sm text-white/60">
-              <p className="flex items-center gap-2">
-                <MapPin className="size-4 text-violet-400 shrink-0" /> Dubai World Trade Centre, UAE
-              </p>
-              <p className="flex items-center gap-2">
-                <CalendarDays className="size-4 text-violet-400 shrink-0" /> December 8\u201310, 2026
-              </p>
-              <p className="flex items-center gap-2">
-                <Globe className="size-4 text-violet-400 shrink-0" /> Hybrid Event (Onsite &amp; Virtual)
-              </p>
+            <div className="my-7 h-px w-20 bg-amber-500" />
+            <p className="max-w-xl text-sm leading-7 text-white/60 sm:text-base">{description}</p>
+            <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-white/60">
+              <span className="flex items-center gap-2"><MapPin className="size-4 text-amber-600" /> Dubai World Trade Centre, UAE</span>
+              <span className="flex items-center gap-2"><CalendarDays className="size-4 text-amber-600" /> December 8–10, 2026</span>
+              <span className="flex items-center gap-2"><Globe className="size-4 text-amber-600" /> Hybrid Event</span>
             </div>
-
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Button asChild size="lg" className="bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-lg shadow-amber-500/30 border-0">
-                <Link href={ctaLink1}>
-                  <Presentation className="size-4 mr-2" /> {ctaText1}
-                </Link>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Button asChild size="lg" className="bg-violet-600 font-bold text-white shadow-lg shadow-violet-600/30">
+                <Link href={ctaLink2}>{ctaText2} <ArrowRight className="ml-2 size-4" /></Link>
               </Button>
-              <Button asChild size="lg" className="bg-violet-600 hover:bg-violet-500 text-white font-bold shadow-lg shadow-violet-600/30 border-0">
-                <Link href={ctaLink2}>
-                  {ctaText2} <ArrowRight className="size-4 ml-2" />
-                </Link>
+              <Button asChild size="lg" variant="outline" className="border-border/70 bg-white/70 font-semibold text-foreground hover:bg-white">
+                <Link href={ctaLink1}><Presentation className="mr-2 size-4" /> {ctaText1}</Link>
               </Button>
             </div>
           </div>
 
-          {/* Right column — info card */}
-          <div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-5">
-              <div className="flex justify-between items-start border-b border-white/10 pb-4">
-                <div>
-                  <h3 className="font-heading text-lg font-bold text-white">ICGIT 2026</h3>
-                  <p className="text-[11px] text-white/40 uppercase tracking-wider font-semibold mt-0.5">Global Innovation &amp; Technology</p>
+          <div className="relative lg:-mr-16">
+            <div className="hero-art relative overflow-hidden border-l-8 border-amber-500/70 bg-violet-950">
+              <img src={`/ICGIT${heroImage}`} alt="ICGIT 2026 conference experience" className="aspect-[1.2/0.86] w-full object-cover object-center" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-violet-950/35 via-transparent to-transparent" />
+            </div>
+            <div className="home-stat-bar absolute -bottom-8 left-8 right-4 grid grid-cols-2 gap-px rounded-xl bg-violet-950 p-4 text-white sm:grid-cols-4 sm:p-5">
+              {[["2,000+", "Attendees"], ["80+", "Countries"], ["120+", "Speakers"], ["200+", "Organizations"]].map(([value, label]) => (
+                <div key={label} className="border-white/20 px-3 py-2 text-center sm:border-r last:border-0">
+                  <p className="font-heading text-2xl font-bold text-white">{value}</p>
+                  <p className="mt-1 text-[10px] uppercase tracking-wider text-white/60">{label}</p>
                 </div>
-                <span className="text-[10px] text-violet-400 font-mono bg-violet-400/10 px-2 py-0.5 rounded border border-violet-400/30 font-bold">
-                  DUBAI
-                </span>
-              </div>
-
-              <div className="aspect-video rounded-xl overflow-hidden border border-white/10 relative">
-                <img
-                  src={`/ICGIT${heroImage}`}
-                  alt="ICGIT 2026"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 text-center">
-                {[["2000+", "Attendees"], ["80+", "Countries"], ["120+", "Speakers"]].map(([val, lbl]) => (
-                  <div key={lbl} className="bg-white/5 border border-white/10 p-2.5 rounded-lg">
-                    <p className="text-lg font-black text-white">{val}</p>
-                    <p className="text-[9px] uppercase tracking-wider font-bold text-white/40">{lbl}</p>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -688,19 +649,11 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
 
   return (
     <div
-      className="relative min-h-screen"
+      className="conference-home relative min-h-screen"
       style={{
-        backgroundImage: "url('/ICGIT/globe_bg.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-        backgroundRepeat: "no-repeat"
+        backgroundImage: "radial-gradient(circle at 80% 20%, rgb(242 232 211 / 0.35), transparent 24rem)"
       }}
     >
-      {/* Dark overlay to keep text readable while globe stays visible */}
-      <div className="pointer-events-none fixed inset-0 bg-[#050818]/65 z-0" />
-
-      {/* Page content sits above the overlay */}
       <div className="relative z-10 space-y-0 pb-24">
         {sectionsList.map((sec) => {
           if (sec.visible === false) return null;

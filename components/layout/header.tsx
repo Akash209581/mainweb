@@ -67,16 +67,17 @@ export function Header({ items = NAVIGATION_ITEMS }: HeaderProps) {
       className={cn(
         "fixed inset-x-0 top-0 z-50 border-b transition duration-300",
         scrolled
-          ? "border-border/45 bg-background/80 shadow-soft backdrop-blur-2xl"
-          : "border-transparent bg-background/35 backdrop-blur-lg"
+          ? "border-border/60 bg-white/95 shadow-soft backdrop-blur-2xl"
+          : "border-transparent bg-white/90 backdrop-blur-lg"
       )}
     >
       <div className="container flex h-20 items-center justify-between gap-4">
-        <Link href="/" className="focus-ring rounded-md" aria-label={`${CONFERENCE.name} home`}>
-          <span className="block font-heading text-xl font-bold text-foreground">
-            {CONFERENCE.name}
+        <Link href="/" className="focus-ring flex items-center gap-3 rounded-md" aria-label={`${CONFERENCE.name} home`}>
+          <span className="grid size-10 place-items-center rounded-full border border-amber-500/50 text-xl text-amber-600">✳</span>
+          <span>
+          <span className="block font-heading text-xl font-bold text-foreground">{CONFERENCE.name}</span>
+          <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-muted sm:block">Global Innovation &amp; Technology</span>
           </span>
-          <span className="hidden text-xs text-muted sm:block">{CONFERENCE.mode}</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
@@ -98,7 +99,7 @@ export function Header({ items = NAVIGATION_ITEMS }: HeaderProps) {
 
         <div className="hidden items-center gap-3 lg:flex">
           <Button asChild size="sm" className="bg-violet-600 hover:bg-violet-500 text-white border-0 font-bold">
-            <Link href="/registration">Register Now</Link>
+            <Link href="/registration">Register Now <span aria-hidden="true">→</span></Link>
           </Button>
           <Button asChild variant="ghost" size="icon" aria-label="User profile">
             <Link href="/profile">

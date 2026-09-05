@@ -12,7 +12,7 @@ const resourceLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/40 bg-surface/35">
+    <footer className="border-t border-border/40 bg-[#f7f4ee]">
       <div className="container grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_0.8fr_1fr]">
         <div>
           <Link href="/" className="font-heading text-2xl font-bold text-foreground">

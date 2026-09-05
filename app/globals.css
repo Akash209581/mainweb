@@ -4,18 +4,18 @@
 
 :root,
 [data-theme="tech-ai"] {
-  --font-outfit: Outfit, Inter, system-ui, sans-serif;
-  --font-inter: Inter, system-ui, sans-serif;
-  --color-background: 5 10 24;
-  --color-surface: 12 18 38;
-  --color-card: 17 24 49;
-  --color-border: 89 105 158;
-  --color-text-primary: 245 248 255;
-  --color-text-secondary: 177 188 218;
-  --color-primary: 124 92 255;
-  --color-secondary: 30 144 255;
-  --color-accent: 30 213 255;
-  --color-glow: 92 133 255;
+  --font-outfit: Georgia, "Times New Roman", serif;
+  --font-inter: "Trebuchet MS", Verdana, sans-serif;
+  --color-background: 255 254 251;
+  --color-surface: 250 248 244;
+  --color-card: 255 255 255;
+  --color-border: 216 207 194;
+  --color-text-primary: 21 25 48;
+  --color-text-secondary: 83 86 111;
+  --color-primary: 43 32 101;
+  --color-secondary: 54 43 121;
+  --color-accent: 194 145 54;
+  --color-glow: 229 214 188;
   --color-success: 34 197 94;
   --color-warning: 245 158 11;
   --color-danger: 248 113 113;
@@ -71,10 +71,7 @@ section[id] {
 body {
   min-width: 320px;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at top left, rgb(var(--color-glow) / 0.22), transparent 34rem),
-    radial-gradient(circle at bottom right, rgb(var(--color-accent) / 0.13), transparent 26rem),
-    rgb(var(--color-background));
+  background: rgb(var(--color-background));
   color: rgb(var(--color-text-primary));
   font-family: var(--font-inter), sans-serif;
 }
@@ -114,10 +111,72 @@ a {
 }
 
 body {
-  user-select: none !important;
+  user-select: auto !important;
   -webkit-user-select: none !important;
   -moz-user-select: none !important;
   -ms-user-select: none !important;
+}
+
+.conference-home {
+  color: rgb(var(--color-text-primary));
+  background:
+    radial-gradient(circle at 8% 14%, rgb(242 232 211 / 0.52), transparent 22rem),
+    linear-gradient(180deg, #fffefb 0%, #ffffff 48%, #faf8f4 100%);
+}
+
+.conference-home .text-white { color: rgb(var(--color-text-primary)); }
+.conference-home .text-white\/60 { color: rgb(var(--color-text-secondary)); }
+.conference-home .text-white\/50 { color: rgb(var(--color-text-secondary) / 0.86); }
+.conference-home .text-white\/40 { color: rgb(var(--color-text-secondary) / 0.72); }
+.conference-home .text-white\/30 { color: rgb(var(--color-text-secondary) / 0.6); }
+.conference-home .border-white\/10 { border-color: rgb(var(--color-border) / 0.7); }
+.conference-home .border-white\/15 { border-color: rgb(var(--color-border) / 0.85); }
+.conference-home .bg-white\/5 { background-color: rgb(255 255 255 / 0.72); }
+.conference-home .bg-white\/10 { background-color: rgb(249 246 239 / 0.9); }
+.conference-home .bg-violet-500\/10 { background-color: rgb(194 145 54 / 0.1); }
+.conference-home .border-violet-500\/20,
+.conference-home .border-violet-500\/40 { border-color: rgb(194 145 54 / 0.38); }
+.conference-home .text-violet-400,
+.conference-home .text-violet-300 { color: rgb(43 32 101); }
+.conference-home .bg-violet-600 { background-color: rgb(43 32 101); color: #ffffff !important; }
+.conference-home .hover\:bg-violet-500:hover { background-color: rgb(59 47 127); }
+.conference-home .bg-amber-500 { background-color: rgb(194 145 54); color: #ffffff !important; }
+.conference-home .text-amber-400 { color: rgb(139 98 26); }
+.conference-home .shadow-violet-600\/30 { box-shadow: 0 12px 26px rgb(43 32 101 / 0.18); }
+
+.home-hero {
+  position: relative;
+  min-height: 650px;
+  overflow: hidden;
+  background: linear-gradient(108deg, #fffefb 0%, #fffefb 52%, #f6f1e9 100%);
+}
+
+.home-hero::after {
+  content: "";
+  position: absolute;
+  right: -7%;
+  bottom: -24%;
+  width: 42%;
+  height: 70%;
+  border-radius: 50%;
+  background: rgb(231 220 200 / 0.34);
+  filter: blur(12px);
+}
+
+.home-hero h1 { letter-spacing: -0.035em; }
+.home-hero .hero-art {
+  border-radius: 46% 0 0 28% / 34% 0 0 72%;
+  box-shadow: -24px 25px 55px rgb(43 32 101 / 0.16);
+}
+.home-stat-bar { box-shadow: 0 16px 35px rgb(43 32 101 / 0.2); }
+.conference-home .home-stat-bar { display: none; }
+.home-stat-bar .text-white { color: #ffffff !important; }
+.home-stat-bar .text-white\/60 { color: rgb(255 255 255 / 0.68) !important; }
+
+@media (max-width: 1023px) {
+  .home-hero { min-height: auto; }
+  .home-hero::after { display: none; }
+  .home-hero .hero-art { border-radius: 20% 0 0 20%; }
 }
 
 input, textarea {
