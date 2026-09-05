@@ -157,7 +157,7 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     const ctaLink1 = fields.ctaLink1 || "/abstracts";
     const ctaText2 = fields.ctaText2 || "Register Now";
     const ctaLink2 = fields.ctaLink2 || "/registration";
-    const heroImage = fields.heroImage || "/about_banner.png";
+    const heroImage = fields.heroImage || "/about_banner.avif";
 
     return (
       <section id="home" key="hero" className="home-hero flex items-center pt-20">
@@ -244,7 +244,7 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     const title = fields.title || "Shaping the Future Together";
     const paragraph1 = fields.paragraph1 || "ICGIT 2026 is the world's most anticipated gathering of global innovators, technology pioneers, academic researchers, and business leaders. Now in its 8th edition, this conference serves as a global platform for exchange of cutting-edge ideas across AI, blockchain, green technology, digital transformation, and sustainable innovation.";
     const paragraph2 = fields.paragraph2 || "Hosted in Dubai \u2014 the world's innovation hub \u2014 ICGIT 2026 features 120+ expert speakers, 40+ interactive sessions, live demos, startup showcases, and exclusive networking dinners bringing together 2,000+ delegates from 80+ countries.";
-    const aboutImage = fields.aboutImage || "/about_banner.png";
+    const aboutImage = fields.aboutImage || "/about_banner.avif";
 
     // Split highlight for styling "Future Together"
     const highlightIndex = title.toLowerCase().lastIndexOf("future together");
