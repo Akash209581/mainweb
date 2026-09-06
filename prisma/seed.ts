@@ -108,10 +108,41 @@ async function seedRolesAndPermissions() {
 }
 
 async function seedConference() {
-  const country = await prisma.country.upsert({
-    where: { iso2: "AE" },
-    update: {},
-    create: { iso2: "AE", name: "United Arab Emirates" }
+  const countriesData = [
+    { iso2: "AE", name: "United Arab Emirates" },
+    { iso2: "US", name: "United States" },
+    { iso2: "GB", name: "United Kingdom" },
+    { iso2: "IN", name: "India" },
+    { iso2: "SA", name: "Saudi Arabia" },
+    { iso2: "CA", name: "Canada" },
+    { iso2: "AU", name: "Australia" },
+    { iso2: "DE", name: "Germany" },
+    { iso2: "FR", name: "France" },
+    { iso2: "JP", name: "Japan" },
+    { iso2: "SG", name: "Singapore" },
+    { iso2: "QA", name: "Qatar" },
+    { iso2: "OM", name: "Oman" },
+    { iso2: "KW", name: "Kuwait" },
+    { iso2: "BH", name: "Bahrain" },
+    { iso2: "EG", name: "Egypt" },
+    { iso2: "ZA", name: "South Africa" },
+    { iso2: "MY", name: "Malaysia" },
+    { iso2: "KR", name: "South Korea" },
+    { iso2: "CH", name: "Switzerland" },
+    { iso2: "NL", name: "Netherlands" },
+    { iso2: "IT", name: "Italy" },
+    { iso2: "ES", name: "Spain" },
+    { iso2: "BR", name: "Brazil" },
+    { iso2: "CN", name: "China" }
+  ];
+
+  await prisma.country.createMany({
+    data: countriesData,
+    skipDuplicates: true
+  });
+
+  const country = await prisma.country.findUniqueOrThrow({
+    where: { iso2: "AE" }
   });
 
   const venue = await prisma.venue.upsert({

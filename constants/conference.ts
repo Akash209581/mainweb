@@ -186,3 +186,58 @@ export const VENUE_HIGHLIGHTS: FeatureItem[] = [
     icon: CalendarDays
   }
 ];
+
+export const DEFAULT_PACKAGES = [
+  {
+    id: "00000000-0000-0000-0000-000000000301",
+    name: "Standard Delegate Pass",
+    description: "Full access to all keynote sessions, parallel research tracks, conference kit, lunches, and networking receptions.",
+    priceCents: 49900
+  },
+  {
+    id: "00000000-0000-0000-0000-000000000302",
+    name: "Student & Academic Pass",
+    description: "Discounted access for full-time students and academic researchers with valid university credentials.",
+    priceCents: 29900
+  },
+  {
+    id: "00000000-0000-0000-0000-000000000303",
+    name: "VIP All-Access Pass",
+    description: "Premium front-row seating, VIP gala dinner admission, exclusive speaker lounge access, and digital proceedings archive.",
+    priceCents: 79900
+  },
+  {
+    id: "00000000-0000-0000-0000-000000000304",
+    name: "Virtual Hybrid Pass",
+    description: "Live interactive streaming of all tracks, virtual networking portal, and on-demand session recordings for 90 days.",
+    priceCents: 14900
+  }
+];
+
+export const DEFAULT_COUNTRIES = [
+  { id: "00000000-0000-0000-0000-000000000401", name: "United Arab Emirates" },
+  { id: "00000000-0000-0000-0000-000000000402", name: "United States" },
+  { id: "00000000-0000-0000-0000-000000000403", name: "United Kingdom" },
+  { id: "00000000-0000-0000-0000-000000000404", name: "India" },
+  { id: "00000000-0000-0000-0000-000000000405", name: "Saudi Arabia" },
+  { id: "00000000-0000-0000-0000-000000000406", name: "Canada" },
+  { id: "00000000-0000-0000-0000-000000000407", name: "Australia" },
+  { id: "00000000-0000-0000-0000-000000000408", name: "Germany" },
+  { id: "00000000-0000-0000-0000-000000000409", name: "France" },
+  { id: "00000000-0000-0000-0000-000000000410", name: "Japan" },
+  { id: "00000000-0000-0000-0000-000000000411", name: "Singapore" },
+  { id: "00000000-0000-0000-0000-000000000412", name: "Qatar" },
+  { id: "00000000-0000-0000-0000-000000000413", name: "Oman" },
+  { id: "00000000-0000-0000-0000-000000000414", name: "Kuwait" },
+  { id: "00000000-0000-0000-0000-000000000415", name: "Bahrain" },
+  { id: "00000000-0000-0000-0000-000000000416", name: "Egypt" },
+  { id: "00000000-0000-0000-0000-000000000417", name: "South Africa" },
+  { id: "00000000-0000-0000-0000-000000000418", name: "Malaysia" },
+  { id: "00000000-0000-0000-0000-000000000419", name: "South Korea" },
+  { id: "00000000-0000-0000-0000-000000000420", name: "Switzerland" },
+  { id: "00000000-0000-0000-0000-000000000421", name: "Netherlands" },
+  { id: "00000000-0000-0000-0000-000000000422", name: "Italy" },
+  { id: "00000000-0000-0000-0000-000000000423", name: "Spain" },
+  { id: "00000000-0000-0000-0000-000000000424", name: "Brazil" },
+  { id: "00000000-0000-0000-0000-000000000425", name: "China" }
+];

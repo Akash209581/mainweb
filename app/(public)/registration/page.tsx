@@ -7,6 +7,10 @@ import { RegistrationForm } from "@/components/forms/registration-form";
 import { prisma } from "@/lib/prisma/client";
 import { memoize } from "@/lib/cache";
 
+import { DEFAULT_PACKAGES, DEFAULT_COUNTRIES } from "@/constants/conference";
+
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Registration",
   description: "Register as an ICGIT 2026 onsite or virtual delegate."
@@ -14,16 +18,42 @@ export const metadata: Metadata = {
 
 export default async function RegistrationPage() {
   const { packages, countries } = await memoize("registration_page_data", 15000, async () => {
-    const [dbPackages, dbCountries] = await Promise.all([
-      prisma.registrationPackage.findMany({
-        where: { deletedAt: null },
-        orderBy: { priceCents: "asc" }
-      }),
-      prisma.country.findMany({
-        orderBy: { name: "asc" }
-      })
-    ]);
-    return { packages: dbPackages, countries: dbCountries };
+    try {
+      const [dbPackages, dbCountries] = await Promise.all([
+        prisma.registrationPackage.findMany({
+          where: { deletedAt: null },
+          orderBy: { priceCents: "asc" }
+        }),
+        prisma.country.findMany({
+          orderBy: { name: "asc" }
+        })
+      ]);
+
+      return {
+        packages:
+          dbPackages.length > 0
+            ? dbPackages.map((p) => ({
+                id: p.id,
+                name: p.name,
+                description: p.description,
+                priceCents: p.priceCents
+              }))
+            : DEFAULT_PACKAGES,
+        countries:
+          dbCountries.length > 0
+            ? dbCountries.map((c) => ({
+                id: c.id,
+                name: c.name
+              }))
+            : DEFAULT_COUNTRIES
+      };
+    } catch (err) {
+      console.error("RegistrationPage DB error, falling back to defaults:", err);
+      return {
+        packages: DEFAULT_PACKAGES,
+        countries: DEFAULT_COUNTRIES
+      };
+    }
   });
 
   return (

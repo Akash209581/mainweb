@@ -13,6 +13,10 @@ export const metadata: Metadata = {
   description: "Explore ICGIT 2026 sponsors and partnership categories."
 };
 
+import { SPONSORS } from "@/constants/conference";
+
+export const dynamic = "force-dynamic";
+
 export default async function SponsorsPage() {
   const { items: dbSponsors } = await listSponsors({
     page: 1,
@@ -20,11 +24,14 @@ export default async function SponsorsPage() {
     direction: "asc"
   });
 
-  const mappedSponsors = dbSponsors.map((sponsor) => ({
-    name: sponsor.name,
-    tier: sponsor.sponsorTier.name,
-    focus: sponsor.focus
-  }));
+  const mappedSponsors =
+    dbSponsors.length > 0
+      ? dbSponsors.map((sponsor) => ({
+          name: sponsor.name,
+          tier: sponsor.sponsorTier?.name || "Gold",
+          focus: sponsor.focus
+        }))
+      : SPONSORS;
 
   const tiers = ["Diamond", "Platinum", "Gold", "Silver"];
   const grouped = tiers.reduce((acc, tier) => {

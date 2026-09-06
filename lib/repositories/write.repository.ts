@@ -17,13 +17,57 @@ export async function createContactMessage(
   });
 }
 
+import { DEFAULT_PACKAGES, DEFAULT_COUNTRIES } from "@/constants/conference";
+
 export async function createRegistration(input: RegistrationInput, userId?: string) {
   return prisma.$transaction(async (tx) => {
-    const conference = await tx.conference.findUnique({
+    let conference = await tx.conference.findUnique({
       where: { slug: input.conferenceSlug }
     });
     if (!conference) {
+      conference = await tx.conference.findFirst({
+        where: { deletedAt: null }
+      });
+    }
+    if (!conference) {
       throw new NotFoundError("Conference not found.");
+    }
+
+    // Ensure package exists in DB (auto-upsert fallback if needed)
+    const pkgExists = await tx.registrationPackage.findUnique({
+      where: { id: input.packageId }
+    });
+    if (!pkgExists) {
+      const fallbackPkg = DEFAULT_PACKAGES.find((p) => p.id === input.packageId);
+      await tx.registrationPackage.create({
+        data: {
+          id: input.packageId,
+          conferenceId: conference.id,
+          name: fallbackPkg?.name || "Standard Delegate Pass",
+          description: fallbackPkg?.description || "Conference access pass",
+          priceCents: fallbackPkg?.priceCents || 49900,
+          attendanceMode: "ONSITE"
+        }
+      });
+    }
+
+    // Ensure country exists if countryId provided
+    if (input.countryId) {
+      const countryExists = await tx.country.findUnique({
+        where: { id: input.countryId }
+      });
+      if (!countryExists) {
+        const fallbackCountry = DEFAULT_COUNTRIES.find((c) => c.id === input.countryId);
+        if (fallbackCountry) {
+          await tx.country.create({
+            data: {
+              id: input.countryId,
+              iso2: fallbackCountry.name.slice(0, 2).toUpperCase(),
+              name: fallbackCountry.name
+            }
+          });
+        }
+      }
     }
 
     const registration = await tx.registration.create({
@@ -54,18 +98,34 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
 
 export async function createAbstractSubmission(input: AbstractSubmissionInput, authorId: string) {
   return prisma.$transaction(async (tx) => {
-    const conference = await tx.conference.findUnique({
+    let conference = await tx.conference.findUnique({
       where: { slug: input.conferenceSlug }
     });
     if (!conference) {
+      conference = await tx.conference.findFirst({
+        where: { deletedAt: null }
+      });
+    }
+    if (!conference) {
       throw new NotFoundError("Conference not found.");
+    }
+
+    // Verify track exists before linking foreign key
+    let validTrackId = input.trackId;
+    if (validTrackId) {
+      const trackExists = await tx.track.findUnique({
+        where: { id: validTrackId }
+      });
+      if (!trackExists) {
+        validTrackId = undefined;
+      }
     }
 
     const submission = await tx.abstractSubmission.create({
       data: {
         conferenceId: conference.id,
         authorId,
-        trackId: input.trackId,
+        trackId: validTrackId,
         title: input.title,
         abstractText: input.abstractText,
         keywords: input.keywords,

@@ -39,10 +39,14 @@ const HIGHLIGHTS = [
 
 export default async function AboutPage() {
   const sections = await memoize("about_page_setting", 15000, async () => {
-    const aboutSetting = await prisma.systemSetting.findFirst({
-      where: { key: "page_content_about" }
-    });
-    return (aboutSetting?.value as unknown as Array<{ id: string; name: string; visible?: boolean; fields: Record<string, string>; }>) || [];
+    try {
+      const aboutSetting = await prisma.systemSetting.findFirst({
+        where: { key: "page_content_about" }
+      });
+      return (aboutSetting?.value as unknown as Array<{ id: string; name: string; visible?: boolean; fields: Record<string, string>; }>) || [];
+    } catch {
+      return [];
+    }
   });
 
   // Helper to extract fields for a section
