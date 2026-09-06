@@ -6,6 +6,7 @@ import { SearchBar } from "@/components/common/search-bar";
 import { Pagination } from "@/components/common/pagination";
 import { EmptyState } from "@/components/common/empty-state";
 import { listSpeakers } from "@/lib/repositories/public-content.repository";
+import { SPEAKERS } from "@/constants/conference";
 
 export const metadata: Metadata = {
   title: "Speakers",
@@ -33,12 +34,17 @@ export default async function SpeakersPage({ searchParams }: SpeakersPageProps) 
     direction
   });
 
-  const mappedSpeakers = items.map((speaker) => ({
-    name: speaker.name,
-    role: speaker.role,
-    organization: speaker.organization?.name ?? "Independent",
-    topic: speaker.topic
-  }));
+  const mappedSpeakers =
+    items.length > 0
+      ? items.map((speaker) => ({
+          name: speaker.name,
+          role: speaker.role,
+          organization: speaker.organization?.name ?? "Independent",
+          topic: speaker.topic
+        }))
+      : !search
+      ? SPEAKERS
+      : [];
 
   return (
     <>

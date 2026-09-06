@@ -99,11 +99,86 @@ function resolveImgSrc(src: string): string {
   return src.startsWith("/") ? `/ICGIT${src}` : `/ICGIT/${src}`;
 }
 
+export const DEFAULT_FALLBACK_TRACKS: TrackInfo[] = [
+  {
+    id: "ai",
+    name: "AI & Neural Systems",
+    description: "Covers computational modeling of neural designs, deep reinforcement learning, safety benchmarks, and borderless AI deployment."
+  },
+  {
+    id: "blockchain",
+    name: "Blockchain & Web3",
+    description: "Focuses on consensus scalability, zero-knowledge proofs, smart contract security auditing, and decentralized governance."
+  },
+  {
+    id: "greentech",
+    name: "Green Tech & Sustainability",
+    description: "Addresses net-zero computing, algorithmic energy reduction, renewable-powered data centers, and ESG metrics."
+  },
+  {
+    id: "smartcities",
+    name: "Smart Cities & IoT",
+    description: "Explores resilient urban IoT architectures, municipal digital twins, edge telemetry, and automated transit systems."
+  },
+  {
+    id: "cybersecurity",
+    name: "Cybersecurity & Privacy",
+    description: "Investigates post-quantum cryptography, zero-trust infrastructure, automated threat intelligence, and defense systems."
+  },
+  {
+    id: "healthtech",
+    name: "HealthTech & BioSystems",
+    description: "Translates breakthroughs in digital health diagnostics, bioinformatics pipelines, and neural clinical interfaces."
+  }
+];
+
+export const DEFAULT_FALLBACK_SPEAKERS: SpeakerInfo[] = [
+  {
+    id: "sp-1",
+    name: "Dr. Amina Rahman",
+    role: "Chief AI Scientist",
+    organizationName: "Global Digital Futures Institute",
+    topic: "Responsible AI for borderless innovation ecosystems",
+    bio: "Pioneering researcher in neural safety and AI governance.",
+    imageAssetId: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "sp-2",
+    name: "Prof. Lucas Meyer",
+    role: "Chair of Smart Systems",
+    organizationName: "European Institute of Technology",
+    topic: "Resilient infrastructure for intelligent cities",
+    bio: "Expert in urban IoT and distributed municipal networks.",
+    imageAssetId: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "sp-3",
+    name: "Dr. Sofia Chen",
+    role: "Director of Health Innovation",
+    organizationName: "Pacific BioSystems Lab",
+    topic: "Translational technology in digital health",
+    bio: "Leader in computational genomics and clinical interfaces.",
+    imageAssetId: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&auto=format&fit=crop&q=80"
+  },
+  {
+    id: "sp-4",
+    name: "Eng. Omar Al Nuaimi",
+    role: "Innovation Strategy Lead",
+    organizationName: "Dubai Enterprise Technology Council",
+    topic: "Scaling public-private innovation in the Gulf",
+    bio: "Strategist advancing smart governance and venture ecosystems.",
+    imageAssetId: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80"
+  }
+];
+
 /* ------------------------------------------------------------------ */
 /*  Component                                                           */
 /* ------------------------------------------------------------------ */
 
 export function HomeClient({ speakers, tracks, customContent, conferenceInfo, themeTokens }: HomeClientProps) {
+  const activeTracks = tracks && tracks.length > 0 ? tracks : DEFAULT_FALLBACK_TRACKS;
+  const activeSpeakers = speakers && speakers.length > 0 ? speakers : DEFAULT_FALLBACK_SPEAKERS;
+
   const [feedback, setFeedback] = useState<{ ok: boolean; msg: string } | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -399,11 +474,11 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
 
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-5 text-center shadow-sm">
-                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{tracks.length || 6}</p>
+                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{activeTracks.length}</p>
                 <p className="text-[11px] text-slate-600 mt-1 uppercase font-bold tracking-wider">Research Tracks</p>
               </div>
               <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-5 text-center shadow-sm">
-                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{speakers.length || 8}+</p>
+                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{activeSpeakers.length}+</p>
                 <p className="text-[11px] text-slate-600 mt-1 uppercase font-bold tracking-wider">Keynote Speakers</p>
               </div>
             </div>
@@ -432,7 +507,7 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {tracks.map((tr, idx) => {
+            {activeTracks.map((tr, idx) => {
               const IconComp = TRACK_ICONS[idx % TRACK_ICONS.length];
               return (
                 <div
@@ -484,7 +559,7 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {speakers.map((sp) => (
+            {activeSpeakers.map((sp) => (
               <div
                 key={sp.id}
                 className="group rounded-3xl border border-slate-200/90 bg-white/90 backdrop-blur-md p-5 space-y-4 hover:border-indigo-400 hover:shadow-xl transition duration-300 flex flex-col shadow-sm"

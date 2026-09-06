@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/common/page-header";
 import { Section } from "@/components/common/section";
 import { listSpeakers } from "@/lib/repositories/public-content.repository";
+import { SPEAKERS } from "@/constants/conference";
 import { SessionsLayout } from "./sessions-layout";
 
 export const metadata: Metadata = {
@@ -17,12 +18,15 @@ export default async function SessionsPage() {
     direction: "asc"
   });
 
-  const mappedSpeakers = speakers.map((s) => ({
-    name: s.name,
-    role: s.role,
-    organization: s.organization?.name ?? "Independent",
-    topic: s.topic
-  }));
+  const mappedSpeakers =
+    speakers.length > 0
+      ? speakers.map((s) => ({
+          name: s.name,
+          role: s.role,
+          organization: s.organization?.name ?? "Independent",
+          topic: s.topic
+        }))
+      : SPEAKERS;
 
   return (
     <>

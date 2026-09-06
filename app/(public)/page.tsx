@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma/client";
-import { HomeClient, type ConferenceInfo } from "@/components/home/home-client";
+import { HomeClient, type ConferenceInfo, DEFAULT_FALLBACK_SPEAKERS, DEFAULT_FALLBACK_TRACKS } from "@/components/home/home-client";
 import { memoize } from "@/lib/cache";
 
 export const dynamic = "force-dynamic";
@@ -65,21 +65,27 @@ export default async function HomePage() {
           })
         ]);
 
-        const mappedSpeakers = speakers.map((s) => ({
-          id: s.id,
-          name: s.name,
-          role: s.role,
-          topic: s.topic,
-          bio: s.bio,
-          imageAssetId: s.imageAsset?.storageKey || s.imageAssetId || null,
-          organizationName: s.organization?.name ?? "N/A"
-        }));
+        const mappedSpeakers =
+          speakers.length > 0
+            ? speakers.map((s) => ({
+                id: s.id,
+                name: s.name,
+                role: s.role,
+                topic: s.topic,
+                bio: s.bio,
+                imageAssetId: s.imageAsset?.storageKey || s.imageAssetId || null,
+                organizationName: s.organization?.name ?? "N/A"
+              }))
+            : DEFAULT_FALLBACK_SPEAKERS;
 
-        const mappedTracks = tracks.map((t) => ({
-          id: t.id,
-          name: t.name,
-          description: t.description
-        }));
+        const mappedTracks =
+          tracks.length > 0
+            ? tracks.map((t) => ({
+                id: t.id,
+                name: t.name,
+                description: t.description
+              }))
+            : DEFAULT_FALLBACK_TRACKS;
 
         const customContent = homeSetting?.value as unknown as Array<{
           id: string;
@@ -120,8 +126,8 @@ export default async function HomePage() {
       } catch (err) {
         console.error("HomePage DB fetch error:", err);
         return {
-          mappedSpeakers: [],
-          mappedTracks: [],
+          mappedSpeakers: DEFAULT_FALLBACK_SPEAKERS,
+          mappedTracks: DEFAULT_FALLBACK_TRACKS,
           customContent: undefined,
           conferenceInfo: undefined,
           themeTokens: null
