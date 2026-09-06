@@ -35,7 +35,7 @@ export interface FooterProps {
     copyright?: string;
     quickLinks?: Array<{ label: string; href: string }>;
     resourceLinks?: Array<{ label: string; href: string }>;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 

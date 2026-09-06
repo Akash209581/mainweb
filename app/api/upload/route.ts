@@ -44,8 +44,9 @@ export async function POST(request: Request) {
       url: relativeUrl,
       fileAssetId: fileAsset.id
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("File upload error:", error);
-    return NextResponse.json({ error: error.message || "Failed to upload file" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to upload file";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

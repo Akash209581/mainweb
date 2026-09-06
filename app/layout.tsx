@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { AuthProvider } from "@/components/auth/auth-provider";
-import { Footer, type FooterConferenceInfo } from "@/components/layout/footer";
+import { Footer, type FooterConferenceInfo, type FooterProps } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { ClientParticles } from "@/components/particles/client-particles";
 import { ThemeScript } from "@/components/theme/theme-script";
@@ -156,7 +156,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           menuItems: (dbMenuSetting?.value as Array<{ label: string; href: string }>) || undefined,
           themeTokens: activeTheme?.tokens || null,
           conferenceInfo,
-          footerContent: (footerSetting?.value as any) || undefined,
+          footerContent: (footerSetting?.value as FooterProps["footerContent"]) || undefined,
           faviconUrl
         };
       } catch (e) {
