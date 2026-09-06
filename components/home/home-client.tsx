@@ -326,24 +326,24 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
     const heroMode = fields.heroMode || confMode;
 
     return (
-      <section id="home" key="hero" className="home-hero flex items-center pt-32 pb-14 sm:pt-36 sm:pb-20">
-        <div className="container relative z-10 grid items-start gap-10 px-4 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12">
-          <div className="max-w-2xl">
-            <span className="mb-6 inline-flex w-fit items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#281b58]">
+      <section id="home" key="hero" className="home-hero flex items-start pt-20 pb-4 sm:pt-20 sm:pb-6">
+        <div className="container relative z-10 grid items-start gap-8 px-4 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10">
+          <div className="max-w-2xl pt-1 sm:pt-2">
+            <span className="mb-4 inline-flex w-fit items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#281b58]">
               <CalendarDays className="mr-2 size-3.5 text-amber-600" /> {badge}
             </span>
             <h1 className="font-heading text-4xl sm:text-6xl lg:text-[4.25rem] font-bold leading-[1.08] sm:leading-[0.98] text-[#1a153a] tracking-tight">
               {title}
               <span className="mt-2 block text-[#281b58]">{titleColor}</span>
             </h1>
-            <div className="my-6 h-px w-20 bg-amber-500" />
+            <div className="my-5 h-px w-20 bg-amber-500" />
             <p className="max-w-xl text-sm sm:text-base leading-relaxed sm:leading-7 text-[#4b4568] text-justify font-normal">{description}</p>
-            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-[#4b4568]">
+            <div className="mt-5 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-[#4b4568]">
               <span className="flex items-center gap-2"><MapPin className="size-4 text-amber-600 shrink-0" /> {heroVenue}</span>
               <span className="flex items-center gap-2"><CalendarDays className="size-4 text-amber-600 shrink-0" /> {heroDates}</span>
               <span className="flex items-center gap-2"><Globe className="size-4 text-amber-600 shrink-0" /> {heroMode}</span>
             </div>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild size="lg" className="bg-[#281b58] hover:bg-[#382678] font-bold !text-white shadow-xl shadow-indigo-950/30">
                 <Link href={ctaLink2} className="!text-white">{ctaText2} <ArrowRight className="ml-2 size-4" /></Link>
               </Button>
@@ -353,8 +353,8 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
             </div>
           </div>
 
-          <div className="relative lg:-mr-16 mt-6 lg:mt-0">
-            <div className="hero-art relative overflow-hidden rounded-3xl border-l-8 border-amber-500/70 bg-white shadow-2xl">
+          <div className="relative lg:-mr-16">
+            <div className="hero-art relative overflow-hidden border-l-8 border-amber-500/70 bg-violet-950">
               <img src={heroImage} alt={`${confName} conference experience`} className="aspect-[1.2/0.86] w-full object-cover object-center" />
               <div className="absolute inset-0 bg-gradient-to-tr from-[#1a153a]/25 via-transparent to-transparent" />
             </div>
@@ -386,9 +386,9 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
     }
 
     return (
-      <section key="countdown" className="py-14 sm:py-20 scroll-mt-24">
+      <section key="countdown" className="py-6 sm:py-8 scroll-mt-24">
         <div className="container px-4 sm:px-6">
-          <div className="rounded-3xl border border-slate-200/90 bg-white/90 backdrop-blur-md p-6 sm:p-10 text-center space-y-6 shadow-xl">
+          <div className="rounded-3xl border border-slate-200/90 bg-white/90 backdrop-blur-md p-6 sm:p-8 text-center space-y-5 shadow-xl">
             <span className="inline-flex rounded-full bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58]">
               {badge}
             </span>
@@ -414,7 +414,7 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
     const aboutImage = resolveImgSrc(rawAboutImg);
 
     return (
-      <section id="about" key="about" className="py-14 sm:py-20 scroll-mt-28">
+      <section id="about" key="about" className="py-6 sm:py-8 scroll-mt-24">
         <div id="brochure" />
         <div className="container grid gap-10 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] items-start">
           <div className="space-y-6">
@@ -494,8 +494,8 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
     const description = fields.description || "Explore the multifaceted agenda and research tracks designed for global delegates.";
 
     return (
-      <section id="sessions" key="sessions" className="py-14 sm:py-20 scroll-mt-28">
-        <div className="container px-4 sm:px-6 space-y-8">
+      <section id="sessions" key="sessions" className="py-6 sm:py-8 scroll-mt-24">
+        <div className="container px-4 sm:px-6 space-y-6">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="inline-flex rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
               {badge}
@@ -538,8 +538,8 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
     const description = fields.description || "Hear from the foremost minds in artificial intelligence, deep tech, smart cities, and digital policy.";
 
     return (
-      <section id="speakers" key="speakers" className="py-14 sm:py-20 scroll-mt-28">
-        <div className="container px-4 sm:px-6 space-y-8">
+      <section id="speakers" key="speakers" className="py-6 sm:py-8 scroll-mt-24">
+        <div className="container px-4 sm:px-6 space-y-6">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="inline-flex rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
               {badge}
@@ -613,9 +613,9 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
     }
 
     return (
-      <section id="venue" key="venue" className="py-14 sm:py-20 scroll-mt-28">
+      <section id="venue" key="venue" className="py-6 sm:py-8 scroll-mt-24">
         <div className="container px-4 sm:px-6">
-          <div className="grid lg:grid-cols-[1fr_1.18fr] gap-10 items-center">
+          <div className="grid lg:grid-cols-[1fr_1.18fr] gap-8 sm:gap-10 items-center">
             {/* Left Column: Venue Details */}
             <div className="space-y-4">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
@@ -676,9 +676,9 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
     const description = fields.description || "Questions on registration, submission, or corporate sponsorship? Send us an inquiry below or email secretariat@icgit2026.org.";
 
     return (
-      <section id="contact" key="contact" className="py-14 sm:py-20 scroll-mt-28">
+      <section id="contact" key="contact" className="py-6 sm:py-8 scroll-mt-24">
         <div className="container max-w-4xl px-4 sm:px-6">
-          <div className="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-10 space-y-6 shadow-2xl">
+          <div className="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-8 space-y-5 shadow-2xl">
             <div className="text-center space-y-3">
               <span className="inline-flex rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
                 {badge}
@@ -783,7 +783,7 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
         backgroundImage: "radial-gradient(circle at 80% 20%, rgb(242 232 211 / 0.35), transparent 24rem)"
       }}
     >
-      <div className="relative z-10 space-y-0 pb-24">
+      <div className="relative z-10 space-y-0 pb-10">
         {sectionsList.map((sec) => {
           if (sec.visible === false) return null;
           switch (sec.id) {

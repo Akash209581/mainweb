@@ -38,20 +38,9 @@ export function Header({ items = NAVIGATION_ITEMS }: HeaderProps) {
       const element = document.getElementById(id);
       if (element) {
         const headerHeight = 80;
-        const viewportHeight = window.innerHeight;
         const rect = element.getBoundingClientRect();
         const elementTop = window.pageYOffset + rect.top;
-        const elementHeight = rect.height;
-        const availableHeight = viewportHeight - headerHeight;
-
-        let targetY: number;
-        if (elementHeight > 0 && elementHeight < availableHeight) {
-          // Center the section neatly within the available visible space below fixed header
-          targetY = elementTop - headerHeight - (availableHeight - elementHeight) / 2;
-        } else {
-          // For taller sections, offset downward so section title rests comfortably in the middle view area
-          targetY = elementTop - headerHeight - 120;
-        }
+        const targetY = elementTop - headerHeight - 12;
 
         window.scrollTo({
           top: Math.max(0, targetY),
