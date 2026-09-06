@@ -34,12 +34,13 @@ export const CONFERENCE = {
 } as const;
 
 export const NAVIGATION_ITEMS: NavigationItem[] = [
-  { label: "Home", href: "/#home" },
-  { label: "Brochure", href: "/#brochure" },
-  { label: "Sessions", href: "/#sessions" },
-  { label: "Speakers", href: "/#speakers" },
-  { label: "Venue", href: "/#venue" },
-  { label: "Contact Us", href: "/#contact" }
+  { label: "Home", href: "/" },
+  { label: "About", href: "/#about" },
+  { label: "Brochure", href: "/brochure" },
+  { label: "Sessions", href: "/sessions" },
+  { label: "Speakers", href: "/speakers" },
+  { label: "Venue", href: "/venue" },
+  { label: "Contact Us", href: "/contact" }
 ];
 
 export const STATISTICS: Statistic[] = [

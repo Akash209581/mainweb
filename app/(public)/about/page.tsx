@@ -94,7 +94,7 @@ export default async function AboutPage() {
                 title={missionFields.title}
                 align="left"
               />
-              <p className="text-sm leading-7 text-muted">
+              <p className="text-sm leading-7 text-muted text-justify">
                 {missionFields.paragraph}
               </p>
               

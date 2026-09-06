@@ -26,7 +26,7 @@ import { submitContactAction } from "@/actions/contact.actions";
 /*  Types                                                               */
 /* ------------------------------------------------------------------ */
 
-interface SpeakerInfo {
+export interface SpeakerInfo {
   id: string;
   name: string;
   role: string;
@@ -36,10 +36,21 @@ interface SpeakerInfo {
   organizationName: string;
 }
 
-interface TrackInfo {
+export interface TrackInfo {
   id: string;
   name: string;
   description: string | null;
+}
+
+export interface ConferenceInfo {
+  name: string;
+  fullName: string;
+  dates: string;
+  startDateIso: string;
+  venueName: string;
+  venueAddress: string;
+  venueCity: string;
+  mode: string;
 }
 
 interface HomeClientProps {
@@ -51,10 +62,12 @@ interface HomeClientProps {
     visible?: boolean;
     fields: Record<string, string>;
   }>;
+  conferenceInfo?: ConferenceInfo;
+  themeTokens?: Record<string, string> | null;
 }
 
 /* ------------------------------------------------------------------ */
-/*  Static data                                                         */
+/*  Fallback Track Icons                                                */
 /* ------------------------------------------------------------------ */
 
 const TRACK_ICONS = [
@@ -66,90 +79,164 @@ const TRACK_ICONS = [
   Heart
 ];
 
-const BROCHURE_TRACKS = [
-  { id: "t1", name: "AI & Neural Systems", description: "Deep learning architectures, large language models, neural interface research, and autonomous intelligence systems." },
-  { id: "t2", name: "Blockchain & Web3", description: "Decentralised finance, smart contracts, NFT ecosystems, and the next evolution of the open web." },
-  { id: "t3", name: "Green Technology", description: "Sustainable engineering, carbon-neutral computing, renewable energy integration, and circular economy models." },
-  { id: "t4", name: "Smart Cities & IoT", description: "Urban intelligence platforms, sensor mesh networks, connected infrastructure, and civic data analytics." },
-  { id: "t5", name: "Digital Transformation", description: "Enterprise modernisation, cloud-native strategies, platform engineering, and workforce upskilling models." },
-  { id: "t6", name: "HealthTech", description: "Precision medicine, AI diagnostics, wearable biosensors, and regulatory frameworks for medical innovation." }
-];
-
-const REGISTRATION_FEES = [
-  { category: "Early Bird Delegate", price: "$450 USD", highlight: true },
-  { category: "Regular Onsite Delegate", price: "$550 USD", highlight: false },
-  { category: "Student Delegate", price: "$250 USD", highlight: false },
-  { category: "Virtual Delegate", price: "$150 USD", highlight: false }
-];
-
-const IMPORTANT_DATES = [
+const DEFAULT_IMPORTANT_DATES = [
   { title: "Abstract Submission Opens", date: "July 15, 2026", status: "Open", color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" },
   { title: "Abstract Submission Deadline", date: "October 1, 2026", status: "Upcoming", color: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30" },
   { title: "Acceptance Notification", date: "November 1, 2026", status: "Upcoming", color: "bg-white/5 text-white/50 border-white/10" },
   { title: "Camera-Ready Deadline", date: "November 15, 2026", status: "Upcoming", color: "bg-white/5 text-white/50 border-white/10" },
   { title: "Registration Deadline", date: "December 1, 2026", status: "Upcoming", color: "bg-white/5 text-white/50 border-white/10" },
-  { title: "Conference Dates", date: "December 8\u201310, 2026", status: "Event", color: "bg-violet-500/10 text-violet-400 border-violet-500/30" }
+  { title: "Conference Dates", date: "December 8–10, 2026", status: "Event", color: "bg-violet-500/10 text-violet-400 border-violet-500/30" }
 ];
+
+function resolveImgSrc(src: string): string {
+  if (!src) return "/ICGIT/about_banner.avif";
+  if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) {
+    return src;
+  }
+  if (src.startsWith("/ICGIT/") || src === "/ICGIT") {
+    return src;
+  }
+  return src.startsWith("/") ? `/ICGIT${src}` : `/ICGIT/${src}`;
+}
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                           */
 /* ------------------------------------------------------------------ */
 
-export function HomeClient({ speakers, tracks, customContent }: HomeClientProps) {
+export function HomeClient({ speakers, tracks, customContent, conferenceInfo, themeTokens }: HomeClientProps) {
   const [feedback, setFeedback] = useState<{ ok: boolean; msg: string } | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const activeTracks = tracks.length > 0 ? tracks : BROCHURE_TRACKS;
+  const confName = conferenceInfo?.name || "ICGIT 2026";
+  const confDates = conferenceInfo?.dates || "December 8–10, 2026";
+  const confVenue = conferenceInfo?.venueName || "Dubai World Trade Centre";
+  const confCity = conferenceInfo?.venueCity || "Dubai";
+  const confMode = conferenceInfo?.mode || "Hybrid (Onsite & Online)";
+  const confStartDate = conferenceInfo?.startDateIso || "2026-12-08T09:00:00Z";
 
   function handleContactSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setFeedback(null);
-    const formData = new FormData(e.currentTarget);
-    const form = e.currentTarget;
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
     startTransition(async () => {
-      try {
-        const res = await submitContactAction({ ok: false, message: "" }, formData);
-        setFeedback({ ok: res.ok, msg: res.message });
-        if (res.ok) form.reset();
-      } catch {
-        setFeedback({ ok: false, msg: "Failed to submit. Please try again." });
+      const res = await submitContactAction({ ok: false, message: "" }, formData);
+      if (!res.ok) {
+        setFeedback({ ok: false, msg: res.message || "Failed to submit inquiry" });
+      } else {
+        setFeedback({ ok: true, msg: "Thank you for contacting us! We will respond shortly." });
+        formElement.reset();
       }
     });
   }
 
-  interface SectionItem {
+  /* ------------------------------------------------------------------ */
+  /*  Default sections fallback if customContent is empty              */
+  /* ------------------------------------------------------------------ */
+
+  const defaultSections: Array<{
     id: string;
     name: string;
-    visible?: boolean;
+    visible: boolean;
     fields: Record<string, string>;
-  }
-
-  // Define default order and layouts of the sections
-  const defaultSections: SectionItem[] = [
-    { id: "hero", name: "Hero Section", visible: true, fields: {} },
-    { id: "countdown", name: "Countdown Section", visible: true, fields: {} },
-    { id: "about", name: "About Section", visible: true, fields: {} },
-    { id: "sessions", name: "Conference Tracks", visible: true, fields: {} },
-    { id: "speakers", name: "Featured Speakers", visible: true, fields: {} },
-    { id: "venue", name: "Venue Section", visible: true, fields: {} },
-    { id: "contact", name: "Contact Secretariat", visible: true, fields: {} }
+  }> = [
+    {
+      id: "hero",
+      name: "Hero Header",
+      visible: true,
+      fields: {
+        badge: `${confDates.toUpperCase()}  •  ${confCity.toUpperCase()}, UAE`,
+        title: `8th International Conference on`,
+        titleColor: "Global Innovation & Technology",
+        description:
+          "Bringing together 2,000+ visionaries, researchers, and industry leaders from 80+ countries to shape the future of global innovation and emerging technologies.",
+        ctaText1: "Submit Abstract",
+        ctaLink1: "/abstracts",
+        ctaText2: "Register Now",
+        ctaLink2: "/registration",
+        heroImage: themeTokens?.heroBannerUrl || "/about_banner.avif"
+      }
+    },
+    {
+      id: "countdown",
+      name: "Event Countdown",
+      visible: true,
+      fields: {
+        badge: "⏳ Conference Begins In",
+        title: "Don't Miss This Global Event",
+        targetDate: confStartDate
+      }
+    },
+    {
+      id: "about",
+      name: "About Overview",
+      visible: true,
+      fields: {
+        badge: "🚀 About the Conference",
+        title: "Shaping the Future Together",
+        paragraph1:
+          `${confName} is the world's most anticipated gathering of global innovators, technology pioneers, academic researchers, and business leaders. Now in its 8th edition, this conference serves as a global platform for exchange of cutting-edge ideas across AI, blockchain, green technology, digital transformation, and sustainable innovation.`,
+        paragraph2:
+          `Hosted in ${confCity} — the world's innovation hub — ${confName} features 120+ expert speakers, 40+ interactive sessions, live demos, startup showcases, and exclusive networking dinners bringing together 2,000+ delegates from 80+ countries.`,
+        aboutImage: "/about_banner.avif"
+      }
+    },
+    {
+      id: "sessions",
+      name: "Tracks & Key Dates",
+      visible: true,
+      fields: {
+        badge: "🎯 Conference Program",
+        title: "Sessions, Tracks & Key Dates",
+        description:
+          "Explore the multifaceted agenda, research tracks, submission deadlines, and fee structures designed for global delegates."
+      }
+    },
+    {
+      id: "speakers",
+      name: "Featured Speakers",
+      visible: true,
+      fields: {
+        badge: "🎙 Visionary Thought Leaders",
+        title: "World-Class Keynotes & Panelists",
+        description:
+          "Hear from the foremost minds in artificial intelligence, deep tech, smart cities, and digital policy."
+      }
+    },
+    {
+      id: "venue",
+      name: "Venue & Location",
+      visible: true,
+      fields: {
+        badge: "EVENT LOCATION",
+        title: "Hosted in the Heart of",
+        description:
+          `${confVenue}, situated at the crossroads of international innovation in ${confCity}, United Arab Emirates.`,
+        format: "Hybrid (Onsite & Online)",
+        mainHall: "Sheikh Maktoum Hall"
+      }
+    },
+    {
+      id: "contact",
+      name: "Contact & Secretariat",
+      visible: true,
+      fields: {
+        badge: "✉ Contact Secretariat",
+        title: "Get in Touch",
+        description:
+          `Questions on registration, submission, or corporate sponsorship? Send us an inquiry below or email secretariat@icgit2026.org.`
+      }
+    }
   ];
 
-  // Reorder and align dynamic sections with absolute fallback
-  let sectionsList: SectionItem[] = [...defaultSections];
-  if (customContent && Array.isArray(customContent) && customContent.length > 0) {
-    const customIds = new Set(customContent.map((s) => s.id));
-    const orderedCustom = customContent.filter((s) => defaultSections.some((ds) => ds.id === s.id));
-    const missing = defaultSections.filter((ds) => !customIds.has(ds.id));
-    sectionsList = [...orderedCustom, ...missing];
-  }
+  const sectionsList = customContent && customContent.length > 0 ? customContent : defaultSections;
 
   /* ------------------------------------------------------------------ */
   /*  Section Renderers                                                  */
   /* ------------------------------------------------------------------ */
 
-  function renderHero(fields: Record<string, string>) {
-    const badge = fields.badge || "DECEMBER 8–10, 2026  •  DUBAI, UAE";
+  function renderHero(fields: Record<string, string | undefined>) {
+    const badge = fields.badge || `${confDates.toUpperCase()}  •  ${confCity.toUpperCase()}, UAE`;
     const title = fields.title || "8th International Conference on";
     const titleColor = fields.titleColor || "Global Innovation & Technology";
     const description = fields.description || "Bringing together 2,000+ visionaries, researchers, and industry leaders from 80+ countries to shape the future of global innovation and emerging technologies.";
@@ -157,46 +244,50 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     const ctaLink1 = fields.ctaLink1 || "/abstracts";
     const ctaText2 = fields.ctaText2 || "Register Now";
     const ctaLink2 = fields.ctaLink2 || "/registration";
-    const heroImage = fields.heroImage || "/about_banner.avif";
+    const rawHeroImg = fields.heroImage || themeTokens?.heroBannerUrl || "/about_banner.avif";
+    const heroImage = resolveImgSrc(rawHeroImg);
+    const heroVenue = fields.heroVenue || `${confVenue}, ${confCity}`;
+    const heroDates = fields.heroDates || confDates;
+    const heroMode = fields.heroMode || confMode;
 
     return (
-      <section id="home" key="hero" className="home-hero flex items-center pt-20">
-        <div className="container relative z-10 grid items-start gap-12 py-0 lg:grid-cols-[0.92fr_1.08fr] lg:py-0">
+      <section id="home" key="hero" className="home-hero flex items-center pt-32 pb-14 sm:pt-36 sm:pb-20">
+        <div className="container relative z-10 grid items-start gap-10 px-4 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12">
           <div className="max-w-2xl">
-            <span className="mb-7 inline-flex w-fit items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-violet-400">
+            <span className="mb-6 inline-flex w-fit items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#281b58]">
               <CalendarDays className="mr-2 size-3.5 text-amber-600" /> {badge}
             </span>
-            <h1 className="font-heading text-5xl font-bold leading-[0.98] text-white sm:text-6xl lg:text-[4.25rem]">
+            <h1 className="font-heading text-4xl sm:text-6xl lg:text-[4.25rem] font-bold leading-[1.08] sm:leading-[0.98] text-[#1a153a] tracking-tight">
               {title}
-              <span className="mt-2 block text-violet-400">{titleColor}</span>
+              <span className="mt-2 block text-[#281b58]">{titleColor}</span>
             </h1>
-            <div className="my-7 h-px w-20 bg-amber-500" />
-            <p className="max-w-xl text-sm leading-7 text-white/60 sm:text-base">{description}</p>
-            <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-white/60">
-              <span className="flex items-center gap-2"><MapPin className="size-4 text-amber-600" /> Dubai World Trade Centre, UAE</span>
-              <span className="flex items-center gap-2"><CalendarDays className="size-4 text-amber-600" /> December 8–10, 2026</span>
-              <span className="flex items-center gap-2"><Globe className="size-4 text-amber-600" /> Hybrid Event</span>
+            <div className="my-6 h-px w-20 bg-amber-500" />
+            <p className="max-w-xl text-sm sm:text-base leading-relaxed sm:leading-7 text-[#4b4568] text-justify font-normal">{description}</p>
+            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-[#4b4568]">
+              <span className="flex items-center gap-2"><MapPin className="size-4 text-amber-600 shrink-0" /> {heroVenue}</span>
+              <span className="flex items-center gap-2"><CalendarDays className="size-4 text-amber-600 shrink-0" /> {heroDates}</span>
+              <span className="flex items-center gap-2"><Globe className="size-4 text-amber-600 shrink-0" /> {heroMode}</span>
             </div>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-violet-600 font-bold text-white shadow-lg shadow-violet-600/30">
-                <Link href={ctaLink2}>{ctaText2} <ArrowRight className="ml-2 size-4" /></Link>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild size="lg" className="bg-[#281b58] hover:bg-[#382678] font-bold !text-white shadow-xl shadow-indigo-950/30">
+                <Link href={ctaLink2} className="!text-white">{ctaText2} <ArrowRight className="ml-2 size-4" /></Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-border/70 bg-white/70 font-semibold text-foreground hover:bg-white">
-                <Link href={ctaLink1}><Presentation className="mr-2 size-4" /> {ctaText1}</Link>
+              <Button asChild size="lg" variant="outline" className="border-slate-300 bg-white/90 font-semibold text-[#1a153a] hover:bg-white shadow-sm">
+                <Link href={ctaLink1}><Presentation className="mr-2 size-4 text-amber-600" /> {ctaText1}</Link>
               </Button>
             </div>
           </div>
 
-          <div className="relative lg:-mr-16">
-            <div className="hero-art relative overflow-hidden border-l-8 border-amber-500/70 bg-violet-950">
-              <img src={`/ICGIT${heroImage}`} alt="ICGIT 2026 conference experience" className="aspect-[1.2/0.86] w-full object-cover object-center" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-violet-950/35 via-transparent to-transparent" />
+          <div className="relative lg:-mr-16 mt-6 lg:mt-0">
+            <div className="hero-art relative overflow-hidden rounded-3xl border-l-8 border-amber-500/70 bg-white shadow-2xl">
+              <img src={heroImage} alt={`${confName} conference experience`} className="aspect-[1.2/0.86] w-full object-cover object-center" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#1a153a]/25 via-transparent to-transparent" />
             </div>
-            <div className="home-stat-bar absolute -bottom-8 left-8 right-4 grid grid-cols-2 gap-px rounded-xl bg-violet-950 p-4 text-white sm:grid-cols-4 sm:p-5">
-              {[["2,000+", "Attendees"], ["80+", "Countries"], ["120+", "Speakers"], ["200+", "Organizations"]].map(([value, label]) => (
-                <div key={label} className="border-white/20 px-3 py-2 text-center sm:border-r last:border-0">
-                  <p className="font-heading text-2xl font-bold text-white">{value}</p>
-                  <p className="mt-1 text-[10px] uppercase tracking-wider text-white/60">{label}</p>
+            <div className="home-stat-bar relative sm:absolute sm:-bottom-8 sm:left-8 sm:right-4 mt-4 sm:mt-0 grid grid-cols-2 gap-2 sm:gap-px rounded-2xl bg-[#281b58] p-4 text-white sm:grid-cols-4 sm:p-5 shadow-2xl border border-indigo-900/50">
+              {[["2,000+", "Attendees"], ["80+", "Countries"], [`${speakers.length || 40}+`, "Speakers"], ["200+", "Organizations"]].map(([value, label]) => (
+                <div key={label} className="border-white/10 px-3 py-2 text-center sm:border-r last:border-0 bg-white/5 sm:bg-transparent rounded-lg sm:rounded-none">
+                  <p className="font-heading text-xl sm:text-2xl font-bold text-white">{value}</p>
+                  <p className="mt-1 text-[10px] uppercase tracking-wider text-white/70">{label}</p>
                 </div>
               ))}
             </div>
@@ -206,12 +297,11 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     );
   }
 
-  function renderCountdown(fields: Record<string, string>) {
-    const badge = fields.badge || "\u23F3 Conference Begins In";
+  function renderCountdown(fields: Record<string, string | undefined>) {
+    const badge = fields.badge || "⏳ Conference Begins In";
     const title = fields.title || "Don't Miss This Global Event";
-    const targetDate = fields.targetDate || "2026-12-08T09:00:00Z";
+    const targetDate = fields.targetDate || confStartDate;
 
-    // Split title to style the last words or highlight "Global Event"
     const highlightIndex = title.toLowerCase().lastIndexOf("global event");
     let mainTitle = title;
     let highlightPart = "";
@@ -221,14 +311,14 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     }
 
     return (
-      <section key="countdown" className="py-10">
-        <div className="container">
-          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 text-center space-y-6">
-            <span className="inline-flex rounded-full bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-violet-400">
+      <section key="countdown" className="py-14 sm:py-20 scroll-mt-24">
+        <div className="container px-4 sm:px-6">
+          <div className="rounded-3xl border border-slate-200/90 bg-white/90 backdrop-blur-md p-6 sm:p-10 text-center space-y-6 shadow-xl">
+            <span className="inline-flex rounded-full bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58]">
               {badge}
             </span>
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-white">
-              {mainTitle} <span className="text-violet-400">{highlightPart}</span>
+            <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-[#1a153a]">
+              {mainTitle} <span className="text-[#281b58]">{highlightPart}</span>
             </h2>
             <div className="max-w-3xl mx-auto">
               <CountdownCard targetDate={targetDate} />
@@ -239,219 +329,135 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     );
   }
 
-  function renderAbout(fields: Record<string, string>) {
-    const badge = fields.badge || "\uD83D\uDE80 About the Conference";
-    const title = fields.title || "Shaping the Future Together";
-    const paragraph1 = fields.paragraph1 || "ICGIT 2026 is the world's most anticipated gathering of global innovators, technology pioneers, academic researchers, and business leaders. Now in its 8th edition, this conference serves as a global platform for exchange of cutting-edge ideas across AI, blockchain, green technology, digital transformation, and sustainable innovation.";
-    const paragraph2 = fields.paragraph2 || "Hosted in Dubai \u2014 the world's innovation hub \u2014 ICGIT 2026 features 120+ expert speakers, 40+ interactive sessions, live demos, startup showcases, and exclusive networking dinners bringing together 2,000+ delegates from 80+ countries.";
-    const aboutImage = fields.aboutImage || "/about_banner.avif";
-
-    // Split highlight for styling "Future Together"
-    const highlightIndex = title.toLowerCase().lastIndexOf("future together");
-    let mainTitle = title;
-    let highlightPart = "";
-    if (highlightIndex !== -1) {
-      mainTitle = title.substring(0, highlightIndex);
-      highlightPart = title.substring(highlightIndex);
-    }
+  function renderAbout(fields: Record<string, string | undefined>) {
+    const badge = fields.badge || "About the Conference";
+    const title = fields.title || "Pioneering the Next Era of";
+    const titleColor = fields.titleColor || "Technological Breakthroughs";
+    const paragraph1 = fields.paragraph1 || fields.desc1 || `${confName} is the world's most anticipated gathering of global innovators, technology pioneers, academic researchers, and business leaders.`;
+    const paragraph2 = fields.paragraph2 || fields.desc2 || `Hosted in ${confCity} — the world's innovation hub — ${confName} features 120+ expert speakers, 40+ interactive sessions, live demos, startup showcases, and exclusive networking dinners.`;
+    const rawAboutImg = fields.aboutImage || "/about_banner.avif";
+    const aboutImage = resolveImgSrc(rawAboutImg);
 
     return (
-      <section id="brochure" key="about" className="py-10">
-        <div className="container grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-start">
-          {/* Left — about */}
+      <section id="about" key="about" className="py-14 sm:py-20 scroll-mt-28">
+        <div id="brochure" />
+        <div className="container grid gap-10 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] items-start">
           <div className="space-y-6">
-            <span className="inline-flex rounded-full bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-violet-400">
+            <span className="inline-flex rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
               {badge}
             </span>
-            <h2 className="font-heading text-3xl font-extrabold text-white leading-tight">
-              {mainTitle} <span className="text-violet-400">{highlightPart}</span>
+            <h2 className="font-heading text-3xl sm:text-5xl font-extrabold text-[#1a153a] leading-tight tracking-tight">
+              {title} <span className="text-[#281b58]">{titleColor}</span>
             </h2>
-            <p className="text-sm leading-relaxed text-white/60">
-              {paragraph1}
-            </p>
-            <p className="text-sm leading-relaxed text-white/60">
-              {paragraph2}
-            </p>
-            <div className="rounded-xl overflow-hidden border border-white/10 relative h-52">
+            <div className="space-y-4">
+              <p className="text-sm sm:text-base leading-relaxed sm:leading-7 text-[#4b4568] text-justify font-normal">
+                {paragraph1}
+              </p>
+              <p className="text-sm sm:text-base leading-relaxed sm:leading-7 text-[#4b4568] text-justify font-normal">
+                {paragraph2}
+              </p>
+            </div>
+            <div className="rounded-3xl overflow-hidden border border-slate-200/90 relative h-56 sm:h-64 shadow-xl mt-4">
               <img
-                src={`/ICGIT${aboutImage}`}
+                src={aboutImage}
                 alt="Conference venue"
                 className="w-full h-full object-cover object-center"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-4 sm:p-5">
+                <p className="text-xs sm:text-sm font-semibold text-white/95">
+                  📍 {confVenue}, {confCity}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Right — dates + fees */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-6">
-            <h3 className="font-heading text-lg font-bold text-white">
-              &#128197; Important Dates
-            </h3>
-
-            <div className="space-y-2.5">
-              {IMPORTANT_DATES.map((d, i) => (
-                <div key={i} className="flex justify-between items-center bg-white/5 border border-white/10 px-3 py-2.5 rounded-lg text-xs">
-                  <div>
-                    <p className="font-bold text-white">{d.title}</p>
-                    <p className="text-white/40 text-[10px] mt-0.5">{d.date}</p>
-                  </div>
-                  <span className={`px-2 py-0.5 rounded text-[9px] font-bold border uppercase ${d.color}`}>
-                    {d.status}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <Button asChild size="lg" className="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold border-0">
-              <Link href="/abstracts">Submit Your Abstract &rarr;</Link>
-            </Button>
-
-            {/* Registration fees */}
-            <div className="pt-2 border-t border-white/10">
-              <h4 className="font-heading text-sm font-bold text-white mb-3">
-                &#128179; Registration Fees
-              </h4>
-              <div className="space-y-2">
-                {REGISTRATION_FEES.map((f) => (
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-slate-200/90 bg-white/90 backdrop-blur-md p-6 sm:p-8 space-y-4 shadow-xl">
+              <h3 className="font-heading text-lg font-bold text-[#1a153a] flex items-center gap-2">
+                <CalendarDays className="size-5 text-indigo-600" />
+                Key Milestones & Dates
+              </h3>
+              <div className="space-y-3">
+                {DEFAULT_IMPORTANT_DATES.slice(0, 4).map((d) => (
                   <div
-                    key={f.category}
-                    className={`flex justify-between items-center px-3 py-2 rounded-lg text-xs border ${
-                      f.highlight
-                        ? "bg-amber-500/10 border-amber-500/30 text-amber-400"
-                        : "bg-white/5 border-white/10 text-white"
-                    }`}
+                    key={d.title}
+                    className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"
                   >
-                    <span className="font-semibold">{f.category}</span>
-                    <span className={`font-black text-sm ${f.highlight ? "text-amber-400" : "text-white"}`}>{f.price}</span>
+                    <div>
+                      <p className="font-semibold text-[#1a153a]">{d.title}</p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">{d.date}</p>
+                    </div>
+                    <span
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${d.color}`}
+                    >
+                      {d.status}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-5 text-center shadow-sm">
+                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{tracks.length || 6}</p>
+                <p className="text-[11px] text-slate-600 mt-1 uppercase font-bold tracking-wider">Research Tracks</p>
+              </div>
+              <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-5 text-center shadow-sm">
+                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{speakers.length || 8}+</p>
+                <p className="text-[11px] text-slate-600 mt-1 uppercase font-bold tracking-wider">Keynote Speakers</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
     );
   }
 
-  function renderSessions(fields: Record<string, string>) {
-    const badge = fields.badge || "\uD83E\uDDE9 Conference Tracks";
-    const title = fields.title || "Featured Session Tracks";
-    const description = fields.description || "6 specialized tracks covering the most critical areas of global innovation and emerging technologies.";
-
-    const highlightIndex = title.toLowerCase().lastIndexOf("session tracks");
-    let mainTitle = title;
-    let highlightPart = "";
-    if (highlightIndex !== -1) {
-      mainTitle = title.substring(0, highlightIndex);
-      highlightPart = title.substring(highlightIndex);
-    }
+  function renderSessions(fields: Record<string, string | undefined>) {
+    const badge = fields.badge || "🎯 Conference Program";
+    const title = fields.title || "Sessions, Tracks & Topics";
+    const description = fields.description || "Explore the multifaceted agenda and research tracks designed for global delegates.";
 
     return (
-      <section id="sessions" key="sessions" className="py-10">
-        <div className="container space-y-10">
-          <div className="text-center space-y-4 max-w-3xl mx-auto">
-            <span className="inline-flex rounded-full bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-violet-400">
+      <section id="sessions" key="sessions" className="py-14 sm:py-20 scroll-mt-28">
+        <div className="container px-4 sm:px-6 space-y-8">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <span className="inline-flex rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
               {badge}
             </span>
-            <h2 className="font-heading text-3xl font-extrabold text-white">
-              {mainTitle} <span className="text-violet-400">{highlightPart}</span>
+            <h2 className="font-heading text-3xl sm:text-5xl font-extrabold text-[#1a153a]">
+              {title}
             </h2>
-            <p className="text-sm text-white/50">
-              {description}
-            </p>
+            <p className="text-sm sm:text-base text-[#4b4568] leading-relaxed text-pretty">{description}</p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {activeTracks.slice(0, 6).map((t, idx) => {
-              const Icon = TRACK_ICONS[idx % TRACK_ICONS.length];
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {tracks.map((tr, idx) => {
+              const IconComp = TRACK_ICONS[idx % TRACK_ICONS.length];
               return (
                 <div
-                  key={t.id}
-                  className="group rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 hover:border-violet-500/40 hover:bg-white/8 transition-all duration-300 flex flex-col justify-between"
+                  key={tr.id}
+                  className="group rounded-3xl border border-slate-200/90 bg-white/90 backdrop-blur-md p-6 space-y-3 hover:border-indigo-400 hover:shadow-xl transition duration-300 shadow-sm"
                 >
-                  <div>
-                    <div className="rounded-lg bg-violet-500/10 p-2.5 text-violet-400 w-fit mb-4 group-hover:bg-violet-500/20 transition">
-                      <Icon className="size-5" />
-                    </div>
-                    <h4 className="font-heading text-sm font-bold text-white mb-2">{t.name}</h4>
-                    <p className="text-xs text-white/50 leading-relaxed">
-                      {t.description ?? "Deep dive analysis into technical frameworks, research methodologies, and industrial implementation challenges."}
-                    </p>
+                  <div className="size-11 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 group-hover:scale-110 transition">
+                    <IconComp className="size-5" />
                   </div>
-                  <div className="mt-6 pt-4 border-t border-white/10 flex justify-end">
-                    <Link href="/sessions" className="text-[10px] text-violet-400 font-bold uppercase tracking-wider hover:text-white transition">
-                      Explore sessions &rarr;
-                    </Link>
-                  </div>
+                  <h3 className="font-heading text-base font-bold text-[#1a153a] group-hover:text-indigo-600 transition">
+                    {tr.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#4b4568] leading-relaxed line-clamp-3 text-pretty">
+                    {tr.description || "Comprehensive research presentations, workshop panels, and interactive paper sessions."}
+                  </p>
                 </div>
               );
             })}
           </div>
-        </div>
-      </section>
-    );
-  }
 
-  function renderSpeakers(fields: Record<string, string>) {
-    const badge = fields.badge || "\uD83C\uDF99 Featured Speakers";
-    const title = fields.title || "World-Class Keynote Speakers";
-    const description = fields.description || "Meet the academic visionaries and industrial leaders delivering keynote addresses at ICGIT 2026.";
-
-    const highlightIndex = title.toLowerCase().lastIndexOf("keynote speakers");
-    let mainTitle = title;
-    let highlightPart = "";
-    if (highlightIndex !== -1) {
-      mainTitle = title.substring(0, highlightIndex);
-      highlightPart = title.substring(highlightIndex);
-    }
-
-    return (
-      <section id="speakers" key="speakers" className="py-10">
-        <div className="container space-y-10">
-          <div className="text-center space-y-4 max-w-3xl mx-auto">
-            <span className="inline-flex rounded-full bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-violet-400">
-              {badge}
-            </span>
-            <h2 className="font-heading text-3xl font-extrabold text-white">
-              {mainTitle} <span className="text-violet-400">{highlightPart}</span>
-            </h2>
-            <p className="text-sm text-white/50">
-              {description}
-            </p>
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {speakers.length === 0 ? (
-              <div className="col-span-full py-12 text-center text-sm text-white/30 italic">
-                Speaker announcements coming soon.
-              </div>
-            ) : (
-              speakers.map((s) => (
-                <div
-                  key={s.id}
-                  className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5 flex flex-col justify-between hover:border-violet-500/40 transition"
-                >
-                  <div className="space-y-3">
-                    <div className="aspect-square rounded-xl bg-violet-500/10 border border-white/10 flex items-center justify-center overflow-hidden">
-                      <User className="size-14 text-violet-400/50" />
-                    </div>
-                    <div>
-                      <h4 className="font-heading text-sm font-bold text-white">{s.name}</h4>
-                      <p className="text-violet-400 text-[10px] font-semibold mt-0.5">{s.role}</p>
-                      <p className="text-[10px] text-white/40 mt-1">{s.organizationName}</p>
-                    </div>
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-white/10">
-                    <span className="text-[9px] uppercase font-bold text-white/30 block mb-1">Keynote Topic</span>
-                    <p className="font-semibold text-white/80 text-xs italic">&quot;{s.topic}&quot;</p>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-
-          <div className="text-center">
-            <Button asChild className="bg-violet-600 hover:bg-violet-500 text-white font-bold border-0">
-              <Link href="/speakers">View All Speakers &rarr;</Link>
+          <div className="flex justify-center pt-2">
+            <Button asChild className="bg-[#281b58] hover:bg-[#382678] !text-white font-bold px-8 py-3 rounded-xl shadow-xl shadow-indigo-950/30 text-sm">
+              <Link href="/sessions" className="!text-white">
+                View Complete Session Tracks & Schedule <ArrowRight className="ml-2 size-4" />
+              </Link>
             </Button>
           </div>
         </div>
@@ -459,71 +465,144 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     );
   }
 
-  function renderVenue(fields: Record<string, string>) {
-    const badge = fields.badge || "\uD83D\uDCCD Venue Details";
-    const title = fields.title || "Dubai World Trade Centre";
-    const description = fields.description || "Sheikh Zayed Rd, Trade Centre 2, Dubai, United Arab Emirates. The DWTC is the premier venue in the Middle East for global technological events.";
-    const format = fields.format || "Hybrid (Onsite & Online)";
-    const mainHall = fields.mainHall || "Sheikh Maktoum Hall";
+  function renderSpeakers(fields: Record<string, string | undefined>) {
+    const badge = fields.badge || "🎙 Visionary Thought Leaders";
+    const title = fields.title || "World-Class Keynotes & Panelists";
+    const description = fields.description || "Hear from the foremost minds in artificial intelligence, deep tech, smart cities, and digital policy.";
 
-    const highlightIndex = title.toLowerCase().lastIndexOf("trade centre");
-    let mainTitle = title;
-    let highlightPart = "";
-    if (highlightIndex !== -1) {
-      mainTitle = title.substring(0, highlightIndex);
-      highlightPart = title.substring(highlightIndex);
+    return (
+      <section id="speakers" key="speakers" className="py-14 sm:py-20 scroll-mt-28">
+        <div className="container px-4 sm:px-6 space-y-8">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <span className="inline-flex rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
+              {badge}
+            </span>
+            <h2 className="font-heading text-3xl sm:text-5xl font-extrabold text-[#1a153a]">
+              {title}
+            </h2>
+            <p className="text-sm sm:text-base text-[#4b4568] leading-relaxed text-pretty">{description}</p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {speakers.map((sp) => (
+              <div
+                key={sp.id}
+                className="group rounded-3xl border border-slate-200/90 bg-white/90 backdrop-blur-md p-5 space-y-4 hover:border-indigo-400 hover:shadow-xl transition duration-300 flex flex-col shadow-sm"
+              >
+                <div className="aspect-square rounded-2xl bg-indigo-50 border border-slate-200 overflow-hidden relative flex items-center justify-center">
+                  {sp.imageAssetId ? (
+                    <img
+                      src={resolveImgSrc(sp.imageAssetId)}
+                      alt={sp.name}
+                      className="size-full object-cover group-hover:scale-105 transition duration-500 absolute inset-0 z-0"
+                    />
+                  ) : null}
+                  <div className="size-16 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-700 font-heading text-xl font-bold">
+                    {sp.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                  </div>
+                </div>
+                <div className="space-y-1.5 flex-1">
+                  <h3 className="font-heading text-sm font-bold text-[#1a153a] group-hover:text-indigo-600 transition">
+                    {sp.name}
+                  </h3>
+                  <p className="text-[11px] text-indigo-600 font-semibold">{sp.role}</p>
+                  <p className="text-[10px] text-slate-500 font-medium">{sp.organizationName}</p>
+                  {sp.topic && (
+                    <p className="text-[11px] text-[#4b4568] italic pt-2 line-clamp-2 border-t border-slate-100 mt-2 leading-relaxed">
+                      &ldquo;{sp.topic}&rdquo;
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center pt-6">
+            <Button asChild className="bg-[#281b58] hover:bg-[#382678] !text-white font-bold px-8 py-3 rounded-xl shadow-2xl shadow-indigo-950/40 text-sm">
+              <Link href="/speakers" className="!text-white font-bold flex items-center gap-1.5">
+                <span className="!text-white">View All Speakers</span>
+                <span className="!text-white text-base">&rarr;</span>
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function renderVenue(fields: Record<string, string | undefined>) {
+    const badge = fields.badge || "EVENT LOCATION";
+    const title = fields.title || "Hosted in the Heart of";
+    const description = fields.description || `${confVenue}, situated at the crossroads of international innovation in ${confCity}, United Arab Emirates.`;
+    const formatValue = fields.format || confMode || "Hybrid (Onsite & Online)";
+    const mainHallValue = fields.mainHall || "Sheikh Maktoum Hall";
+    
+    // Dynamic Google Maps handling:
+    const customMapLink = fields.mapLink || fields.mapLocationLink;
+    let embedSrc = `https://maps.google.com/maps?q=${encodeURIComponent(`${confVenue}, ${confCity}`)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    let directMapLink = `https://maps.google.com/?q=${encodeURIComponent(`${confVenue}, ${confCity}`)}`;
+    
+    if (customMapLink && customMapLink.trim() !== "") {
+      const trimmed = customMapLink.trim();
+      if (trimmed.includes("output=embed") || trimmed.includes("google.com/maps/embed")) {
+        embedSrc = trimmed;
+        directMapLink = trimmed.replace("&output=embed", "").replace("?output=embed", "");
+      } else {
+        const q = encodeURIComponent(trimmed);
+        embedSrc = `https://maps.google.com/maps?q=${q}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+        directMapLink = trimmed.startsWith("http://") || trimmed.startsWith("https://") ? trimmed : `https://maps.google.com/?q=${q}`;
+      }
     }
 
     return (
-      <section id="venue" key="venue" className="py-10">
-        <div className="container grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-center">
-          <div className="space-y-6">
-            <span className="inline-flex rounded-full bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-violet-400">
-              {badge}
-            </span>
-            <h2 className="font-heading text-3xl font-extrabold text-white">
-              {mainTitle} <span className="text-violet-400">{highlightPart}</span>
-            </h2>
-            <p className="text-sm text-white/60 leading-relaxed">
-              {description}
-            </p>
+      <section id="venue" key="venue" className="py-14 sm:py-20 scroll-mt-28">
+        <div className="container px-4 sm:px-6">
+          <div className="grid lg:grid-cols-[1fr_1.18fr] gap-10 items-center">
+            {/* Left Column: Venue Details */}
+            <div className="space-y-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
+                <span>{badge}</span>
+              </span>
+              <h2 className="font-heading text-3xl sm:text-5xl font-extrabold text-[#1a153a] tracking-tight leading-tight">
+                {title}
+              </h2>
+              <p className="text-sm sm:text-base leading-relaxed sm:leading-7 text-[#4b4568] max-w-lg mt-3 text-justify font-normal">
+                {description}
+              </p>
 
-            <div className="grid grid-cols-2 gap-4 text-xs font-semibold">
-              <div className="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                <p className="text-violet-400 mb-1 uppercase tracking-wider font-bold text-[10px]">Format</p>
-                <p className="text-white">{format}</p>
-              </div>
-              <div className="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                <p className="text-violet-400 mb-1 uppercase tracking-wider font-bold text-[10px]">Main Hall</p>
-                <p className="text-white">{mainHall}</p>
+              {/* Format & Main Hall feature cards */}
+              <div className="grid grid-cols-2 gap-4 pt-4 max-w-lg">
+                <div className="rounded-2xl border border-slate-200/90 bg-white/80 backdrop-blur-md p-4 space-y-1.5 shadow-sm">
+                  <span className="text-[10px] font-bold tracking-wider uppercase text-[#5a489b]">FORMAT</span>
+                  <p className="font-heading text-xs sm:text-sm font-extrabold text-[#1a153a]">{formatValue}</p>
+                </div>
+                <div className="rounded-2xl border border-slate-200/90 bg-white/80 backdrop-blur-md p-4 space-y-1.5 shadow-sm">
+                  <span className="text-[10px] font-bold tracking-wider uppercase text-[#5a489b]">MAIN HALL</span>
+                  <p className="font-heading text-xs sm:text-sm font-extrabold text-[#1a153a]">{mainHallValue}</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="rounded-2xl border border-white/10 overflow-hidden h-80 relative group bg-surface/30">
-            <iframe
-              title="Dubai World Trade Centre location map"
-              src="https://maps.google.com/maps?q=Dubai%20World%20Trade%20Centre,%20Dubai&t=&z=15&ie=UTF8&iwloc=&output=embed"
-              className="w-full h-full border-0 grayscale-[25%] contrast-[1.05] opacity-90 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500"
-              loading="lazy"
-              allowFullScreen
-            />
+            {/* Right Column: Clean Light Google Map with 'Open in Maps' Button */}
+            <div className="relative rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-white h-[320px] sm:h-[400px]">
+              <iframe
+                title={`${confVenue} Location Map`}
+                src={embedSrc}
+                className="w-full h-full border-0"
+                loading="lazy"
+                allowFullScreen
+              />
 
-            {/* Overlay card */}
-            <div className="absolute bottom-4 left-4 right-4 pointer-events-none z-10">
-              <div className="rounded-xl bg-slate-950/80 backdrop-blur-md border border-white/15 p-4 flex items-center justify-between gap-4 pointer-events-auto shadow-2xl">
-                <div>
-                  <p className="text-[10px] text-violet-400 font-bold uppercase tracking-wider mb-1">📍 Venue Location</p>
-                  <p className="text-white font-semibold text-sm">Dubai World Trade Centre</p>
-                  <p className="text-white/60 text-[11px] mt-0.5">Sheikh Zayed Rd, Trade Centre 2, Dubai, UAE</p>
-                </div>
+              {/* Floating 'Open in Maps' badge in top-left */}
+              <div className="absolute top-3 left-3 z-10">
                 <a
-                  href="https://maps.google.com/?q=Dubai+World+Trade+Centre"
+                  href={directMapLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 rounded-lg bg-violet-600 hover:bg-violet-500 transition-colors px-3.5 py-2 text-white text-[11px] font-bold whitespace-nowrap shadow-lg hover-lift"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/95 hover:bg-white text-blue-600 text-xs font-semibold shadow-md border border-slate-200/80 transition-all hover:scale-105"
                 >
-                  Get Directions &rarr;
+                  <span>Open in Maps</span>
+                  <span className="text-xs">↗</span>
                 </a>
               </div>
             </div>
@@ -533,37 +612,29 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
     );
   }
 
-  function renderContact(fields: Record<string, string>) {
-    const badge = fields.badge || "\u2709 Contact Secretariat";
+  function renderContact(fields: Record<string, string | undefined>) {
+    const badge = fields.badge || "✉ Contact Secretariat";
     const title = fields.title || "Get in Touch";
     const description = fields.description || "Questions on registration, submission, or corporate sponsorship? Send us an inquiry below or email secretariat@icgit2026.org.";
 
-    const highlightIndex = title.toLowerCase().lastIndexOf("touch");
-    let mainTitle = title;
-    let highlightPart = "";
-    if (highlightIndex !== -1) {
-      mainTitle = title.substring(0, highlightIndex);
-      highlightPart = title.substring(highlightIndex);
-    }
-
     return (
-      <section id="contact" key="contact" className="py-10">
-        <div className="container max-w-4xl">
-          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 space-y-6">
+      <section id="contact" key="contact" className="py-14 sm:py-20 scroll-mt-28">
+        <div className="container max-w-4xl px-4 sm:px-6">
+          <div className="rounded-3xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-6 sm:p-10 space-y-6 shadow-2xl">
             <div className="text-center space-y-3">
-              <span className="inline-flex rounded-full bg-violet-500/10 border border-violet-500/20 px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-violet-400">
+              <span className="inline-flex rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
                 {badge}
               </span>
-              <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-white">
-                {mainTitle} <span className="text-violet-400">{highlightPart}</span>
+              <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-[#1a153a]">
+                {title}
               </h2>
-              <p className="text-xs text-white/50 max-w-lg mx-auto">
+              <p className="text-xs sm:text-sm text-[#4b4568] max-w-lg mx-auto leading-relaxed text-pretty">
                 {description}
               </p>
             </div>
 
             {feedback && (
-              <div className={`p-4 rounded-lg border text-xs font-semibold text-center ${feedback.ok ? "border-emerald-500/35 bg-emerald-500/5 text-emerald-400" : "border-red-500/35 bg-red-500/5 text-red-400"}`}>
+              <div className={`p-4 rounded-xl border text-xs font-semibold text-center ${feedback.ok ? "border-emerald-500/35 bg-emerald-50 text-emerald-800" : "border-red-500/35 bg-red-50 text-red-800"}`}>
                 {feedback.msg}
               </div>
             )}
@@ -571,44 +642,44 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
             <form onSubmit={handleContactSubmit} className="space-y-4 text-xs">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-white/50 font-semibold mb-1.5 uppercase tracking-wider text-[10px]">Full Name</label>
+                  <label className="block text-slate-700 font-semibold mb-1.5 uppercase tracking-wider text-[10px]">Full Name</label>
                   <div className="relative">
-                    <User className="absolute left-3 top-3 size-4 text-white/30 pointer-events-none" />
+                    <User className="absolute left-3 top-3 size-4 text-slate-400 pointer-events-none" />
                     <input
                       required
                       type="text"
                       name="name"
                       suppressHydrationWarning
                       placeholder="Your full name"
-                      className="w-full rounded-lg border border-white/10 bg-white/5 p-2.5 pl-10 text-white placeholder:text-white/25 focus:outline-none focus:border-violet-500/60 focus:bg-white/8 transition"
+                      className="w-full rounded-xl border border-slate-300 bg-white p-2.5 pl-10 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 transition"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-white/50 font-semibold mb-1.5 uppercase tracking-wider text-[10px]">Email Address</label>
+                  <label className="block text-slate-700 font-semibold mb-1.5 uppercase tracking-wider text-[10px]">Email Address</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 size-4 text-white/30 pointer-events-none" />
+                    <Mail className="absolute left-3 top-3 size-4 text-slate-400 pointer-events-none" />
                     <input
                       required
                       type="email"
                       name="email"
                       suppressHydrationWarning
                       placeholder="you@example.com"
-                      className="w-full rounded-lg border border-white/10 bg-white/5 p-2.5 pl-10 text-white placeholder:text-white/25 focus:outline-none focus:border-violet-500/60 focus:bg-white/8 transition"
+                      className="w-full rounded-xl border border-slate-300 bg-white p-2.5 pl-10 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 transition"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-white/50 font-semibold mb-1.5 uppercase tracking-wider text-[10px]">Inquiry Category</label>
+                <label className="block text-slate-700 font-semibold mb-1.5 uppercase tracking-wider text-[10px]">Inquiry Category</label>
                 <div className="relative">
-                  <HelpCircle className="absolute left-3 top-3 size-4 text-white/30 pointer-events-none" />
+                  <HelpCircle className="absolute left-3 top-3 size-4 text-slate-400 pointer-events-none" />
                   <select
                     required
                     name="category"
                     suppressHydrationWarning
-                    className="w-full rounded-lg border border-white/10 bg-white/5 p-2.5 pl-10 text-white focus:outline-none focus:border-violet-500/60 transition"
+                    className="w-full rounded-xl border border-slate-300 bg-white p-2.5 pl-10 text-slate-900 focus:outline-none focus:border-indigo-600 transition"
                   >
                     <option value="delegate">Delegate Inquiry</option>
                     <option value="author">Author Submission</option>
@@ -619,14 +690,14 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
               </div>
 
               <div>
-                <label className="block text-white/50 font-semibold mb-1.5 uppercase tracking-wider text-[10px]">Message</label>
+                <label className="block text-slate-700 font-semibold mb-1.5 uppercase tracking-wider text-[10px]">Message</label>
                 <textarea
                   required
                   name="message"
                   rows={5}
                   suppressHydrationWarning
                   placeholder="Details of your inquiry (min. 12 characters)..."
-                  className="w-full rounded-lg border border-white/10 bg-white/5 p-2.5 text-white placeholder:text-white/25 focus:outline-none focus:border-violet-500/60 focus:bg-white/8 transition resize-none"
+                  className="w-full rounded-xl border border-slate-300 bg-white p-2.5 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 transition resize-none"
                 />
               </div>
 
@@ -635,9 +706,9 @@ export function HomeClient({ speakers, tracks, customContent }: HomeClientProps)
                   type="submit"
                   isLoading={isPending}
                   suppressHydrationWarning
-                  className="bg-violet-600 hover:bg-violet-500 text-white font-bold border-0 shadow-lg shadow-violet-600/25"
+                  className="bg-[#281b58] hover:bg-[#382678] !text-white font-bold px-8 py-3 rounded-xl shadow-xl shadow-indigo-950/30"
                 >
-                  Send Inquiry Message
+                  <span className="!text-white">Send Inquiry Message</span>
                 </Button>
               </div>
             </form>

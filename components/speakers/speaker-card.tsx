@@ -1,23 +1,58 @@
 import { Mic2 } from "lucide-react";
 import { GlassCard } from "@/components/cards/glass-card";
-import type { Speaker } from "@/types/conference";
 
 interface SpeakerCardProps {
-  speaker: Speaker;
+  speaker: {
+    id?: string;
+    name: string;
+    role: string;
+    topic?: string;
+    bio?: string | null;
+    organization?: string;
+    organizationId?: string | null;
+    imageAsset?: { storageKey: string } | null;
+    imageAssetId?: string | null;
+  };
+}
+
+function resolveImgSrc(src?: string | null): string | null {
+  if (!src) return null;
+  if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) {
+    return src;
+  }
+  if (src.startsWith("/ICGIT/") || src === "/ICGIT") {
+    return src;
+  }
+  return src.startsWith("/") ? `/ICGIT${src}` : `/ICGIT/${src}`;
 }
 
 export function SpeakerCard({ speaker }: SpeakerCardProps) {
+  const rawImgSrc = speaker.imageAsset?.storageKey || speaker.imageAssetId;
+  const imgSrc = resolveImgSrc(rawImgSrc);
+
   return (
-    <GlassCard className="h-full">
-      <div className="mb-5 flex size-14 items-center justify-center rounded-full bg-secondary/15 text-accent">
-        <Mic2 className="size-7" aria-hidden="true" />
+    <GlassCard className="h-full flex flex-col justify-between">
+      <div>
+        <div className="mb-5 size-16 rounded-2xl overflow-hidden bg-secondary/15 border border-border/30 flex items-center justify-center relative">
+          {imgSrc ? (
+            <img
+              src={imgSrc}
+              alt={speaker.name}
+              className="size-full object-cover"
+            />
+          ) : (
+            <Mic2 className="size-7 text-accent" aria-hidden="true" />
+          )}
+        </div>
+        <h3 className="font-heading text-xl font-semibold text-foreground">{speaker.name}</h3>
+        <p className="mt-1 text-sm font-medium text-accent">{speaker.role}</p>
+        {speaker.organization && <p className="mt-1 text-sm text-muted">{speaker.organization}</p>}
       </div>
-      <h3 className="font-heading text-xl font-semibold text-foreground">{speaker.name}</h3>
-      <p className="mt-1 text-sm font-medium text-accent">{speaker.role}</p>
-      <p className="mt-1 text-sm text-muted">{speaker.organization}</p>
-      <p className="mt-5 border-t border-border/35 pt-5 text-sm leading-7 text-muted">
-        {speaker.topic}
-      </p>
+      {speaker.topic && (
+        <p className="mt-5 border-t border-border/35 pt-5 text-sm leading-7 text-muted">
+          &ldquo;{speaker.topic}&rdquo;
+        </p>
+      )}
     </GlassCard>
   );
 }

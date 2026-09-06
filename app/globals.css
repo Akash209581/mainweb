@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide Next.js dev overlay indicator bubble */
+nextjs-portal,
+#nextjs-dev-overlay-bubble,
+[data-nextjs-dev-overlay-bubble],
+[data-nextjs-toast],
+div[data-nextjs-dev-overlay-bubble] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 :root,
 [data-theme="tech-ai"] {
   --font-outfit: Georgia, "Times New Roman", serif;
@@ -186,3 +198,6 @@ input, textarea {
   -ms-user-select: text !important;
 }
 
+
+
+.conference-home a.btn, .conference-home button, .conference-home .bg-violet-600, .conference-home .bg-\[\#281b58\] { color: #ffffff !important; }

@@ -32,7 +32,7 @@ export async function listSpeakers(options: QueryOptions) {
       orderBy: [{ sortOrder: options.direction }, { name: "asc" }],
       skip: offset(options),
       take: options.pageSize,
-      include: { organization: true }
+      include: { organization: true, imageAsset: true }
     }),
     prisma.speaker.count({ where })
   ]);

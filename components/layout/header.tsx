@@ -27,7 +27,7 @@ export function Header({ items = NAVIGATION_ITEMS }: HeaderProps) {
   useEffect(() => setOpen(false), [pathname]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith("/#") && pathname === "/") {
+    if (href.startsWith("/#") && (pathname === "/" || pathname === "/ICGIT" || pathname === "/ICGIT/")) {
       e.preventDefault();
       const id = href.replace("/#", "");
       if (id === "home") {
@@ -73,10 +73,12 @@ export function Header({ items = NAVIGATION_ITEMS }: HeaderProps) {
     >
       <div className="container flex h-20 items-center justify-between gap-4">
         <Link href="/" className="focus-ring flex items-center gap-3 rounded-md" aria-label={`${CONFERENCE.name} home`}>
-          <span className="grid size-10 place-items-center rounded-full border border-amber-500/50 text-xl text-amber-600">✳</span>
+          <div className="grid size-10 place-items-center rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-violet-600/20 tracking-wider">
+            ICGIT
+          </div>
           <span>
-          <span className="block font-heading text-xl font-bold text-foreground">{CONFERENCE.name}</span>
-          <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-muted sm:block">Global Innovation &amp; Technology</span>
+            <span className="block font-heading text-xl font-bold text-foreground">{CONFERENCE.name}</span>
+            <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-muted sm:block">Global Innovation &amp; Technology</span>
           </span>
         </Link>
 
