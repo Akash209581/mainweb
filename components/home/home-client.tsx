@@ -140,7 +140,7 @@ export const DEFAULT_FALLBACK_SPEAKERS: SpeakerInfo[] = [
     organizationName: "Global Digital Futures Institute",
     topic: "Responsible AI for borderless innovation ecosystems",
     bio: "Pioneering researcher in neural safety and AI governance.",
-    imageAssetId: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&auto=format&fit=crop&q=80"
+    imageAssetId: null
   },
   {
     id: "sp-2",
@@ -149,7 +149,7 @@ export const DEFAULT_FALLBACK_SPEAKERS: SpeakerInfo[] = [
     organizationName: "European Institute of Technology",
     topic: "Resilient infrastructure for intelligent cities",
     bio: "Expert in urban IoT and distributed municipal networks.",
-    imageAssetId: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&auto=format&fit=crop&q=80"
+    imageAssetId: null
   },
   {
     id: "sp-3",
@@ -158,7 +158,7 @@ export const DEFAULT_FALLBACK_SPEAKERS: SpeakerInfo[] = [
     organizationName: "Pacific BioSystems Lab",
     topic: "Translational technology in digital health",
     bio: "Leader in computational genomics and clinical interfaces.",
-    imageAssetId: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&auto=format&fit=crop&q=80"
+    imageAssetId: null
   },
   {
     id: "sp-4",
@@ -167,7 +167,7 @@ export const DEFAULT_FALLBACK_SPEAKERS: SpeakerInfo[] = [
     organizationName: "Dubai Enterprise Technology Council",
     topic: "Scaling public-private innovation in the Gulf",
     bio: "Strategist advancing smart governance and venture ecosystems.",
-    imageAssetId: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80"
+    imageAssetId: null
   }
 ];
 
@@ -527,14 +527,6 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
               );
             })}
           </div>
-
-          <div className="flex justify-center pt-2">
-            <Button asChild className="bg-[#281b58] hover:bg-[#382678] !text-white font-bold px-8 py-3 rounded-xl shadow-xl shadow-indigo-950/30 text-sm">
-              <Link href="/sessions" className="!text-white">
-                View Complete Session Tracks & Schedule <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
-          </div>
         </div>
       </section>
     );
@@ -590,15 +582,6 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="flex justify-center pt-6">
-            <Button asChild className="bg-[#281b58] hover:bg-[#382678] !text-white font-bold px-8 py-3 rounded-xl shadow-2xl shadow-indigo-950/40 text-sm">
-              <Link href="/speakers" className="!text-white font-bold flex items-center gap-1.5">
-                <span className="!text-white">View All Speakers</span>
-                <span className="!text-white text-base">&rarr;</span>
-              </Link>
-            </Button>
           </div>
         </div>
       </section>

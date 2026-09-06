@@ -5,6 +5,7 @@ import { Section } from "@/components/common/section";
 import { SearchBar } from "@/components/common/search-bar";
 import { EmptyState } from "@/components/common/empty-state";
 import { listCommittee } from "@/lib/repositories/public-content.repository";
+import { COMMITTEE } from "@/constants/conference";
 
 export const metadata: Metadata = {
   title: "Committee",
@@ -21,12 +22,23 @@ export default async function CommitteePage({ searchParams }: CommitteePageProps
   const params = await searchParams;
   const search = params.search ?? "";
 
-  const { items } = await listCommittee({
+  const { items: dbItems } = await listCommittee({
     page: 1,
     pageSize: 100,
     search,
     direction: "asc"
   });
+
+  const items =
+    dbItems.length > 0
+      ? dbItems
+      : !search
+      ? COMMITTEE.map((c) => ({
+          name: c.name,
+          role: c.role,
+          affiliation: c.affiliation
+        }))
+      : [];
 
   const groups: Record<string, typeof items> = {
     "Honorary Chairs": [],

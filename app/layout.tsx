@@ -152,8 +152,19 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           phone: "+971 4 000 2026"
         };
 
+        const rawMenuItems = dbMenuSetting?.value as Array<{ label: string; href: string }> | undefined;
+        const menuItems = rawMenuItems
+          ? rawMenuItems.map((item) => {
+              if (item.href === "/speakers") return { ...item, href: "/#speakers" };
+              if (item.href === "/sessions") return { ...item, href: "/#sessions" };
+              if (item.href === "/venue") return { ...item, href: "/#venue" };
+              if (item.href === "/contact") return { ...item, href: "/#contact" };
+              return item;
+            })
+          : undefined;
+
         return {
-          menuItems: (dbMenuSetting?.value as Array<{ label: string; href: string }>) || undefined,
+          menuItems,
           themeTokens: activeTheme?.tokens || null,
           conferenceInfo,
           footerContent: (footerSetting?.value as FooterProps["footerContent"]) || undefined,
