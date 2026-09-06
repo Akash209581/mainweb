@@ -8,5 +8,13 @@ services:
     restart: unless-stopped
     ports:
       - "3001:3000"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ${UPLOADS_PATH:-./public/uploads}:/app/public/uploads
+      - ${BACKUPS_PATH:-./backups}:/app/backups
+      - ${BACKUPS_PATH:-./backups}:/data/backups
