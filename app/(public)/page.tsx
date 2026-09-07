@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma/client";
 import { HomeClient, type ConferenceInfo, DEFAULT_FALLBACK_SPEAKERS, DEFAULT_FALLBACK_TRACKS } from "@/components/home/home-client";
 import { memoize } from "@/lib/cache";
 
-
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -41,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const { mappedSpeakers, mappedTracks, customContent, conferenceInfo, themeTokens } = await memoize(
     "home_page_data_live",
-    10000,
+    500,
     async () => {
       try {
         const [speakers, tracks, homeSetting, conf, activeTheme] = await Promise.all([
@@ -107,7 +107,7 @@ export default async function HomePage() {
                 if (sMonth === eMonth && s.getFullYear() === e.getFullYear()) {
                   return `${sMonth} ${s.getDate()}–${e.getDate()}, ${s.getFullYear()}`;
                 }
-                return `${sMonth} ${s.getDate()} – ${eMonth} ${e.getDate()}, ${e.getFullYear()}`;
+                return `${sMonth} ${s.getDate()} – ${eMonth} ${e.getDate()}, ${s.getFullYear()}`;
               })()
             : "December 8–10, 2026",
           startDateIso: conf?.startDate ? conf.startDate.toISOString() : "2026-12-08T09:00:00Z",

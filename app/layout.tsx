@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { AuthProvider } from "@/components/auth/auth-provider";
 import { Footer, type FooterConferenceInfo, type FooterProps } from "@/components/layout/footer";
@@ -10,9 +10,11 @@ import { CONFERENCE } from "@/constants/conference";
 import { prisma } from "@/lib/prisma/client";
 import { memoize } from "@/lib/cache";
 import { ClientBlocker } from "@/components/security/client-blocker";
+import { LiveContentWatcher } from "@/components/common/live-content-watcher";
 import "./globals.css";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 function resolveFaviconUrl(src?: string): string {
   if (!src) return "/ICGIT/favicon.ico";
@@ -112,7 +114,7 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const { menuItems, themeTokens, conferenceInfo, footerContent, faviconUrl } = await memoize(
     "layout_settings_live",
-    1000,
+    500,
     async () => {
       try {
         const [dbMenuSetting, activeTheme, conf, footerSetting, brandingSetting] = await Promise.all([
@@ -222,6 +224,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className="min-h-screen antialiased">
         <AuthProvider>
+          <LiveContentWatcher intervalMs={4000} />
           <ClientBlocker />
           <ClientParticles />
           <Header items={menuItems} />
