@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma/client";
 import { HomeClient, type ConferenceInfo, DEFAULT_FALLBACK_SPEAKERS, DEFAULT_FALLBACK_TRACKS } from "@/components/home/home-client";
 import { memoize } from "@/lib/cache";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const dynamic = "force-dynamic";
 
