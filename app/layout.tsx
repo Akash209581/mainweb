@@ -112,7 +112,7 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const { menuItems, themeTokens, conferenceInfo, footerContent, faviconUrl } = await memoize(
+  const { menuItems, branding, themeTokens, conferenceInfo, footerContent, faviconUrl } = await memoize(
     "layout_settings_live",
     500,
     async () => {
@@ -155,19 +155,28 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         };
 
         let rawMenuItems = dbMenuSetting?.value as Array<{ label: string; href: string }> | undefined;
-        if (!rawMenuItems || !Array.isArray(rawMenuItems) || rawMenuItems.length === 0) {
-          try {
-            const fs = await import("fs");
-            const path = await import("path");
-            const settingsFile = path.join(process.cwd(), "storage", "settings.json");
-            if (fs.existsSync(settingsFile)) {
-              const saved = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
-              if (Array.isArray(saved.navigation) && saved.navigation.length > 0) {
-                rawMenuItems = saved.navigation;
-              }
+        let fileBranding: any = null;
+        try {
+          const fs = await import("fs");
+          const path = await import("path");
+          const settingsFile = path.join(process.cwd(), "storage", "settings.json");
+          if (fs.existsSync(settingsFile)) {
+            const saved = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
+            if ((!rawMenuItems || !Array.isArray(rawMenuItems) || rawMenuItems.length === 0) && Array.isArray(saved.navigation) && saved.navigation.length > 0) {
+              rawMenuItems = saved.navigation;
             }
-          } catch {}
-        }
+            if (saved.branding) {
+              fileBranding = saved.branding;
+            }
+          }
+        } catch {}
+
+        const branding = {
+          logoUrl: brandingVal.logoUrl || fileBranding?.logoUrl || undefined,
+          logoText: brandingVal.logoText || fileBranding?.logoText || "ICGIT",
+          brandName: brandingVal.brandName || fileBranding?.brandName || conf?.name || CONFERENCE.name,
+          brandSubtitle: brandingVal.brandSubtitle || fileBranding?.brandSubtitle || "GLOBAL INNOVATION & TECHNOLOGY"
+        };
 
         const menuItems = rawMenuItems && Array.isArray(rawMenuItems) && rawMenuItems.length > 0
           ? rawMenuItems
@@ -175,6 +184,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
         return {
           menuItems,
+          branding,
           themeTokens: activeTheme?.tokens || null,
           conferenceInfo,
           footerContent: (footerSetting?.value as FooterProps["footerContent"]) || undefined,
@@ -183,6 +193,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       } catch (e) {
         console.error("Layout fetch error:", e);
         let fallbackMenu = undefined;
+        let fallbackBranding = undefined;
         try {
           const fs = await import("fs");
           const path = await import("path");
@@ -192,11 +203,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             if (Array.isArray(saved.navigation) && saved.navigation.length > 0) {
               fallbackMenu = saved.navigation;
             }
+            if (saved.branding) {
+              fallbackBranding = saved.branding;
+            }
           }
         } catch {}
 
         return {
           menuItems: fallbackMenu,
+          branding: fallbackBranding,
           themeTokens: null,
           conferenceInfo: undefined,
           footerContent: undefined,
@@ -248,7 +263,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           <LiveContentWatcher intervalMs={4000} />
           <ClientBlocker />
           <ClientParticles />
-          <Header items={menuItems} />
+          <Header items={menuItems} branding={branding} />
           <main>{children}</main>
           <Footer conference={conferenceInfo} navItems={menuItems} footerContent={footerContent} />
         </AuthProvider>

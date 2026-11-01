@@ -8,11 +8,23 @@ import { Button } from "@/components/buttons/button";
 import { CONFERENCE, NAVIGATION_ITEMS } from "@/constants/conference";
 import { cn } from "@/lib/utils/cn";
 
-interface HeaderProps {
-  items?: Array<{ label: string; href: string }>;
+export interface HeaderBranding {
+  logoUrl?: string;
+  logoText?: string;
+  brandName?: string;
+  brandSubtitle?: string;
 }
 
-export function Header({ items = NAVIGATION_ITEMS }: HeaderProps) {
+interface HeaderProps {
+  items?: Array<{ label: string; href: string }>;
+  branding?: HeaderBranding;
+}
+
+export function Header({ items = NAVIGATION_ITEMS, branding }: HeaderProps) {
+  const brandLogoUrl = branding?.logoUrl;
+  const brandLogoText = branding?.logoText || "ICGIT";
+  const brandName = branding?.brandName || CONFERENCE.name;
+  const brandSubtitle = branding?.brandSubtitle || "GLOBAL INNOVATION & TECHNOLOGY";
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -61,13 +73,21 @@ export function Header({ items = NAVIGATION_ITEMS }: HeaderProps) {
       )}
     >
       <div className="container flex h-20 items-center justify-between gap-4">
-        <Link href="/" className="focus-ring flex items-center gap-3 rounded-md" aria-label={`${CONFERENCE.name} home`}>
-          <div className="grid size-10 place-items-center rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-violet-600/20 tracking-wider">
-            ICGIT
-          </div>
+        <Link href="/" className="focus-ring flex items-center gap-3 rounded-md" aria-label={`${brandName} home`}>
+          {brandLogoUrl ? (
+            <img
+              src={brandLogoUrl}
+              alt={brandName}
+              className="size-10 rounded-xl object-contain shadow-md shadow-violet-600/20 bg-white border border-slate-200"
+            />
+          ) : (
+            <div className="grid size-10 place-items-center rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-violet-600/20 tracking-wider">
+              {brandLogoText}
+            </div>
+          )}
           <span>
-            <span className="block font-heading text-xl font-bold text-foreground">{CONFERENCE.name}</span>
-            <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-muted sm:block">Global Innovation &amp; Technology</span>
+            <span className="block font-heading text-xl font-bold text-foreground">{brandName}</span>
+            <span className="hidden text-[10px] font-semibold uppercase tracking-wider text-muted sm:block">{brandSubtitle}</span>
           </span>
         </Link>
 

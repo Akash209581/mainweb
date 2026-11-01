@@ -392,10 +392,10 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
             </div>
             <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild size="lg" className="bg-[#281b58] hover:bg-[#382678] font-bold !text-white shadow-xl shadow-indigo-950/30">
-                <Link href={ctaLink2} className="!text-white">{ctaText2} <ArrowRight className="ml-2 size-4" /></Link>
+                <Link href={ctaLink1} className="!text-white">{ctaText1}</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-slate-300 bg-white/90 font-semibold text-[#1a153a] hover:bg-white shadow-sm">
-                <Link href={ctaLink1}><Presentation className="mr-2 size-4 text-amber-600" /> {ctaText1}</Link>
+                <Link href={ctaLink2}>{ctaText2}</Link>
               </Button>
             </div>
           </div>
@@ -455,10 +455,58 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
     const badge = fields.badge || "About the Conference";
     const title = fields.title || "Pioneering the Next Era of";
     const titleColor = fields.titleColor || "Technological Breakthroughs";
-    const paragraph1 = fields.paragraph1 || fields.desc1 || `${confName} is the world's most anticipated gathering of global innovators, technology pioneers, academic researchers, and business leaders.`;
-    const paragraph2 = fields.paragraph2 || fields.desc2 || `Hosted in ${confCity} — the world's innovation hub — ${confName} features 120+ expert speakers, 40+ interactive sessions, live demos, startup showcases, and exclusive networking dinners.`;
+
+    const p1 = fields.paragraph1 || fields.desc1 || "";
+    const p2 = fields.paragraph2 || fields.desc2 || "";
+    let rawText = p1;
+    if (p2 && !p1.includes(p2)) {
+      rawText = p1 ? `${p1}\n\n${p2}` : p2;
+    }
+    if (!rawText.trim()) {
+      rawText = `${confName} is the world's most anticipated gathering of global innovators, technology pioneers, academic researchers, and business leaders.\n\nHosted in ${confCity} — the world's innovation hub — ${confName} features 120+ expert speakers, 40+ interactive sessions, live demos, startup showcases, and exclusive networking dinners.`;
+    }
+    const paragraphs = rawText.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+
     const rawAboutImg = fields.aboutImage || "/about_banner.avif";
     const aboutImage = resolveImgSrc(rawAboutImg);
+    const venueCaption = fields.aboutVenueCaption || `📍 ${confVenue}, ${confCity}`;
+
+    const milestonesTitle = fields.milestonesTitle || "Key Milestones & Dates";
+    const milestoneItems = [
+      {
+        title: fields.m1_title || "Abstract Submission Opens",
+        date: fields.m1_date || "July 15, 2026",
+        status: fields.m1_status || "Open",
+        color: (fields.m1_status || "Open").toLowerCase().includes("open")
+          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+          : "bg-amber-50 text-amber-700 border-amber-200"
+      },
+      {
+        title: fields.m2_title || "Abstract Submission Deadline",
+        date: fields.m2_date || "October 1, 2026",
+        status: fields.m2_status || "Upcoming",
+        color: (fields.m2_status || "Upcoming").toLowerCase().includes("open")
+          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+          : "bg-amber-50 text-amber-700 border-amber-200"
+      },
+      {
+        title: fields.m3_title || "Acceptance Notification",
+        date: fields.m3_date || "November 1, 2026",
+        status: fields.m3_status || "Upcoming",
+        color: "bg-slate-50 text-slate-700 border-slate-200"
+      },
+      {
+        title: fields.m4_title || "Camera Ready Deadline",
+        date: fields.m4_date || "November 15, 2026",
+        status: fields.m4_status || "Upcoming",
+        color: "bg-slate-50 text-slate-700 border-slate-200"
+      }
+    ];
+
+    const stat1Num = fields.stat1Number !== undefined && fields.stat1Number !== "" ? fields.stat1Number : String(activeTracks.length || 4);
+    const stat1Lbl = fields.stat1Label !== undefined && fields.stat1Label !== "" ? fields.stat1Label : "RESEARCH TRACKS";
+    const stat2Num = fields.stat2Number !== undefined && fields.stat2Number !== "" ? fields.stat2Number : `${activeSpeakers.length || 4}+`;
+    const stat2Lbl = fields.stat2Label !== undefined && fields.stat2Label !== "" ? fields.stat2Label : "KEYNOTE SPEAKERS";
 
     return (
       <section id="about" key="about" className="py-6 sm:py-8 scroll-mt-24">
@@ -472,12 +520,11 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
               {title} <span className="text-[#281b58]">{titleColor}</span>
             </h2>
             <div className="space-y-4">
-              <p className="text-sm sm:text-base leading-relaxed sm:leading-7 text-[#4b4568] text-justify font-normal">
-                {paragraph1}
-              </p>
-              <p className="text-sm sm:text-base leading-relaxed sm:leading-7 text-[#4b4568] text-justify font-normal">
-                {paragraph2}
-              </p>
+              {paragraphs.map((para, idx) => (
+                <p key={idx} className="text-sm sm:text-base leading-relaxed sm:leading-7 text-[#4b4568] text-justify font-normal whitespace-pre-line">
+                  {para}
+                </p>
+              ))}
             </div>
             <div className="rounded-3xl overflow-hidden border border-slate-200/90 relative h-56 sm:h-64 shadow-xl mt-4">
               <img
@@ -487,7 +534,7 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-4 sm:p-5">
                 <p className="text-xs sm:text-sm font-semibold text-white/95">
-                  📍 {confVenue}, {confCity}
+                  {venueCaption}
                 </p>
               </div>
             </div>
@@ -497,12 +544,12 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
             <div className="rounded-3xl border border-slate-200/90 bg-white/90 backdrop-blur-md p-6 sm:p-8 space-y-4 shadow-xl">
               <h3 className="font-heading text-lg font-bold text-[#1a153a] flex items-center gap-2">
                 <CalendarDays className="size-5 text-indigo-600" />
-                Key Milestones & Dates
+                {milestonesTitle}
               </h3>
               <div className="space-y-3">
-                {DEFAULT_IMPORTANT_DATES.slice(0, 4).map((d) => (
+                {milestoneItems.map((d, idx) => (
                   <div
-                    key={d.title}
+                    key={idx}
                     className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"
                   >
                     <div>
@@ -521,12 +568,12 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
 
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-5 text-center shadow-sm">
-                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{activeTracks.length}</p>
-                <p className="text-[11px] text-slate-600 mt-1 uppercase font-bold tracking-wider">Research Tracks</p>
+                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{stat1Num}</p>
+                <p className="text-[11px] text-slate-600 mt-1 uppercase font-bold tracking-wider">{stat1Lbl}</p>
               </div>
               <div className="rounded-2xl border border-slate-200/90 bg-white/90 p-5 text-center shadow-sm">
-                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{activeSpeakers.length}+</p>
-                <p className="text-[11px] text-slate-600 mt-1 uppercase font-bold tracking-wider">Keynote Speakers</p>
+                <p className="font-heading text-3xl font-extrabold text-[#281b58]">{stat2Num}</p>
+                <p className="text-[11px] text-slate-600 mt-1 uppercase font-bold tracking-wider">{stat2Lbl}</p>
               </div>
             </div>
           </div>
