@@ -1,0 +1,585 @@
+.hansci-reg {
+  --reg-navy: #102e4c;
+  --reg-blue: #214b70;
+  --reg-muted: #64748a;
+  --reg-border: #dce3e9;
+  --reg-paper: #f5f7f9;
+  --reg-gold: #b4935b;
+  color: var(--reg-navy);
+  font-family: "Times New Roman", Times, serif !important;
+}
+
+.hansci-reg * {
+  box-sizing: border-box;
+  font-family: "Times New Roman", Times, serif !important;
+}
+
+.hansci-reg p,
+.hansci-reg small,
+.hansci-reg .sub,
+.hansci-reg .mini,
+.hansci-reg .status,
+.hansci-reg .helper,
+.hansci-reg .tax,
+.hansci-reg label,
+.hansci-reg span {
+  font-size: 12px;
+}
+
+.hansci-reg .currencybar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 22px;
+  background: white;
+  border: 1px solid var(--reg-border);
+  border-radius: 12px;
+  margin-bottom: 28px;
+}
+
+.hansci-reg .currencybar label {
+  font-size: 13px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: var(--reg-navy);
+}
+
+.hansci-reg .currencybar select {
+  padding: 10px 14px;
+  border: 1px solid var(--reg-border);
+  border-radius: 8px;
+  background: white;
+  color: var(--reg-navy);
+  font-weight: 500;
+}
+
+.hansci-reg .currencybar p {
+  font-size: 11px;
+  color: var(--reg-muted);
+  margin: 0;
+}
+
+.hansci-reg .progress {
+  display: flex;
+  gap: 0;
+  margin-bottom: 34px;
+  max-width: 760px;
+}
+
+.hansci-reg .step {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: 1;
+  font-size: 13px;
+  color: var(--reg-muted);
+  position: relative;
+}
+
+.hansci-reg .step:not(:last-child):after {
+  content: '';
+  height: 1px;
+  background: var(--reg-border);
+  flex: 1;
+  margin: 0 18px;
+}
+
+.hansci-reg .num {
+  display: grid;
+  place-items: center;
+  min-width: 32px;
+  height: 32px;
+  border: 1px solid var(--reg-border);
+  border-radius: 50%;
+  background: white;
+  font-weight: 600;
+}
+
+.hansci-reg .step.active {
+  color: var(--reg-navy);
+  font-weight: 700;
+}
+
+.hansci-reg .step.active .num {
+  color: white;
+  background: var(--reg-navy);
+  border-color: var(--reg-navy);
+}
+
+.hansci-reg .sub {
+  font-size: 14px;
+  color: var(--reg-muted);
+  margin: 0 0 24px;
+}
+
+.hansci-reg .cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 28px 0;
+}
+
+.hansci-reg .ticket {
+  background: white;
+  border: 1px solid var(--reg-border);
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease-in-out;
+}
+
+.hansci-reg .ticket:hover {
+  border-color: #cbd5df;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.hansci-reg .ticket.selected {
+  border: 2px solid var(--reg-navy);
+  background: #fdfefe;
+}
+
+.hansci-reg .ticket .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--reg-muted);
+}
+
+.hansci-reg h3,
+.hansci-reg h4,
+.hansci-reg h5,
+.hansci-reg h6,
+.hansci-reg .ticket h3,
+.hansci-reg .sectiontitle,
+.hansci-reg .summary h3,
+.hansci-reg .faq h3,
+.hansci-reg .subheading {
+  font-size: 16px !important;
+  line-height: 1.4 !important;
+}
+
+.hansci-reg .ticket h3 {
+  font-size: 16px !important;
+  font-weight: 700;
+  margin: 8px 0;
+  color: var(--reg-navy);
+}
+
+.hansci-reg .ticket p {
+  font-size: 12px;
+  color: var(--reg-muted);
+  min-height: 38px;
+  line-height: 1.5;
+}
+
+.hansci-reg .price {
+  font-size: 34px;
+  letter-spacing: -1px;
+  font-weight: 700;
+  margin: 16px 0 4px;
+  color: var(--reg-navy);
+}
+
+.hansci-reg .price small {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--reg-muted);
+}
+
+.hansci-reg .price.quote {
+  font-size: 24px;
+  letter-spacing: -0.5px;
+}
+
+.hansci-reg .tax {
+  font-size: 11px;
+  color: var(--reg-muted);
+}
+
+.hansci-reg .ticket ul {
+  padding: 16px 0 10px;
+  margin: 14px 0 20px;
+  border-top: 1px solid var(--reg-border);
+  list-style: none;
+  font-size: 12px;
+  color: #4c6073;
+  flex: 1;
+}
+
+.hansci-reg .ticket li {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hansci-reg .ticket li:before {
+  content: '✓';
+  color: #547d6a;
+  font-weight: bold;
+}
+
+.hansci-reg .button {
+  border: 1px solid var(--reg-border);
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  background: white;
+  color: var(--reg-navy);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.hansci-reg .button:hover {
+  filter: brightness(0.96);
+}
+
+.hansci-reg .button.primary {
+  background: var(--reg-navy);
+  border-color: var(--reg-navy);
+  color: white;
+}
+
+.hansci-reg .button.primary:hover {
+  background: #091f35;
+}
+
+.hansci-reg .button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hansci-reg .ticket .button {
+  width: 100%;
+}
+
+.hansci-reg .helper {
+  display: flex;
+  gap: 15px;
+  background: #ebeff4;
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #52667b;
+  line-height: 1.6;
+}
+
+.hansci-reg .layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 28px;
+}
+
+.hansci-reg .panel {
+  padding: 28px;
+  background: white;
+  border: 1px solid var(--reg-border);
+  border-radius: 12px;
+}
+
+.hansci-reg .fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.hansci-reg .fields label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4c6073;
+  display: block;
+}
+
+.hansci-reg .fields input,
+.hansci-reg .fields select,
+.hansci-reg .fields textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 14px;
+  background: white;
+  border: 1px solid #cbd5df;
+  border-radius: 6px;
+  color: var(--reg-navy);
+  font-size: 13px;
+}
+
+.hansci-reg .fields input:focus,
+.hansci-reg .fields select:focus,
+.hansci-reg .fields textarea:focus {
+  outline: 2px solid #7193b3;
+  outline-offset: 1px;
+}
+
+.hansci-reg .sectiontitle {
+  font-size: 16px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--reg-border);
+  padding: 5px 0 12px;
+  margin: 0 0 18px;
+  color: var(--reg-navy);
+}
+
+.hansci-reg .sectiontitle.later {
+  margin-top: 28px;
+}
+
+.hansci-reg .check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #53667b;
+  margin-top: 18px;
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+.hansci-reg .check input {
+  margin-top: 3px;
+  accent-color: var(--reg-navy);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.hansci-reg .actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 28px;
+}
+
+.hansci-reg .summary {
+  align-self: start;
+}
+
+.hansci-reg .summary .eyebrow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--reg-muted);
+}
+
+.hansci-reg .summary h3 {
+  font-size: 16px !important;
+  font-weight: 700;
+  margin: 6px 0 16px;
+  color: var(--reg-navy);
+}
+
+.hansci-reg .sumrow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--reg-border);
+  font-size: 13px;
+}
+
+.hansci-reg .sumrow span:first-child {
+  color: var(--reg-muted);
+}
+
+.hansci-reg .sumrow span:last-child {
+  font-weight: 600;
+  text-align: right;
+  color: var(--reg-navy);
+}
+
+.hansci-reg .summary .price {
+  margin-top: 18px;
+}
+
+.hansci-reg .summary p {
+  font-size: 11px;
+  color: var(--reg-muted);
+  line-height: 1.5;
+  margin-top: 12px;
+}
+
+.hansci-reg .status {
+  padding: 14px 16px;
+  background: #fbf7ee;
+  border: 1px solid #ebd9b8;
+  color: #745b2e;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 18px;
+}
+
+.hansci-reg .status.success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+.hansci-reg .status.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.hansci-reg .reviewgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  white-space: pre-wrap;
+}
+
+.hansci-reg .reviewgrid dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--reg-muted);
+  margin-bottom: 4px;
+}
+
+.hansci-reg .reviewgrid dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--reg-navy);
+  overflow-wrap: anywhere;
+}
+
+.hansci-reg .reviewgrid dl {
+  margin: 0;
+}
+
+.hansci-reg .reviewtitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.hansci-reg .linkbutton {
+  background: none;
+  border: 0;
+  color: var(--reg-blue);
+  text-decoration: underline;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hansci-reg .linkbutton:hover {
+  color: #0b1c2d;
+}
+
+.hansci-reg .captcha-box {
+  background: #f5f7f9;
+  border: 1px solid var(--reg-border);
+  border-radius: 8px;
+  padding: 18px;
+  margin-top: 18px;
+}
+
+.hansci-reg .captcha-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hansci-reg .captcha-top b {
+  font-size: 13px;
+  color: var(--reg-navy);
+}
+
+.hansci-reg .captcha-box .fields {
+  max-width: 320px;
+  margin: 12px 0 6px;
+}
+
+.hansci-reg .stayintro {
+  font-size: 12px;
+  color: var(--reg-muted);
+  margin: 0 0 14px;
+}
+
+.hansci-reg .stay-preview {
+  margin-top: 14px;
+  color: var(--reg-blue);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.hansci-reg .mini {
+  font-size: 11px;
+  color: var(--reg-muted);
+  margin-top: 6px;
+}
+
+.hansci-reg .faq {
+  margin-top: 40px;
+}
+
+.hansci-reg .faq h3 {
+  font-size: 16px !important;
+  font-weight: 700;
+  color: var(--reg-navy);
+  margin-bottom: 12px;
+}
+
+.hansci-reg details {
+  border-bottom: 1px solid var(--reg-border);
+  padding: 14px 0;
+  font-size: 13px;
+}
+
+.hansci-reg summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--reg-navy);
+}
+
+.hansci-reg details p {
+  font-size: 12px;
+  color: var(--reg-muted);
+  margin: 8px 0 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 860px) {
+  .hansci-reg .layout {
+    grid-template-columns: 1fr;
+  }
+  .hansci-reg .summary {
+    order: -1;
+  }
+  .hansci-reg .cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .hansci-reg .fields,
+  .hansci-reg .reviewgrid {
+    grid-template-columns: 1fr;
+  }
+  .hansci-reg .step {
+    font-size: 11px;
+    gap: 6px;
+  }
+  .hansci-reg .step:not(:last-child):after {
+    margin: 0 8px;
+  }
+}
+

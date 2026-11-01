@@ -2,293 +2,379 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { BrainCircuit, Coins, Leaf, Building2, Network, HeartPulse, Sparkles, ArrowRight, User } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Button } from "@/components/buttons/button";
-import { GlassCard } from "@/components/cards/glass-card";
+import { Search, ArrowRight, CheckCircle2, Mic, FileText, ChevronDown } from "lucide-react";
 
-interface Speaker {
-  name: string;
-  role: string;
-  organization: string;
-  topic: string;
-}
-
-interface SessionsLayoutProps {
-  speakers: Speaker[];
-}
-
-const TRACKS_DETAIL = [
+export const SCIENTIFIC_TRACKS = [
   {
-    id: "ai",
-    name: "AI & Neural Systems",
-    icon: BrainCircuit,
-    overview: "Covers computational modeling of neural designs, deep reinforcement learning, safety benchmarks, and ethics for borderless AI deployment.",
+    id: "01",
+    name: "Hematologic Malignancies",
+    category: "Clinical hematology",
+    summary: "Research across blood cancers, from disease biology to clinical investigation.",
     topics: [
-      "Large Language Models & Transformers",
-      "Trustworthy & Explainable AI",
-      "Distributed and Edge AI Implementations",
-      "Generative Neural Architectures"
-    ],
-    keywords: ["LLMs", "Edge AI", "Neural Networks", "Explainability"],
-    sessions: [
-      "Keynote Forum: Responsible AI & Policy",
-      "Parallel Technical Track: Deep Learning Architectures",
-      "Interactive Session: Generative Art & Compute Scales"
-    ],
-    speakerName: "Dr. Amina Rahman"
+      "Leukemia biology & targeted therapies",
+      "Lymphoma classifications & clinical trials",
+      "Multiple myeloma & plasma cell disorders",
+      "Myelodysplastic and myeloproliferative neoplasms"
+    ]
   },
   {
-    id: "blockchain",
-    name: "Blockchain & Web3",
-    icon: Coins,
-    overview: "Focuses on consensus scalability, zero-knowledge proofs, smart contract security auditing, decentralized finance models, and governance structures.",
+    id: "02",
+    name: "Hemostasis & Thrombosis",
+    category: "Clinical hematology",
+    summary: "Scientific exchange on coagulation, bleeding disorders and thrombosis.",
     topics: [
-      "Consensus Protocol Optimization",
-      "Zero-Knowledge Cryptography",
-      "Secure Layer-2 Rollups",
-      "DAO Frameworks & Token Economics"
-    ],
-    keywords: ["DeFi", "ZKP", "DAO", "Layer-2 Scale"],
-    sessions: [
-      "Roundtable: Decentralized Infrastructures",
-      "Paper Presentation: Cryptographic Proofs & Audits"
-    ],
-    speakerName: "Prof. Nadia Al Mansoori" // fallback or other seeded info
+      "Inherited and acquired bleeding disorders",
+      "Platelet biology and functional disorders",
+      "Venous and arterial thrombosis management",
+      "Coagulation testing and laboratory assessment"
+    ]
   },
   {
-    id: "greentech",
-    name: "Green Technology",
-    icon: Leaf,
-    overview: "Explores energy-efficient high-performance compute architectures, virtualized carbon tracking, smart grid engineering, and industrial green transitions.",
+    id: "03",
+    name: "Anemia & Red Cell Disorders",
+    category: "Clinical hematology",
+    summary: "Investigations into red cell biology, anemia and inherited blood conditions.",
     topics: [
-      "Sustainable Computing & Datacenters",
-      "IoT Carbon Emission Sensing",
-      "Renewable Energy Distribution Networks",
-      "Circular Material Supply Chains"
-    ],
-    keywords: ["Green Compute", "Carbon Tracking", "Smart Grids", "CleanTech"],
-    sessions: [
-      "Presentation: Decarbonizing Modern Datacenters",
-      "Panel: Sustainable Microgrids & Distribution"
-    ],
-    speakerName: "Dr. Sofia Chen"
+      "Iron metabolism and iron deficiency anemia",
+      "Hemoglobinopathies (Sickle Cell Disease & Thalassemia)",
+      "Hemolytic anemias and membrane defects",
+      "Red cell physiology and diagnostic breakthroughs"
+    ]
   },
   {
-    id: "smart-cities",
-    name: "Smart Cities & IoT",
-    icon: Building2,
-    overview: "Delves into vehicle-to-everything (V2X) connectivity, edge-native sensoring networks, municipality analytics, and autonomous infrastructure coordination.",
+    id: "04",
+    name: "Transfusion Medicine",
+    category: "Clinical hematology",
+    summary: "Research and practice discussions across blood donation and transfusion services.",
     topics: [
-      "V2X Autonomous Communications",
-      "Smart Water & Grid Management",
-      "Real-time Spatial Intelligence",
-      "Edge-to-Cloud Coordination Systems"
-    ],
-    keywords: ["IoT Edge", "V2X", "Spatial AI", "Smart Infrastructure"],
-    sessions: [
-      "Keynote Forum: Resilient Municipal Infrastructures",
-      "Parallel Track: IoT Sensoring & Vehicle Coordination"
-    ],
-    speakerName: "Prof. Lucas Meyer"
+      "Blood component preparation & pathogen reduction",
+      "Patient blood management (PBM) protocols",
+      "Transfusion safety and hemovigilance systems",
+      "Immunohematology & rare blood group genetics"
+    ]
   },
   {
-    id: "digital-transformation",
-    name: "Digital Transformation",
-    icon: Network,
-    overview: "Addresses high-performance enterprise architectures, hybrid cloud deployment optimization, API security controls, and enterprise-scale workflow automation.",
+    id: "05",
+    name: "Stem Cell Transplantation",
+    category: "Translational research",
+    summary: "Research on hematopoietic transplantation and related scientific challenges.",
     topics: [
-      "Hybrid & Multi-Cloud Infrastructure",
-      "Zero-Trust API Security",
-      "Enterprise Service Meshes",
-      "Workflow Process Virtualization"
-    ],
-    keywords: ["Zero-Trust", "API Security", "Enterprise Cloud", "SaaS Scale"],
-    sessions: [
-      "Strategy Session: scaling private-public cloud systems",
-      "Paper Session: Multi-Tenant Architecture & Performance"
-    ],
-    speakerName: "Eng. Omar Al Nuaimi"
+      "Hematopoietic stem cell biology & mobilization",
+      "Autologous and allogeneic transplantation protocols",
+      "Graft-versus-host disease (GVHD) prevention & therapy",
+      "Post-transplant immune reconstitution & monitoring"
+    ]
   },
   {
-    id: "healthtech",
-    name: "HealthTech",
-    icon: HeartPulse,
-    overview: "Investigates deep-learning diagnostic assistant models, bioinformatic sequence pipelines, clinical trial management systems, and telemedicine frameworks.",
+    id: "06",
+    name: "Cellular & Gene Therapies",
+    category: "Translational research",
+    summary: "Emerging research connecting cell engineering, gene technologies and hematology.",
     topics: [
-      "Neural Bio-Imaging Diagnosis",
-      "Sequencing Pipeline Execution Scales",
-      "Secure Electronic Health Records (EHR)",
-      "Remote Patient Telemetry Protocols"
-    ],
-    keywords: ["Bioinformatics", "Imaging", "Clinical AI", "EHR Tech"],
-    sessions: [
-      "Keynote Panel: Translating Clinical Tech",
-      "Paper Session: Deep Diagnostics & Image Processing"
-    ],
-    speakerName: "Dr. Sofia Chen"
+      "CAR-T, CAR-NK, and engineered immune cell therapies",
+      "CRISPR gene editing and gene transfer vectors",
+      "Cell therapy biomanufacturing & quality control",
+      "Translational biomarkers & persistence metrics"
+    ]
+  },
+  {
+    id: "07",
+    name: "Molecular Hematology & Genomics",
+    category: "Translational research",
+    summary: "Methods and discoveries shaping the molecular understanding of blood disorders.",
+    topics: [
+      "Next-generation sequencing & genomic profiling",
+      "Single-cell epigenomics & spatial transcriptomics",
+      "Clonal hematopoiesis of indeterminate potential (CHIP)",
+      "Disease disease models & functional genomics assays"
+    ]
+  },
+  {
+    id: "08",
+    name: "Pediatric Hematology",
+    category: "Clinical hematology",
+    summary: "Scientific topics spanning blood disorders in children and adolescents.",
+    topics: [
+      "Pediatric acute leukemias & rare blood cancers",
+      "Inherited bone marrow failure syndromes",
+      "Pediatric vascular anomalies & thrombosis",
+      "Survivorship, fertility preservation & late effects"
+    ]
+  },
+  {
+    id: "09",
+    name: "Laboratory Hematology & Diagnostics",
+    category: "Diagnostics & technology",
+    summary: "Laboratory methods, quality and diagnostic research across hematology.",
+    topics: [
+      "High-parameter flow cytometry and immunophenotyping",
+      "Digital morphology & automated bone marrow smears",
+      "Molecular diagnostics assay validation",
+      "ISO standards & laboratory quality assurance"
+    ]
+  },
+  {
+    id: "10",
+    name: "AI & Digital Hematology",
+    category: "Diagnostics & technology",
+    summary: "Applications of computational methods and digital tools in hematology research.",
+    topics: [
+      "Deep learning for blood cell morphology classification",
+      "Multimodal clinical data science & risk stratification",
+      "Predictive modeling of treatment response",
+      "Responsible AI governance & data privacy in oncology"
+    ]
+  },
+  {
+    id: "11",
+    name: "Supportive Care & Patient Outcomes",
+    category: "Care & collaboration",
+    summary: "Research centred on patient experience, supportive care and outcomes.",
+    topics: [
+      "Quality of life & patient-reported outcome measures",
+      "Infection prophylaxis & supportive oncology",
+      "Palliative and survivorship multidisciplinary care",
+      "Shared decision making and patient advocacy"
+    ]
+  },
+  {
+    id: "12",
+    name: "Global Hematology & Collaboration",
+    category: "Care & collaboration",
+    summary: "Exchange on research partnerships, access and capacity building worldwide.",
+    topics: [
+      "International research partnerships & multicenter trials",
+      "Resource-stratified guideline implementation",
+      "Specialist workforce training and education",
+      "Public health epidemiology in hematology"
+    ]
   }
 ];
 
-export function SessionsLayout({ speakers }: SessionsLayoutProps) {
-  const [activeTab, setActiveTab] = useState("ai");
-  const reduceMotion = useReducedMotion();
+export function SessionsLayout({ initialTracks = SCIENTIFIC_TRACKS }: { initialTracks?: typeof SCIENTIFIC_TRACKS }) {
+  const [query, setQuery] = useState("");
+  const [group, setGroup] = useState("All tracks");
 
-  const activeTrack = TRACKS_DETAIL.find((t) => t.id === activeTab) ?? TRACKS_DETAIL[0];
-  const Icon = activeTrack.icon;
+  const tracks = initialTracks && initialTracks.length > 0 ? initialTracks : SCIENTIFIC_TRACKS;
+  const researchGroups = ["All tracks", ...Array.from(new Set(tracks.map((t) => t.category).filter(Boolean)))];
 
-  // Find speaker matching the track
-  const trackSpeaker = speakers.find((s) => s.name === activeTrack.speakerName);
+  const filtered = tracks.filter((t) => {
+    const matchesGroup = group === "All tracks" || t.category === group;
+    const searchTarget = `${t.name} ${t.summary} ${Array.isArray(t.topics) ? t.topics.join(" ") : ""}`.toLowerCase();
+    const matchesQuery = searchTarget.includes(query.trim().toLowerCase());
+    return matchesGroup && matchesQuery;
+  });
 
   return (
-    <div className="space-y-8">
-      {/* Animated Tabs Headers */}
-      <div className="flex flex-wrap gap-2 border-b border-border/25 pb-6">
-        {TRACKS_DETAIL.map((track) => {
-          const TabIcon = track.icon;
-          const isActive = track.id === activeTab;
-          return (
-            <button
-              key={track.id}
-              onClick={() => setActiveTab(track.id)}
-              className={`focus-ring relative flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition duration-200 ${
-                isActive
-                  ? "bg-accent text-white shadow-soft"
-                  : "bg-surface/60 hover:bg-hover/10 text-muted hover:text-foreground border border-border/30"
-              }`}
+    <div className="space-y-12">
+      {/* FILTER & SEARCH */}
+      <div className="rounded-2xl border border-border/40 bg-surface/40 p-6 shadow-sm">
+        <div className="grid gap-4 md:grid-cols-[1.5fr_1fr]">
+          <div className="space-y-1.5">
+            <label htmlFor="track-search" className="text-xs font-semibold uppercase tracking-wider text-muted">
+              Search Tracks and Research Topics
+            </label>
+            <div className="relative">
+              <Search className="absolute left-3.5 top-3.5 size-4 text-muted pointer-events-none" />
+              <input
+                id="track-search"
+                type="search"
+                placeholder="Search leukemia, gene editing, diagnostics, AI..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full rounded-xl border border-border/45 bg-surface/65 py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label htmlFor="track-group" className="text-xs font-semibold uppercase tracking-wider text-muted">
+              Research Discipline / Area
+            </label>
+            <select
+              id="track-group"
+              value={group}
+              onChange={(e) => setGroup(e.target.value)}
+              className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
             >
-              <TabIcon className="size-4" />
-              <span>{track.name}</span>
+              {researchGroups.map((g) => (
+                <option key={g} value={g}>
+                  {g}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between text-xs text-muted border-t border-border/20 pt-3">
+          <span>Showing <b>{filtered.length}</b> of {SCIENTIFIC_TRACKS.length} proposed scientific tracks</span>
+          {(group !== "All tracks" || query) && (
+            <button
+              onClick={() => {
+                setGroup("All tracks");
+                setQuery("");
+              }}
+              className="text-accent underline font-semibold"
+            >
+              Reset Filters
             </button>
-          );
-        })}
+          )}
+        </div>
       </div>
 
-      {/* Tab Content Area */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial={reduceMotion ? {} : { opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          transition={{ duration: 0.3 }}
-          className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]"
-        >
-          {/* Main Track Details */}
-          <div className="space-y-6">
-            <GlassCard>
-              <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-accent/15 p-3 text-accent">
-                  <Icon className="size-6" />
-                </div>
-                <h2 className="font-heading text-2xl font-bold text-foreground">
-                  {activeTrack.name} Track
-                </h2>
-              </div>
-              <p className="mt-4 text-sm leading-7 text-muted">
-                {activeTrack.overview}
-              </p>
-
-              <h3 className="mt-6 font-heading text-md font-bold text-foreground">
-                Key Topics covered
-              </h3>
-              <ul className="mt-3 grid gap-2 sm:grid-cols-2 text-xs text-muted">
-                {activeTrack.topics.map((topic) => (
-                  <li key={topic} className="flex items-center gap-2">
-                    <div className="size-1.5 rounded-full bg-accent" />
-                    <span>{topic}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <h3 className="mt-6 font-heading text-md font-bold text-foreground">
-                Keywords & Tags
-              </h3>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {activeTrack.keywords.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-border/30 bg-surface/65 px-3 py-1 text-xs text-muted"
-                  >
-                    {tag}
+      {/* TRACKS GRID */}
+      {filtered.length > 0 ? (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((t) => (
+            <article
+              key={t.id}
+              className="group rounded-2xl border border-border/30 bg-surface/30 p-6 space-y-4 hover:border-accent hover:shadow-lg transition duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between border-b border-border/20 pb-3 mb-3">
+                  <span className="font-heading text-2xl font-bold text-accent">
+                    Track {t.id}
                   </span>
-                ))}
-              </div>
-            </GlassCard>
-
-            {/* Sessions Timeline */}
-            <GlassCard>
-              <h3 className="font-heading text-lg font-bold text-foreground mb-4">
-                Track Schedule & Sessions
-              </h3>
-              <div className="space-y-4">
-                {activeTrack.sessions.map((session) => (
-                  <div
-                    key={session}
-                    className="rounded-lg border border-border/30 bg-surface/40 p-4 text-xs font-semibold text-foreground flex items-center justify-between"
-                  >
-                    <span>{session}</span>
-                    <span className="text-[10px] text-accent uppercase tracking-wider">Confirmed</span>
-                  </div>
-                ))}
-              </div>
-            </GlassCard>
-          </div>
-
-          {/* Featured Speaker & CTA */}
-          <div className="space-y-6">
-            {/* Featured Speaker Card */}
-            {trackSpeaker ? (
-              <GlassCard className="border-accent/35 bg-gradient-to-tr from-accent/5 to-transparent">
-                <div className="flex items-center gap-2 text-xs font-bold text-accent uppercase tracking-wider mb-4">
-                  <Sparkles className="size-4" />
-                  <span>Featured Track Speaker</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted bg-surface/80 px-2.5 py-1 rounded-full border border-border/30">
+                    {t.category}
+                  </span>
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
-                    <User className="size-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-heading text-lg font-bold text-foreground">
-                      {trackSpeaker.name}
-                    </h3>
-                    <p className="text-xs text-accent font-medium mt-0.5">{trackSpeaker.role}</p>
-                    <p className="text-xs text-muted mt-0.5">{trackSpeaker.organization}</p>
-                    <p className="mt-4 border-t border-border/25 pt-4 text-xs text-muted leading-5 italic">
-                      &ldquo;{trackSpeaker.topic}&rdquo;
-                    </p>
-                  </div>
-                </div>
-              </GlassCard>
-            ) : (
-              <GlassCard>
-                <p className="text-xs text-muted italic">Speaker assignments pending final schedules.</p>
-              </GlassCard>
-            )}
 
-            {/* Track Call to Action */}
-            <GlassCard className="bg-surface/30">
-              <h3 className="font-heading text-lg font-bold text-foreground">
-                Contribute Your Research
-              </h3>
-              <p className="mt-2 text-xs leading-5 text-muted">
-                Submit your abstract for review and present your tech innovations at the Dubai World Trade Centre. Accepted papers will be featured in the final proceedings.
-              </p>
-              <div className="mt-6 flex flex-col gap-3">
-                <Button asChild className="hover-lift w-full justify-center">
-                  <Link href="/abstracts">
-                    Submit Abstract
-                    <ArrowRight className="size-4 ml-1.5" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="hover-lift w-full justify-center">
-                  <Link href="/registration">Register as Delegate</Link>
-                </Button>
+                <h3 className="font-heading text-lg font-bold text-foreground">
+                  {t.name}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted min-h-[44px]">
+                  {t.summary}
+                </p>
+
+                <details className="mt-4 border-t border-border/20 pt-3 text-xs text-muted group/details cursor-pointer">
+                  <summary className="font-semibold text-foreground flex items-center justify-between hover:text-accent">
+                    <span>Explore Session Topics</span>
+                    <ChevronDown className="size-3.5 transition group-open/details:rotate-180" />
+                  </summary>
+                  <ul className="mt-3 space-y-1.5 pl-3 border-l-2 border-accent/40 text-[11px] leading-relaxed">
+                    {t.topics.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </details>
               </div>
-            </GlassCard>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+
+              <div className="pt-4 border-t border-border/20 mt-4">
+                <Link
+                  href={`/abstracts?track=${encodeURIComponent(t.name)}`}
+                  className="inline-flex items-center text-xs font-bold text-accent hover:underline gap-1"
+                >
+                  Submit Abstract to Track {t.id} <ArrowRight className="size-3.5" />
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-border/40 p-12 text-center space-y-3">
+          <h3 className="font-heading text-lg font-bold text-foreground">No matching tracks found</h3>
+          <p className="text-xs text-muted max-w-sm mx-auto">
+            Try a broader topic search term or select &quot;All tracks&quot; to review the complete scientific agenda.
+          </p>
+          <button
+            onClick={() => {
+              setQuery("");
+              setGroup("All tracks");
+            }}
+            className="rounded-lg bg-accent px-4 py-2 text-xs font-semibold text-white mt-2"
+          >
+            Show all scientific tracks
+          </button>
+        </div>
+      )}
+
+      {/* PRESENTATION FORMATS */}
+      <section className="rounded-2xl border border-border/40 bg-surface/20 p-8 space-y-6">
+        <div>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-accent">Ways to Contribute</span>
+          <h2 className="mt-1 font-heading text-2xl font-bold text-foreground">
+            Choose your presentation preference.
+          </h2>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <article className="rounded-xl border border-border/30 bg-surface/60 p-6 space-y-3">
+            <div className="flex items-center gap-2 text-accent">
+              <Mic className="size-5" />
+              <span className="text-xs font-bold uppercase tracking-wider">Oral Presentation</span>
+            </div>
+            <h3 className="font-heading text-lg font-bold text-foreground">
+              Present your findings. Open the discussion.
+            </h3>
+            <p className="text-xs text-muted leading-relaxed">
+              Share your research in a spoken parallel scientific session with dedicated Q&A opportunities and academic moderator synthesis.
+            </p>
+          </article>
+
+          <article className="rounded-xl border border-border/30 bg-surface/60 p-6 space-y-3">
+            <div className="flex items-center gap-2 text-accent">
+              <FileText className="size-5" />
+              <span className="text-xs font-bold uppercase tracking-wider">Poster Presentation</span>
+            </div>
+            <h3 className="font-heading text-lg font-bold text-foreground">
+              Make your research visible. Connect in person.
+            </h3>
+            <p className="text-xs text-muted leading-relaxed">
+              Communicate your data through interactive printed poster display boards and exchange in-depth insights during designated networking teas.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      {/* CTA BANNER */}
+      <div className="rounded-2xl bg-[#102e4c] text-white p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="space-y-1.5 text-center md:text-left">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-amber-300">
+            Contribute to the Conversation
+          </span>
+          <h2 className="font-heading text-2xl font-bold text-white">
+            Bring your scientific perspective to Dubai.
+          </h2>
+          <p className="text-xs text-slate-300 max-w-lg">
+            Prepare your 500–600 word research abstract document and indicate your preferred track and format.
+          </p>
+        </div>
+        <Link
+          href="/abstracts"
+          className="rounded-lg bg-amber-600 hover:bg-amber-500 px-6 py-3 text-xs font-bold text-white shadow-md transition"
+        >
+          Submit Abstract Online →
+        </Link>
+      </div>
+
+      {/* PROGRAM FAQ */}
+      <section className="rounded-2xl border border-border/40 bg-surface/20 p-6 md:p-8 space-y-4">
+        <h3 className="font-heading text-base font-bold text-foreground">Scientific Programme Questions</h3>
+        <div className="divide-y divide-border/20">
+          {[
+            [
+              "Are these the final session tracks?",
+              "These represent our core approved thematic tracks. Parallel session times, chairs, and room assignments will be announced with the final schedule."
+            ],
+            [
+              "Can I submit interdisciplinary research bridging two tracks?",
+              "Yes. Select the primary track closest to your work during submission. The scientific committee will ensure it is reviewed by relevant peers."
+            ],
+            [
+              "Does track selection guarantee oral presentation?",
+              "Authors select their preferred format (Oral or Poster). Final allocations are confirmed by the Scientific Committee based on peer review scores."
+            ]
+          ].map(([q, a]) => (
+            <details key={q} className="py-3 group cursor-pointer">
+              <summary className="font-semibold text-xs text-foreground group-hover:text-accent transition">
+                {q}
+              </summary>
+              <p className="mt-2 text-xs text-muted leading-relaxed">{a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

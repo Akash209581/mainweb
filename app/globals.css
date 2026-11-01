@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "../styles/hansci-registration.css";
 
 /* Hide Next.js dev overlay indicator bubble */
 nextjs-portal,
@@ -16,8 +17,8 @@ div[data-nextjs-dev-overlay-bubble] {
 
 :root,
 [data-theme="tech-ai"] {
-  --font-outfit: Georgia, "Times New Roman", serif;
-  --font-inter: "Trebuchet MS", Verdana, sans-serif;
+  --font-outfit: "Times New Roman", Times, serif;
+  --font-inter: "Times New Roman", Times, serif;
   --color-background: 255 254 251;
   --color-surface: 250 248 244;
   --color-card: 255 255 255;
@@ -35,6 +36,8 @@ div[data-nextjs-dev-overlay-bubble] {
 }
 
 [data-theme="health-bio"] {
+  --font-outfit: "Times New Roman", Times, serif;
+  --font-inter: "Times New Roman", Times, serif;
   --color-background: 3 24 22;
   --color-surface: 8 44 39;
   --color-card: 13 58 51;
@@ -52,6 +55,8 @@ div[data-nextjs-dev-overlay-bubble] {
 }
 
 [data-theme="corporate"] {
+  --font-outfit: "Times New Roman", Times, serif;
+  --font-inter: "Times New Roman", Times, serif;
   --color-background: 8 13 28;
   --color-surface: 15 23 42;
   --color-card: 21 32 56;
@@ -68,8 +73,20 @@ div[data-nextjs-dev-overlay-bubble] {
   --color-hover: 239 246 255;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+  font-family: "Times New Roman", Times, serif !important;
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Times New Roman", Times, serif !important;
 }
 
 html {
@@ -85,7 +102,35 @@ body {
   overflow-x: hidden;
   background: rgb(var(--color-background));
   color: rgb(var(--color-text-primary));
-  font-family: var(--font-inter), sans-serif;
+  font-family: "Times New Roman", Times, serif !important;
+}
+
+p,
+p *,
+.prose p,
+.prose p *,
+small,
+small *,
+.text-sm,
+.text-xs,
+.sub,
+.mini {
+  font-size: 12px !important;
+  line-height: 1.6;
+}
+
+h3,
+h4,
+h5,
+h6,
+.subheading,
+.sub-heading,
+.section-subtitle,
+.sectiontitle,
+.card-title,
+[data-subheading] {
+  font-size: 16px !important;
+  line-height: 1.4 !important;
 }
 
 a {

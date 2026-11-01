@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/common/page-header";
 import { Section } from "@/components/common/section";
-import { listSpeakers } from "@/lib/repositories/public-content.repository";
-import { SPEAKERS } from "@/constants/conference";
 import { SessionsLayout } from "./sessions-layout";
+import fs from "fs";
+import path from "path";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Sessions & Tracks",
@@ -11,32 +13,26 @@ export const metadata: Metadata = {
 };
 
 export default async function SessionsPage() {
-  // Fetch featured speakers to display inside tracks
-  const { items: speakers } = await listSpeakers({
-    page: 1,
-    pageSize: 100,
-    direction: "asc"
-  });
-
-  const mappedSpeakers =
-    speakers.length > 0
-      ? speakers.map((s) => ({
-          name: s.name,
-          role: s.role,
-          organization: s.organization?.name ?? "Independent",
-          topic: s.topic
-        }))
-      : SPEAKERS;
+  let initialTracks = undefined;
+  try {
+    const settingsFile = path.join(process.cwd(), "storage", "settings.json");
+    if (fs.existsSync(settingsFile)) {
+      const data = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
+      if (Array.isArray(data.tracks) && data.tracks.length > 0) {
+        initialTracks = data.tracks.filter((t: any) => t.published !== false);
+      }
+    }
+  } catch {}
 
   return (
     <>
       <PageHeader
-        eyebrow="Sessions"
-        title="Explore our hybrid program tracks"
-        description="Review session guidelines, academic topics, key areas of interest, and featured keynote schedules across six disciplines."
+        eyebrow="Scientific Programme"
+        title="Explore our scientific conference tracks"
+        description="Review session guidelines, academic topics, key areas of interest, and presentation formats across our comprehensive research tracks."
       />
       <Section className="pt-0">
-        <SessionsLayout speakers={mappedSpeakers} />
+        <SessionsLayout initialTracks={initialTracks} />
       </Section>
     </>
   );

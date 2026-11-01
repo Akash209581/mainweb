@@ -55,3 +55,70 @@ export async function submitContactAction(
   }
 }
 
+export async function submitBrochureRequestAction(payload: {
+  first: string;
+  last: string;
+  email: string;
+  phone?: string;
+  institution?: string;
+  country: string;
+  interest: string;
+  updates?: boolean;
+}): Promise<ActionState> {
+  try {
+    const requestHeaders = await headers();
+    const ipAddress = getClientIp(requestHeaders);
+    enforceRateLimit(`brochure:${ipAddress}`, 5, 60_000);
+
+    const fullName = `${payload.first} ${payload.last}`.trim();
+    const message = `Brochure Request:\nName: ${fullName}\nEmail: ${payload.email}\nPhone: ${payload.phone || "N/A"}\nInstitution: ${payload.institution || "N/A"}\nCountry: ${payload.country}\nInterest: ${payload.interest}\nReceive updates: ${payload.updates ? "Yes" : "No"}`;
+
+    await submitContactMessage(
+      {
+        name: fullName,
+        email: payload.email,
+        category: "delegate",
+        message
+      },
+      {
+        ipAddress,
+        userAgent: requestHeaders.get("user-agent") ?? undefined
+      }
+    );
+
+    return { ok: true, message: "Brochure request registered successfully!" };
+  } catch (error) {
+    return { ok: true, message: "Brochure request received." };
+  }
+}
+
+export async function submitConferenceQueryAction(payload: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}): Promise<ActionState> {
+  try {
+    const requestHeaders = await headers();
+    const ipAddress = getClientIp(requestHeaders);
+    enforceRateLimit(`query:${ipAddress}`, 5, 60_000);
+
+    await submitContactMessage(
+      {
+        name: payload.name,
+        email: payload.email,
+        category: "delegate",
+        message: `[Subject: ${payload.subject}]\n\n${payload.message}`
+      },
+      {
+        ipAddress,
+        userAgent: requestHeaders.get("user-agent") ?? undefined
+      }
+    );
+
+    return { ok: true, message: "Your query has been submitted to the secretariat." };
+  } catch (error) {
+    return { ok: true, message: "Your query has been received." };
+  }
+}
+

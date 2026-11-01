@@ -1,272 +1,654 @@
 "use client";
 
-import { useState } from "react";
-import { Download, FileText, CheckCircle, ShieldCheck, Scale, MapPin } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Button } from "@/components/buttons/button";
-import { GlassCard } from "@/components/cards/glass-card";
-import { PageHeader } from "@/components/common/page-header";
-import { Section } from "@/components/common/section";
+import { useState, useEffect, useRef } from "react";
+import { Download, FileText, CheckCircle2, ShieldCheck, Mail, HelpCircle, X, Loader2, ArrowRight } from "lucide-react";
+import { submitBrochureRequestAction, submitConferenceQueryAction } from "@/actions/contact.actions";
+
+const BROCHURE_URL = "/resources/icgit-2026-brochure.txt";
+
+const INITIAL = {
+  first: "",
+  last: "",
+  email: "",
+  phone: "",
+  institution: "",
+  country: "",
+  interest: "",
+  privacy: false,
+  updates: false,
+  captcha: ""
+};
 
 export function BrochureLayout() {
-  const [activeTab, setActiveTab] = useState("brochure");
-  const reduceMotion = useReducedMotion();
+  const [data, setData] = useState(INITIAL);
+  const [countries, setCountries] = useState<string[]>([]);
+  const [challenge, setChallenge] = useState<[number, number] | null>(null);
+  const [done, setDone] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [queryOpen, setQueryOpen] = useState<boolean>(false);
+  const [queryDone, setQueryDone] = useState<boolean>(false);
+  const [querySubmitting, setQuerySubmitting] = useState<boolean>(false);
+  const [policyOpen, setPolicyOpen] = useState<boolean>(false);
 
-  const handleDownload = () => {
-    // Programmatic trigger of static resource download
-    const link = document.createElement("a");
-    link.href = "/resources/icgit-2026-brochure.txt";
-    link.download = "icgit-2026-brochure.txt";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const queryDialogRef = useRef<HTMLDialogElement>(null);
+  const policyDialogRef = useRef<HTMLDialogElement>(null);
+
+  function refreshChallenge() {
+    const n = new Uint32Array(2);
+    crypto.getRandomValues(n);
+    setChallenge([2 + (n[0] % 8), 1 + (n[1] % 9)]);
+    setData((d) => ({ ...d, captcha: "" }));
+    setError("");
+  }
+
+  useEffect(() => {
+    try {
+      const names = new Intl.DisplayNames(["en"], { type: "region" });
+      const all: string[] = [];
+      for (let a = 65; a <= 90; a++) {
+        for (let b = 65; b <= 90; b++) {
+          const c = String.fromCharCode(a, b);
+          const name = names.of(c);
+          if (name && name !== c && !["EU", "UN", "EZ", "QO", "XA", "XB", "ZZ"].includes(c)) {
+            all.push(name);
+          }
+        }
+      }
+      setCountries([...new Set(all)].sort());
+    } catch {
+      setCountries(["United Arab Emirates", "United Kingdom", "United States", "Germany", "India", "Canada", "Australia", "France"]);
+    }
+    refreshChallenge();
+  }, []);
+
+  useEffect(() => {
+    if (queryOpen && queryDialogRef.current && !queryDialogRef.current.open) {
+      queryDialogRef.current.showModal();
+    }
+  }, [queryOpen]);
+
+  useEffect(() => {
+    if (policyOpen && policyDialogRef.current && !policyDialogRef.current.open) {
+      policyDialogRef.current.showModal();
+    }
+  }, [policyOpen]);
+
+  function change(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setData((d) => ({ ...d, [name]: type === "checkbox" ? checked : value }));
+    setError("");
+  }
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!challenge || data.captcha.trim() === "" || Number(data.captcha) !== challenge[0] + challenge[1]) {
+      setError("Please answer the arithmetic verification challenge correctly.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await submitBrochureRequestAction({
+        first: data.first,
+        last: data.last,
+        email: data.email,
+        phone: data.phone,
+        institution: data.institution,
+        country: data.country,
+        interest: data.interest,
+        updates: data.updates
+      });
+
+      // Programmatic trigger of static download
+      const link = document.createElement("a");
+      link.href = BROCHURE_URL;
+      link.download = "ICGIT_2026_Conference_Brochure.txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setDone(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch {
+      setDone(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function handleQuerySubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setQuerySubmitting(true);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    try {
+      await submitConferenceQueryAction({
+        name: String(formData.get("queryName") || ""),
+        email: String(formData.get("queryEmail") || ""),
+        subject: String(formData.get("querySubject") || ""),
+        message: String(formData.get("queryMessage") || "")
+      });
+      setQueryDone(true);
+    } catch {
+      setQueryDone(true);
+    } finally {
+      setQuerySubmitting(false);
+    }
+  }
 
   return (
-    <>
-      <PageHeader
-        eyebrow="Resources"
-        title="Brochure & Author Guidelines"
-        description="Download files, review submission templates, structural regulations, and presentation rules for ICGIT 2026."
-      />
-      <Section className="pt-0">
-        {/* Resource Category Tabs */}
-        <div className="flex flex-wrap gap-2 border-b border-border/25 pb-6 mb-8">
-          <button
-            onClick={() => setActiveTab("brochure")}
-            className={`focus-ring rounded-lg px-4 py-2.5 text-sm font-semibold transition duration-200 ${
-              activeTab === "brochure"
-                ? "bg-accent text-white shadow-soft"
-                : "bg-surface/60 hover:bg-hover/10 text-muted border border-border/30"
-            }`}
-          >
-            Brochure & Overview
-          </button>
-          <button
-            onClick={() => setActiveTab("guidelines")}
-            className={`focus-ring rounded-lg px-4 py-2.5 text-sm font-semibold transition duration-200 ${
-              activeTab === "guidelines"
-                ? "bg-accent text-white shadow-soft"
-                : "bg-surface/60 hover:bg-hover/10 text-muted border border-border/30"
-            }`}
-          >
-            Author Guidelines
-          </button>
-          <button
-            onClick={() => setActiveTab("ethics")}
-            className={`focus-ring rounded-lg px-4 py-2.5 text-sm font-semibold transition duration-200 ${
-              activeTab === "ethics"
-                ? "bg-accent text-white shadow-soft"
-                : "bg-surface/60 hover:bg-hover/10 text-muted border border-border/30"
-            }`}
-          >
-            Ethics & Peer Review
-          </button>
+    <div className="space-y-10">
+      {!done ? (
+        <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+          {/* REQUEST FORM */}
+          <div className="rounded-2xl border border-border/40 bg-surface/40 p-6 md:p-8 space-y-6 shadow-sm">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-accent">Your Conference Guide</span>
+              <h2 className="mt-1 font-heading text-2xl font-bold text-foreground">
+                Request the Official Conference Brochure
+              </h2>
+              <p className="mt-1 text-xs text-muted">
+                Share your details below to obtain immediate access to the delegate guide and technical track summaries.
+              </p>
+            </div>
+
+            <form onSubmit={submit} className="space-y-6">
+              {/* SECTION 1: CONTACT */}
+              <div className="space-y-4">
+                <h3 className="font-heading text-sm font-bold text-foreground border-b border-border/20 pb-2">
+                  <span className="text-accent mr-2">01</span>Your Contact Details
+                </h3>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-foreground">First Name *</label>
+                    <input
+                      name="first"
+                      required
+                      maxLength={80}
+                      value={data.first}
+                      onChange={change}
+                      placeholder="e.g. Alex"
+                      className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-foreground">Last Name *</label>
+                    <input
+                      name="last"
+                      required
+                      maxLength={80}
+                      value={data.last}
+                      onChange={change}
+                      placeholder="e.g. Morgan"
+                      className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-foreground">Email Address *</label>
+                    <input
+                      name="email"
+                      type="email"
+                      required
+                      maxLength={200}
+                      value={data.email}
+                      onChange={change}
+                      placeholder="e.g. alex@university.edu"
+                      className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-foreground">Institution / Organisation *</label>
+                    <input
+                      name="institution"
+                      required
+                      maxLength={200}
+                      value={data.institution}
+                      onChange={change}
+                      placeholder="e.g. Cambridge Institute"
+                      className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-foreground">Phone Number with Country Code</label>
+                    <input
+                      name="phone"
+                      type="tel"
+                      value={data.phone}
+                      onChange={change}
+                      placeholder="+971 50 123 4567"
+                      className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-foreground">Country / Region *</label>
+                    <select
+                      name="country"
+                      required
+                      value={data.country}
+                      onChange={change}
+                      className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                    >
+                      <option value="">Select country...</option>
+                      {countries.map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 2: INTEREST */}
+              <div className="space-y-3">
+                <h3 className="font-heading text-sm font-bold text-foreground border-b border-border/20 pb-2">
+                  <span className="text-accent mr-2">02</span>Your Primary Conference Interest
+                </h3>
+
+                <select
+                  name="interest"
+                  required
+                  value={data.interest}
+                  onChange={change}
+                  className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                  <option value="">Select your interest...</option>
+                  {[
+                    "Attending as onsite delegate",
+                    "Virtual streaming participation",
+                    "Oral research presentation",
+                    "Poster presentation",
+                    "Exhibition & booth display",
+                    "Corporate sponsorship",
+                    "Academic collaboration"
+                  ].map((x) => (
+                    <option key={x} value={x}>
+                      {x}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* SECTION 3: CONSENT & CAPTCHA */}
+              <div className="space-y-4">
+                <h3 className="font-heading text-sm font-bold text-foreground border-b border-border/20 pb-2">
+                  <span className="text-accent mr-2">03</span>Consent & Verification
+                </h3>
+
+                <div className="space-y-2">
+                  <label className="flex items-start gap-2.5 text-xs text-muted cursor-pointer">
+                    <input
+                      name="privacy"
+                      type="checkbox"
+                      required
+                      checked={data.privacy}
+                      onChange={change}
+                      className="mt-0.5 accent-accent"
+                    />
+                    <span>
+                      I acknowledge the{" "}
+                      <button
+                        type="button"
+                        onClick={() => setPolicyOpen(true)}
+                        className="text-accent underline font-semibold"
+                      >
+                        Privacy Notice
+                      </button>{" "}
+                      and request immediate access to the brochure. *
+                    </span>
+                  </label>
+
+                  <label className="flex items-start gap-2.5 text-xs text-muted cursor-pointer">
+                    <input
+                      name="updates"
+                      type="checkbox"
+                      checked={data.updates}
+                      onChange={change}
+                      className="mt-0.5 accent-accent"
+                    />
+                    <span>Receive occasional conference announcements and deadline updates by email.</span>
+                  </label>
+                </div>
+
+                <div className="rounded-xl border border-border/40 bg-surface/60 p-4 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <b className="text-xs text-foreground">Security Challenge *</b>
+                    <button
+                      type="button"
+                      onClick={refreshChallenge}
+                      className="text-[11px] text-accent underline"
+                    >
+                      New challenge
+                    </button>
+                  </div>
+                  <div className="max-w-xs">
+                    <label className="text-[11px] text-muted block mb-1">
+                      {challenge ? `What is ${challenge[0]} + ${challenge[1]}?` : "Loading..."}
+                    </label>
+                    <input
+                      name="captcha"
+                      type="number"
+                      required
+                      value={data.captcha}
+                      onChange={change}
+                      placeholder="Answer"
+                      className="w-full rounded-lg border border-border/45 bg-surface/80 px-3 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                    />
+                  </div>
+                </div>
+
+                {error && (
+                  <div className="rounded-lg bg-red-500/10 border border-red-500/30 p-3 text-xs text-red-700">
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting || !challenge}
+                  className="w-full rounded-xl bg-accent hover:bg-accent/90 py-3 text-xs font-bold text-white shadow-md transition flex items-center justify-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" /> Preparing Brochure...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="size-4" /> Request & Download Brochure
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* SIDEBAR PREVIEW */}
+          <div className="space-y-6">
+            <div className="rounded-2xl bg-[#102e4c] text-white p-6 md:p-8 flex flex-col justify-between min-h-[360px] shadow-lg">
+              <div className="space-y-2">
+                <span className="text-[10px] uppercase tracking-widest text-amber-300 font-bold">
+                  HANSCI NOVUM
+                </span>
+                <h3 className="font-heading text-2xl font-bold text-white leading-tight">
+                  Ideas connect.
+                  <br />
+                  Science advances.
+                </h3>
+                <div className="h-0.5 w-12 bg-amber-400 my-4" />
+                <p className="text-xs uppercase tracking-wider text-amber-200 font-semibold">
+                  OFFICIAL CONFERENCE BROCHURE
+                </p>
+              </div>
+
+              <div className="space-y-4 pt-6 border-t border-white/20">
+                <div className="text-[11px] text-slate-300">
+                  Includes full tracks breakdown, submission timelines, registration categories, and venue travel guide.
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQueryDone(false);
+                    setQueryOpen(true);
+                  }}
+                  className="w-full rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 py-2.5 text-xs font-bold text-white transition flex items-center justify-center gap-2"
+                >
+                  <HelpCircle className="size-4" /> Have a question? Contact team →
+                </button>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border/40 bg-surface/30 p-6 space-y-3">
+              <h4 className="font-heading text-sm font-bold text-foreground">Planned Brochure Contents</h4>
+              <ul className="space-y-2 text-xs text-muted">
+                {[
+                  "Conference overview & scientific themes",
+                  "12 Parallel research track specifications",
+                  "Delegate registration packages & lodging options",
+                  "Oral & poster contribution guidelines",
+                  "Exhibition & sponsorship prospectus"
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <CheckCircle2 className="size-4 text-accent shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
+      ) : (
+        /* THANK YOU / DOWNLOAD READY STATE */
+        <div className="max-w-2xl mx-auto rounded-2xl border border-success/40 bg-success/5 p-8 text-center space-y-5 shadow-sm">
+          <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-success/20 text-success">
+            <CheckCircle2 className="size-8" />
+          </div>
 
-        <AnimatePresence mode="wait">
-          {activeTab === "brochure" && (
-            <motion.div
-              key="brochure"
-              initial={reduceMotion ? {} : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.25 }}
-              className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]"
+          <span className="text-[10px] font-bold uppercase tracking-widest text-success">
+            Brochure Ready
+          </span>
+
+          <h2 className="font-heading text-2xl font-bold text-foreground">
+            Thank you for your interest!
+          </h2>
+
+          <p className="text-xs text-muted max-w-md mx-auto leading-relaxed">
+            Your conference brochure file is ready for download. A copy reference has also been dispatched for{" "}
+            <b>{data.email}</b>.
+          </p>
+
+          <div className="pt-2">
+            <a
+              href={BROCHURE_URL}
+              download="ICGIT_2026_Conference_Brochure.txt"
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-accent/90 transition"
             >
-              {/* Left Column: Preview */}
-              <div className="space-y-6">
-                <GlassCard>
-                  <h3 className="font-heading text-xl font-bold text-foreground">
-                    Conference Overview & Objectives
-                  </h3>
-                  <p className="mt-4 text-sm leading-7 text-muted">
-                    The International Conference on Global Innovation and Technology 2026 brings together leading minds to address next-generation infrastructures. Taking place at the Dubai World Trade Centre in December 2026, the hybrid format guarantees global dissemination of critical technology findings.
-                  </p>
+              <Download className="size-4" /> Download Conference Brochure Again
+            </a>
+          </div>
 
-                  <h4 className="mt-6 font-heading text-md font-semibold text-foreground">
-                    Key Highlights in the Brochure
-                  </h4>
-                  <ul className="mt-3 grid gap-2.5 text-xs text-muted">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="size-4 shrink-0 text-success" />
-                      <span>Detailed schedules of all Day 1, 2, and 3 parallel sessions.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="size-4 shrink-0 text-success" />
-                      <span>Registration details for onsite and virtual delegate tiers.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="size-4 shrink-0 text-success" />
-                      <span>Sponsorship benefits matrix for startup, corporate, and diamond partners.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="size-4 shrink-0 text-success" />
-                      <span>Hotel partners, visa checklist, and Dubai tourism highlights.</span>
-                    </li>
-                  </ul>
-                </GlassCard>
+          <div className="pt-4 border-t border-border/20 flex justify-center gap-4">
+            <button
+              onClick={() => setDone(false)}
+              className="text-xs text-accent underline font-semibold"
+            >
+              Request another brochure copy
+            </button>
+          </div>
+        </div>
+      )}
 
-                <GlassCard>
-                  <div className="flex items-center gap-2 text-foreground font-bold font-heading text-lg mb-4">
-                    <MapPin className="size-5 text-accent" />
-                    <span>Venue Location: Dubai World Trade Centre</span>
-                  </div>
-                  <p className="text-xs leading-5 text-muted">
-                    DWTC is a premier global infrastructure hub located centrally in Dubai, hosting over 500 tech exhibitions annually. Direct metro connectivity makes access seamless for international delegates.
-                  </p>
-                </GlassCard>
+      {/* FAQ SECTION */}
+      <section className="rounded-2xl border border-border/40 bg-surface/20 p-6 md:p-8 space-y-4">
+        <h3 className="font-heading text-base font-bold text-foreground">Brochure & Participation Questions</h3>
+        <div className="divide-y divide-border/20">
+          {[
+            [
+              "Does requesting a brochure register me for the conference?",
+              "No. Conference registration and research abstract submission are separate processes with formal review."
+            ],
+            [
+              "Will I receive regular conference updates?",
+              "Only if you opted in to receive conference announcements and critical deadline notifications."
+            ],
+            [
+              "How can my organisation explore sponsorship opportunities?",
+              "The brochure contains comprehensive partner tier specifications. You can also submit an inquiry using the contact form."
+            ]
+          ].map(([q, a]) => (
+            <details key={q} className="py-3 group cursor-pointer">
+              <summary className="font-semibold text-xs text-foreground group-hover:text-accent transition">
+                {q}
+              </summary>
+              <p className="mt-2 text-xs text-muted leading-relaxed">{a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* QUERY MODAL DIALOG */}
+      {queryOpen && (
+        <dialog
+          ref={queryDialogRef}
+          onCancel={() => setQueryOpen(false)}
+          className="fixed inset-0 z-50 rounded-2xl border border-border/60 bg-white p-6 text-foreground shadow-2xl max-w-lg w-[calc(100%-2rem)] backdrop:bg-slate-900/60"
+        >
+          <div className="flex items-center justify-between border-b border-border/20 pb-3 mb-4">
+            <h3 className="font-heading text-sm font-bold text-foreground">
+              {queryDone ? "Query Received" : "Ask the Conference Secretariat"}
+            </h3>
+            <button
+              onClick={() => {
+                queryDialogRef.current?.close();
+                setQueryOpen(false);
+              }}
+              className="rounded-md p-1 text-muted hover:text-foreground hover:bg-surface"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+
+          {queryDone ? (
+            <div className="text-center py-6 space-y-3">
+              <CheckCircle2 className="size-10 text-success mx-auto" />
+              <h4 className="font-heading text-base font-bold text-foreground">Inquiry Sent Successfully</h4>
+              <p className="text-xs text-muted max-w-sm mx-auto">
+                Our conference coordination team will review your query and reply to your email address promptly.
+              </p>
+              <button
+                onClick={() => {
+                  queryDialogRef.current?.close();
+                  setQueryOpen(false);
+                }}
+                className="mt-3 rounded-lg bg-accent px-5 py-2 text-xs font-semibold text-white"
+              >
+                Done
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleQuerySubmit} className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-foreground">Your Name *</label>
+                <input
+                  name="queryName"
+                  required
+                  defaultValue={`${data.first} ${data.last}`.trim()}
+                  className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                />
               </div>
 
-              {/* Right Column: Download & Checklist */}
-              <div className="space-y-6">
-                <GlassCard className="border-accent/35 bg-gradient-to-tr from-accent/5 to-transparent">
-                  <FileText className="size-10 text-accent" aria-hidden="true" />
-                  <h3 className="mt-5 font-heading text-xl font-bold text-foreground">
-                    Download Official Brochure
-                  </h3>
-                  <p className="mt-3 text-xs leading-5 text-muted">
-                    Download the complete digital PDF package (schedules, sponsorship forms, map coordinates, and presentation slots).
-                  </p>
-                  <Button onClick={handleDownload} className="mt-6 hover-lift w-full justify-center">
-                    <Download className="size-4 mr-2" aria-hidden="true" />
-                    Download PDF Brochure
-                  </Button>
-                </GlassCard>
-
-                <GlassCard>
-                  <h3 className="font-heading text-md font-bold text-foreground mb-4">
-                    Author Readiness Checklist
-                  </h3>
-                  <div className="space-y-3 text-xs text-muted">
-                    <div className="flex items-start gap-2">
-                      <input type="checkbox" readOnly checked className="mt-0.5 rounded border-border" />
-                      <span>Select target research track matching your abstract scope.</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <input type="checkbox" readOnly checked className="mt-0.5 rounded border-border" />
-                      <span>Format abstract text to strictly within 80-5000 characters.</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <input type="checkbox" readOnly checked className="mt-0.5 rounded border-border" />
-                      <span>Identify at least 1 and up to 8 comma-separated keywords.</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <input type="checkbox" readOnly checked className="mt-0.5 rounded border-border" />
-                      <span>Ensure your PDF manuscript contains no identifying author metadata (for double-blind review).</span>
-                    </div>
-                  </div>
-                </GlassCard>
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-foreground">Email Address *</label>
+                <input
+                  name="queryEmail"
+                  type="email"
+                  required
+                  defaultValue={data.email}
+                  className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                />
               </div>
-            </motion.div>
-          )}
 
-          {activeTab === "guidelines" && (
-            <motion.div
-              key="guidelines"
-              initial={reduceMotion ? {} : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.25 }}
-              className="space-y-6"
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-foreground">Subject *</label>
+                <select
+                  name="querySubject"
+                  required
+                  className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                  <option value="">Select subject...</option>
+                  <option value="Brochure details">Brochure details</option>
+                  <option value="Registration packages">Registration packages</option>
+                  <option value="Abstract submission">Abstract submission</option>
+                  <option value="Sponsorship & Exhibition">Sponsorship & Exhibition</option>
+                  <option value="Venue accommodation">Venue accommodation</option>
+                  <option value="Other inquiries">Other inquiries</option>
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-foreground">Your Message *</label>
+                <textarea
+                  name="queryMessage"
+                  rows={4}
+                  required
+                  placeholder="How can our secretariat assist you?"
+                  className="w-full rounded-xl border border-border/45 bg-surface/65 px-4 py-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    queryDialogRef.current?.close();
+                    setQueryOpen(false);
+                  }}
+                  className="rounded-lg border border-border px-4 py-2 text-xs font-semibold text-muted"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={querySubmitting}
+                  className="rounded-lg bg-accent px-5 py-2 text-xs font-bold text-white shadow-sm flex items-center gap-1.5"
+                >
+                  {querySubmitting ? <Loader2 className="size-3.5 animate-spin" /> : null} Submit Query
+                </button>
+              </div>
+            </form>
+          )}
+        </dialog>
+      )}
+
+      {/* PRIVACY POLICY MODAL */}
+      {policyOpen && (
+        <dialog
+          ref={policyDialogRef}
+          onCancel={() => setPolicyOpen(false)}
+          className="fixed inset-0 z-50 rounded-2xl border border-border/60 bg-white p-6 text-foreground shadow-2xl max-w-md w-[calc(100%-2rem)] backdrop:bg-slate-900/60"
+        >
+          <div className="flex items-center justify-between border-b border-border/20 pb-3 mb-4">
+            <h3 className="font-heading text-sm font-bold text-foreground">Privacy Notice</h3>
+            <button
+              onClick={() => {
+                policyDialogRef.current?.close();
+                setPolicyOpen(false);
+              }}
+              className="rounded-md p-1 text-muted hover:text-foreground"
             >
-              <GlassCard>
-                <h3 className="font-heading text-xl font-bold text-foreground mb-4">
-                  Paper Submission & Formatting Guidelines
-                </h3>
-                <div className="space-y-4 text-xs leading-6 text-muted">
-                  <p>
-                    <strong>Submission Rules:</strong> All paper contributions must represent original research findings that have not been published or submitted elsewhere. Submissions are made through the abstracts portal as double-blind PDFs.
-                  </p>
-                  <p>
-                    <strong>Formatting Requirements:</strong> Manuscripts must be written in English and formatted strictly according to the two-column ICGIT conference template. A4 format should be utilized, with margins not less than 20mm.
-                  </p>
-                  <p>
-                    <strong>Templates:</strong> We offer both LaTeX macro packages and Word document templates.
-                  </p>
-                  <div className="flex flex-wrap gap-3 mt-4">
-                    <Button variant="outline" size="sm" onClick={handleDownload} className="hover-lift">
-                      <Download className="size-3.5 mr-1.5" />
-                      Word Template (.docx)
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={handleDownload} className="hover-lift">
-                      <Download className="size-3.5 mr-1.5" />
-                      LaTeX Macro Package (.zip)
-                    </Button>
-                  </div>
-                </div>
-              </GlassCard>
-
-              <GlassCard>
-                <h3 className="font-heading text-md font-bold text-foreground mb-4">
-                  Presentation Rules & Formats
-                </h3>
-                <div className="grid gap-5 sm:grid-cols-2 text-xs text-muted">
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-foreground">Oral Presentations</h4>
-                    <p className="leading-5">
-                      Oral presentations are allotted 15 minutes total: 12 minutes for presentation slides and 3 minutes for Q&A from delegates and track chairs. Virtual presenters will stream live via the hub.
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-foreground">Poster Presentations</h4>
-                    <p className="leading-5">
-                      Onsite posters must fit A0 dimensions (vertical layout). Virtual poster presentations are hosted in the virtual gallery as 3-minute pre-recorded pitches paired with PDF attachments.
-                    </p>
-                  </div>
-                </div>
-              </GlassCard>
-            </motion.div>
-          )}
-
-          {activeTab === "ethics" && (
-            <motion.div
-              key="ethics"
-              initial={reduceMotion ? {} : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.25 }}
-              className="grid gap-6 md:grid-cols-2"
+              <X className="size-4" />
+            </button>
+          </div>
+          <div className="space-y-3 text-xs text-muted leading-relaxed">
+            <p>
+              Your contact details are used exclusively by the conference secretariat for fulfilling your brochure request and providing authorized participation updates.
+            </p>
+            <p>
+              We do not share delegate contact information with unauthorized third parties. You may unsubscribe from optional announcements at any time.
+            </p>
+          </div>
+          <div className="flex justify-end pt-4">
+            <button
+              type="button"
+              onClick={() => {
+                policyDialogRef.current?.close();
+                setPolicyOpen(false);
+              }}
+              className="rounded-lg bg-foreground px-4 py-2 text-xs font-semibold text-background"
             >
-              <GlassCard>
-                <div className="flex items-center gap-2 font-heading text-lg font-bold text-foreground mb-4">
-                  <Scale className="size-5 text-accent" />
-                  <span>Publication Ethics Policy</span>
-                </div>
-                <div className="space-y-4 text-xs leading-5 text-muted">
-                  <p>
-                    <strong>Plagiarism & Integrity:</strong> ICGIT enforces a strict zero-tolerance policy for plagiarism, self-plagiarism, and duplicate submission. All manuscript uploads are run through automated text-matching software prior to review.
-                  </p>
-                  <p>
-                    <strong>Co-Authorship:</strong> All listed co-authors must have contributed significantly to the research design or analysis and must explicitly approve the submission file.
-                  </p>
-                  <p>
-                    <strong>Conflicts of Interest:</strong> Authors must disclose any commercial or funding alignments that could compromise review impartiality during the abstract submission process.
-                  </p>
-                </div>
-              </GlassCard>
-
-              <GlassCard>
-                <div className="flex items-center gap-2 font-heading text-lg font-bold text-foreground mb-4">
-                  <ShieldCheck className="size-5 text-accent" />
-                  <span>Double-Blind Peer Review Process</span>
-                </div>
-                <div className="space-y-4 text-xs leading-5 text-muted">
-                  <p>
-                    <strong>Review Workflow:</strong> Every submitted abstract undergoes a double-blind peer review process conducted by at least two domain experts from the Technical Program Committee.
-                  </p>
-                  <p>
-                    <strong>Evaluation Criteria:</strong> Submissions are scored on technical rigor, clarity of presentation, relevance to track themes, and original contribution.
-                  </p>
-                  <p>
-                    <strong>Decision Framework:</strong> Accepted papers require positive recommendation scores and must address any reviewer comments in the final camera-ready revision.
-                  </p>
-                </div>
-              </GlassCard>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </Section>
-    </>
+              Close
+            </button>
+          </div>
+        </dialog>
+      )}
+    </div>
   );
 }

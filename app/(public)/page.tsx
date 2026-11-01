@@ -1,7 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma/client";
 import { HomeClient, type ConferenceInfo, DEFAULT_FALLBACK_SPEAKERS, DEFAULT_FALLBACK_TRACKS } from "@/components/home/home-client";
 import { memoize } from "@/lib/cache";
+
+import fs from "fs";
+import path from "path";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -39,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const { mappedSpeakers, mappedTracks, customContent, conferenceInfo, themeTokens } = await memoize(
+  const { mappedSpeakers, mappedTracks, customContent, conferenceInfo, themeTokens, committeeMembers } = await memoize(
     "home_page_data_live",
     500,
     async () => {
@@ -117,19 +120,40 @@ export default async function HomePage() {
           mode: conf?.mode === "OFFLINE" ? "In-Person Event" : conf?.mode === "VIRTUAL" ? "Virtual Event" : "Hybrid Event"
         };
 
+        let savedSettings: any = null;
+        try {
+          const sf = path.join(process.cwd(), "storage", "settings.json");
+          if (fs.existsSync(sf)) {
+            savedSettings = JSON.parse(fs.readFileSync(sf, "utf8"));
+          }
+        } catch {}
+
+        const finalCustomContent = customContent || savedSettings?.sections || undefined;
+        const committeeMembers = savedSettings?.committee || undefined;
+
         return {
           mappedSpeakers,
           mappedTracks,
-          customContent,
+          customContent: finalCustomContent,
           conferenceInfo,
+          committeeMembers,
           themeTokens: activeTheme?.tokens as Record<string, string> | null
         };
       } catch (err) {
         console.error("HomePage DB fetch error:", err);
+        let savedSettings: any = null;
+        try {
+          const sf = path.join(process.cwd(), "storage", "settings.json");
+          if (fs.existsSync(sf)) {
+            savedSettings = JSON.parse(fs.readFileSync(sf, "utf8"));
+          }
+        } catch {}
+
         return {
           mappedSpeakers: DEFAULT_FALLBACK_SPEAKERS,
           mappedTracks: DEFAULT_FALLBACK_TRACKS,
-          customContent: undefined,
+          customContent: savedSettings?.sections || undefined,
+          committeeMembers: savedSettings?.committee || undefined,
           conferenceInfo: undefined,
           themeTokens: null
         };
@@ -144,6 +168,7 @@ export default async function HomePage() {
       customContent={customContent}
       conferenceInfo={conferenceInfo}
       themeTokens={themeTokens}
+      committeeMembers={committeeMembers}
     />
   );
 }

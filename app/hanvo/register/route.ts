@@ -13,7 +13,16 @@ export async function POST(request: Request) {
     const { userId: clerkUserId } = await auth();
     const user = clerkUserId ? await findUserByClerkId(clerkUserId) : null;
     const registration = await submitRegistration(input, user?.id);
-    return ok({ id: registration.id, status: registration.status }, 201);
+    return ok(
+      {
+        id: registration.id,
+        status: registration.status,
+        referenceNumber: registration.referenceNumber,
+        totalAmountCents: registration.totalAmountCents,
+        isQuoteRequired: registration.isQuoteRequired
+      },
+      201
+    );
   } catch (error) {
     return fail(error);
   }

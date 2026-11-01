@@ -436,13 +436,48 @@ model Registration {
   conference            Conference         @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
   userId                String?            @db.Uuid
   user                  User?              @relation(fields: [userId], references: [id])
-  registrationPackageId String             @db.Uuid
-  registrationPackage   RegistrationPackage @relation(fields: [registrationPackageId], references: [id])
+  registrationPackageId String?            @db.Uuid
+  registrationPackage   RegistrationPackage? @relation(fields: [registrationPackageId], references: [id])
+  referenceNumber       String?            @unique
   fullName              String
+  firstName             String?
+  lastName              String?
   email                 String
   organization          String?
   countryId             String?            @db.Uuid
   country               Country?           @relation(fields: [countryId], references: [id])
+  countryName           String?
+  category              String?
+  participationRole     String?
+  abstractReference     String?
+  currency              String             @default("USD")
+  registrationFeeCents  Int                @default(0)
+  totalAmountCents      Int                @default(0)
+  isQuoteRequired       Boolean            @default(false)
+
+  // Partnership / Exhibition fields
+  partnerPackage        String?
+  representativesCount  Int?
+  partnerInterests      String?
+
+  // Accommodation / Stay fields
+  hasStay               Boolean            @default(false)
+  checkInDate           DateTime?
+  checkOutDate          DateTime?
+  roomType              String?
+  roomCount             Int?               @default(1)
+  guestsPerRoom         String?
+  bedPreference         String?
+  accommodationNotes    String?
+  accommodationFeeCents Int?               @default(0)
+
+  // Invoice / Billing fields
+  needsInvoice          Boolean            @default(false)
+  billingOrg            String?
+  billingAddress        String?
+  taxId                 String?
+  poNumber              String?
+
   status                RegistrationStatus @default(PENDING)
   payments              Payment[]
   invoices              Invoice[]
@@ -453,6 +488,7 @@ model Registration {
   @@index([conferenceId, status])
   @@index([email])
   @@index([userId])
+  @@index([referenceNumber])
   @@index([deletedAt])
 }
 

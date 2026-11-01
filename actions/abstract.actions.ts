@@ -62,6 +62,106 @@ export async function submitAbstractAction(
   }
 }
 
+export interface HansciAbstractResult {
+  ok: boolean;
+  message: string;
+  referenceNumber?: string;
+}
+
+export async function submitHansciAbstractAction(payload: {
+  first: string;
+  last: string;
+  email: string;
+  institution: string;
+  phone?: string;
+  country: string;
+  title: string;
+  track: string;
+  presentation: string;
+  coAuthors?: Array<{ name: string; affiliation: string }>;
+  fileName?: string;
+  fileSize?: number;
+}): Promise<HansciAbstractResult> {
+  try {
+    const requestHeaders = await headers();
+    const ipAddress = getClientIp(requestHeaders);
+    enforceRateLimit(`abstract-submit:${ipAddress}`, 5, 60_000);
+
+    const randomDigits = Math.floor(100000 + Math.random() * 900000);
+    const referenceNumber = `ABS-2026-${randomDigits}`;
+
+    // Persist to storage backup
+    const fs = await import("fs");
+    const path = await import("path");
+    const syncDirs = [
+      path.join(process.cwd(), "storage"),
+      "C:\\Users\\banda\\Desktop\\conference-admin\\storage"
+    ];
+
+    const record = {
+      id: `abs-${randomDigits}`,
+      referenceNumber,
+      name: `${payload.first} ${payload.last}`.trim(),
+      presentingAuthor: `${payload.first} ${payload.last}`.trim(),
+      first: payload.first,
+      last: payload.last,
+      email: payload.email,
+      number: payload.phone || "N/A",
+      phone: payload.phone || "N/A",
+      institution: payload.institution,
+      country: payload.country,
+      title: payload.title,
+      track: payload.track,
+      presentationPreference: payload.presentation,
+      coAuthors: payload.coAuthors || [],
+      fileName: payload.fileName || "abstract-document.pdf",
+      fileSize: payload.fileSize || 0,
+      status: "SUBMITTED",
+      submittedAt: new Date().toISOString()
+    };
+
+    for (const d of syncDirs) {
+      try {
+        if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+        const targetFile = path.join(d, "abstracts_backup.json");
+        let existing: any[] = [];
+        if (fs.existsSync(targetFile)) {
+          try {
+            existing = JSON.parse(fs.readFileSync(targetFile, "utf8"));
+          } catch {
+            existing = [];
+          }
+        }
+        existing.push(record);
+        fs.writeFileSync(targetFile, JSON.stringify(existing, null, 2), "utf8");
+      } catch (syncErr) {
+        console.warn("Abstract backup sync error for dir", d, syncErr);
+      }
+    }
+
+    try {
+      await emailService.sendRegistrationConfirmation(
+        payload.email,
+        `${payload.first} ${payload.last}`
+      );
+    } catch {}
+
+    return {
+      ok: true,
+      message: "Abstract submitted successfully!",
+      referenceNumber
+    };
+  } catch (error) {
+    logger.error("submitHansciAbstractAction error", {
+      metadata: { error: String(error) }
+    });
+    return {
+      ok: false,
+      message: "Failed to submit abstract. Please try again."
+    };
+  }
+}
+
 export async function assignAbstractReviewerAction(
   abstractId: string,
   reviewerId: string

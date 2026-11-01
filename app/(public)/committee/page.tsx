@@ -1,108 +1,39 @@
 import type { Metadata } from "next";
-import { CommitteeCard } from "@/components/committee/committee-card";
 import { PageHeader } from "@/components/common/page-header";
 import { Section } from "@/components/common/section";
-import { SearchBar } from "@/components/common/search-bar";
-import { EmptyState } from "@/components/common/empty-state";
-import { listCommittee } from "@/lib/repositories/public-content.repository";
-import { COMMITTEE } from "@/constants/conference";
+import { CommitteeClient } from "@/components/committee/committee-client";
+import fs from "fs";
+import path from "path";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Committee",
-  description: "Browse the ICGIT 2026 committee leadership."
+  title: "Organizing Committee — ICGIT 2026",
+  description: "Meet the international organizing committee, scientific chairs, and academic leadership of ICGIT 2026."
 };
 
-interface CommitteePageProps {
-  searchParams: Promise<{
-    search?: string;
-  }>;
-}
-
-export default async function CommitteePage({ searchParams }: CommitteePageProps) {
-  const params = await searchParams;
-  const search = params.search ?? "";
-
-  const { items: dbItems } = await listCommittee({
-    page: 1,
-    pageSize: 100,
-    search,
-    direction: "asc"
-  });
-
-  const items =
-    dbItems.length > 0
-      ? dbItems
-      : !search
-      ? COMMITTEE.map((c) => ({
-          name: c.name,
-          role: c.role,
-          affiliation: c.affiliation
-        }))
-      : [];
-
-  const groups: Record<string, typeof items> = {
-    "Honorary Chairs": [],
-    "General Chairs": [],
-    "Program Chairs": [],
-    "Organizing Committee": [],
-    "Technical Committee": [],
-    "International Advisory Board": []
-  };
-
-  items.forEach((member) => {
-    const role = member.role.toLowerCase();
-    if (role.includes("honorary")) {
-      groups["Honorary Chairs"].push(member);
-    } else if (role.includes("general")) {
-      groups["General Chairs"].push(member);
-    } else if (role.includes("program")) {
-      groups["Program Chairs"].push(member);
-    } else if (role.includes("organizing")) {
-      groups["Organizing Committee"].push(member);
-    } else if (role.includes("technical")) {
-      groups["Technical Committee"].push(member);
-    } else {
-      groups["International Advisory Board"].push(member);
+export default function CommitteePage() {
+  let initialMembers = undefined;
+  try {
+    const settingsFile = path.join(process.cwd(), "storage", "settings.json");
+    if (fs.existsSync(settingsFile)) {
+      const data = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
+      if (Array.isArray(data.committee) && data.committee.length > 0) {
+        initialMembers = data.committee.filter((m: any) => m.published !== false);
+      }
     }
-  });
-
-  const hasResults = Object.values(groups).some((arr) => arr.length > 0);
+  } catch {}
 
   return (
     <>
       <PageHeader
-        eyebrow="Committee"
-        title="Governance for a trusted conference program"
-        description="ICGIT 2026 is guided by international academic, publication, sponsorship, and program leadership."
+        eyebrow="Organizing Committee"
+        title="Shared expertise. A common purpose."
+        description="Meet the academic, technical, and local leadership who help shape the scientific programme, peer review standards, and conference delegate experience."
       />
       <Section className="pt-0">
-        <div className="mb-8">
-          <SearchBar placeholder="Search committee members by name or affiliation..." />
-        </div>
-
-        {!hasResults ? (
-          <EmptyState title="No committee members found" message="Try searching for a different name, affiliation, or role." />
-        ) : (
-          <div className="space-y-12">
-            {Object.entries(groups).map(([groupName, members]) => {
-              if (members.length === 0) return null;
-              return (
-                <div key={groupName} className="space-y-5">
-                  <h2 className="font-heading text-2xl font-bold text-foreground border-b border-border/20 pb-2">
-                    {groupName}
-                  </h2>
-                  <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                    {members.map((member) => (
-                      <CommitteeCard key={member.name} member={member} />
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <CommitteeClient initialMembers={initialMembers} />
       </Section>
     </>
   );
 }
-

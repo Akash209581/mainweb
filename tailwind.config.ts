@@ -22,8 +22,14 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        heading: ["var(--font-outfit)", "sans-serif"],
-        body: ["var(--font-inter)", "sans-serif"]
+        heading: ['"Times New Roman"', "Times", "serif"],
+        body: ['"Times New Roman"', "Times", "serif"],
+        sans: ['"Times New Roman"', "Times", "serif"],
+        serif: ['"Times New Roman"', "Times", "serif"]
+      },
+      fontSize: {
+        xs: ["12px", { lineHeight: "1.5" }],
+        sm: ["12px", { lineHeight: "1.6" }]
       },
       colors: {
         background: "rgb(var(--color-background) / <alpha-value>)",

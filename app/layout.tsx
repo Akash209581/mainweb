@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { AuthProvider } from "@/components/auth/auth-provider";
 import { Footer, type FooterConferenceInfo, type FooterProps } from "@/components/layout/footer";
@@ -154,15 +154,23 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           phone: "+971 4 000 2026"
         };
 
-        const rawMenuItems = dbMenuSetting?.value as Array<{ label: string; href: string }> | undefined;
-        const menuItems = rawMenuItems
-          ? rawMenuItems.map((item) => {
-              if (item.href === "/speakers") return { ...item, href: "/#speakers" };
-              if (item.href === "/sessions") return { ...item, href: "/#sessions" };
-              if (item.href === "/venue") return { ...item, href: "/#venue" };
-              if (item.href === "/contact") return { ...item, href: "/#contact" };
-              return item;
-            })
+        let rawMenuItems = dbMenuSetting?.value as Array<{ label: string; href: string }> | undefined;
+        if (!rawMenuItems || !Array.isArray(rawMenuItems) || rawMenuItems.length === 0) {
+          try {
+            const fs = await import("fs");
+            const path = await import("path");
+            const settingsFile = path.join(process.cwd(), "storage", "settings.json");
+            if (fs.existsSync(settingsFile)) {
+              const saved = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
+              if (Array.isArray(saved.navigation) && saved.navigation.length > 0) {
+                rawMenuItems = saved.navigation;
+              }
+            }
+          } catch {}
+        }
+
+        const menuItems = rawMenuItems && Array.isArray(rawMenuItems) && rawMenuItems.length > 0
+          ? rawMenuItems
           : undefined;
 
         return {
@@ -174,8 +182,21 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         };
       } catch (e) {
         console.error("Layout fetch error:", e);
+        let fallbackMenu = undefined;
+        try {
+          const fs = await import("fs");
+          const path = await import("path");
+          const settingsFile = path.join(process.cwd(), "storage", "settings.json");
+          if (fs.existsSync(settingsFile)) {
+            const saved = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
+            if (Array.isArray(saved.navigation) && saved.navigation.length > 0) {
+              fallbackMenu = saved.navigation;
+            }
+          }
+        } catch {}
+
         return {
-          menuItems: undefined,
+          menuItems: fallbackMenu,
           themeTokens: null,
           conferenceInfo: undefined,
           footerContent: undefined,

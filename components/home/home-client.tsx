@@ -64,6 +64,7 @@ interface HomeClientProps {
   }>;
   conferenceInfo?: ConferenceInfo;
   themeTokens?: Record<string, string> | null;
+  committeeMembers?: any[];
 }
 
 /* ------------------------------------------------------------------ */
@@ -175,7 +176,7 @@ export const DEFAULT_FALLBACK_SPEAKERS: SpeakerInfo[] = [
 /*  Component                                                           */
 /* ------------------------------------------------------------------ */
 
-export function HomeClient({ speakers, tracks, customContent, conferenceInfo, themeTokens }: HomeClientProps) {
+export function HomeClient({ speakers, tracks, customContent, conferenceInfo, themeTokens, committeeMembers }: HomeClientProps) {
   const activeTracks = tracks && tracks.length > 0 ? tracks : DEFAULT_FALLBACK_TRACKS;
   const activeSpeakers = speakers && speakers.length > 0 ? speakers : DEFAULT_FALLBACK_SPEAKERS;
 
@@ -268,6 +269,17 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
       }
     },
     {
+      id: "committee",
+      name: "Organizing Committee",
+      visible: true,
+      fields: {
+        badge: "🏛 Conference Leadership",
+        title: "Organizing Committee",
+        description:
+          "Meet the people who help shape the scientific programme, academic collaboration, and conference experience."
+      }
+    },
+    {
       id: "speakers",
       name: "Featured Speakers",
       visible: true,
@@ -304,7 +316,27 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
     }
   ];
 
-  const sectionsList = customContent && customContent.length > 0 ? customContent : defaultSections;
+  const rawSectionsList = customContent && customContent.length > 0 ? [...customContent] : defaultSections;
+  const sectionsList = [...rawSectionsList];
+  if (!sectionsList.some((s) => s.id === "committee")) {
+    const speakerIdx = sectionsList.findIndex((s) => s.id === "speakers");
+    const committeeSection = {
+      id: "committee",
+      name: "Organizing Committee",
+      visible: true,
+      fields: {
+        badge: "🏛 Conference Leadership",
+        title: "Organizing Committee",
+        description:
+          "Meet the people who help shape the scientific programme, academic collaboration, and conference experience."
+      }
+    };
+    if (speakerIdx !== -1) {
+      sectionsList.splice(speakerIdx, 0, committeeSection);
+    } else {
+      sectionsList.push(committeeSection);
+    }
+  }
 
   /* ------------------------------------------------------------------ */
   /*  Section Renderers                                                  */
@@ -526,6 +558,122 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function renderCommittee(fields: Record<string, string | undefined>) {
+    const badge = fields.badge || "🏛 Conference Leadership";
+    const title = fields.title || "Organizing Committee";
+    const description = fields.description || "Shared expertise. A common purpose. Meet the people who help shape the scientific programme, academic collaboration, and conference experience.";
+
+    const defaultPreview = [
+      {
+        id: "chair",
+        name: "Conference Chair",
+        role: "Conference Chair",
+        group: "Conference leadership",
+        code: "CL",
+        affiliation: "Institution to be confirmed",
+        country: "Country to be confirmed",
+        expertise: "Conference leadership",
+        photo: null
+      },
+      {
+        id: "cochair",
+        name: "Conference Co-Chair",
+        role: "Conference Co-Chair",
+        group: "Conference leadership",
+        code: "CL",
+        affiliation: "Institution to be confirmed",
+        country: "Country to be confirmed",
+        expertise: "Academic collaboration",
+        photo: null
+      },
+      {
+        id: "scientific-chair",
+        name: "Scientific Committee Chair",
+        role: "Scientific Committee Chair",
+        group: "Scientific committee",
+        code: "SC",
+        affiliation: "Institution to be confirmed",
+        country: "Country to be confirmed",
+        expertise: "Scientific programme",
+        photo: null
+      },
+      {
+        id: "local-chair",
+        name: "Local Organizing Chair",
+        role: "Local Organizing Chair",
+        group: "Local organizing team",
+        code: "LO",
+        affiliation: "Host institution to be confirmed",
+        country: "Country to be confirmed",
+        expertise: "Local coordination",
+        photo: null
+      }
+    ];
+
+    const activeList = committeeMembers && committeeMembers.length > 0
+      ? committeeMembers.filter((m) => m.published !== false)
+      : defaultPreview;
+
+    return (
+      <section id="committee" key="committee" className="py-8 sm:py-12 scroll-mt-24 bg-slate-50/70 border-y border-slate-200/60">
+        <div className="container px-4 sm:px-6 space-y-8">
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <span className="inline-flex rounded-full border border-[#d4af37]/40 bg-[#fdfaf2] px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#281b58] shadow-sm">
+              {badge}
+            </span>
+            <h2 className="font-heading text-3xl sm:text-5xl font-extrabold text-[#1a153a]">
+              {title}
+            </h2>
+            <p className="text-sm sm:text-base text-[#4b4568] leading-relaxed text-pretty">{description}</p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {activeList.slice(0, 4).map((m) => (
+              <div
+                key={m.id}
+                className="group rounded-2xl border border-slate-200/90 bg-white p-5 space-y-4 hover:border-indigo-400 hover:shadow-xl transition duration-300 flex flex-col shadow-sm"
+              >
+                <div className="flex items-center justify-between text-[10px] text-slate-500 font-semibold border-b border-slate-100 pb-2">
+                  <span>{m.group}</span>
+                  <span className="bg-amber-50 text-amber-800 border border-amber-200/60 rounded-full px-2 py-0.5 font-medium">To be confirmed</span>
+                </div>
+
+                <div className="aspect-[4/3] rounded-xl bg-slate-100 flex flex-col items-center justify-center gap-1.5 text-slate-400 font-heading">
+                  <span className="text-2xl font-bold tracking-widest text-slate-500">{m.code}</span>
+                  <span className="text-[9px] uppercase tracking-wider text-slate-400 font-sans">Photo Pending</span>
+                </div>
+
+                <div className="space-y-1.5 flex-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700">{m.role}</span>
+                  <h3 className="font-heading text-sm font-bold text-[#1a153a]">
+                    Member name to be announced
+                  </h3>
+                  <p className="text-[11px] text-slate-600">{m.affiliation}</p>
+                  <p className="text-[10px] text-slate-400">{m.country}</p>
+                  <div className="pt-2 border-t border-slate-100 mt-2 text-[11px] font-medium text-indigo-700">
+                    {m.expertise}
+                  </div>
+                </div>
+
+                <Button asChild variant="outline" size="sm" className="w-full text-xs">
+                  <Link href="/committee">View details →</Link>
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center pt-2">
+            <Button asChild size="lg" className="bg-[#281b58] hover:bg-[#382678] !text-white font-bold shadow-md">
+              <Link href="/committee" className="!text-white">
+                Explore Full Organizing Committee & Remits <ArrowRight className="ml-2 size-4" />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -795,6 +943,8 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
               return renderAbout(sec.fields);
             case "sessions":
               return renderSessions(sec.fields);
+            case "committee":
+              return renderCommittee(sec.fields);
             case "speakers":
               return renderSpeakers(sec.fields);
             case "venue":
