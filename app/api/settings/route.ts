@@ -65,7 +65,8 @@ export async function PUT(request: Request) {
     }
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), "utf8");
     return NextResponse.json({ ok: true, version: "v1." + Date.now() });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to save settings" }, { status: 400 });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : "Failed to save settings";
+    return NextResponse.json({ error: msg }, { status: 400 });
   }
 }

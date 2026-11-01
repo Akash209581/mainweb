@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 const serverEnvSchema = z.object({
-  DATABASE_URL: z.string().url().optional(),
-  DIRECT_URL: z.string().url().optional(),
+  DATABASE_URL: z.string().url().optional().or(z.literal("")),
+  DIRECT_URL: z.string().url().optional().or(z.literal("")),
   RESEND_API_KEY: z.string().optional(),
   NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
   STORAGE_PROVIDER: z.enum(["local", "s3", "cloudinary"]).default("local"),

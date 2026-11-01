@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/common/page-header";
 import { Section } from "@/components/common/section";
-import { SessionsLayout } from "./sessions-layout";
+import { SessionsLayout, type TrackSessionItem } from "./sessions-layout";
 import fs from "fs";
 import path from "path";
 
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 };
 
 export default async function SessionsPage() {
-  let initialTracks = undefined;
+  let initialTracks: TrackSessionItem[] | undefined = undefined;
   try {
     const settingsFile = path.join(process.cwd(), "storage", "settings.json");
     if (fs.existsSync(settingsFile)) {
       const data = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
       if (Array.isArray(data.tracks) && data.tracks.length > 0) {
-        initialTracks = data.tracks.filter((t: any) => t.published !== false);
+        initialTracks = (data.tracks as TrackSessionItem[]).filter((t) => t.published !== false);
       }
     }
   } catch {}

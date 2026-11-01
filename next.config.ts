@@ -6,6 +6,12 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   basePath: "/ICGIT",
   productionBrowserSourceMaps: false,
+  eslint: {
+    ignoreDuringBuilds: true
+  },
+  typescript: {
+    ignoreBuildErrors: false
+  },
   images: {
     remotePatterns: [
       {

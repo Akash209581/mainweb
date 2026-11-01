@@ -120,7 +120,10 @@ export default async function HomePage() {
           mode: conf?.mode === "OFFLINE" ? "In-Person Event" : conf?.mode === "VIRTUAL" ? "Virtual Event" : "Hybrid Event"
         };
 
-        let savedSettings: any = null;
+        let savedSettings: {
+          sections?: Array<{ id: string; name?: string; visible?: boolean; fields?: Record<string, string | undefined> }>;
+          committee?: Array<{ id: string; name: string; role: string; published?: boolean }>;
+        } | null = null;
         try {
           const sf = path.join(process.cwd(), "storage", "settings.json");
           if (fs.existsSync(sf)) {
@@ -141,7 +144,10 @@ export default async function HomePage() {
         };
       } catch (err) {
         console.error("HomePage DB fetch error:", err);
-        let savedSettings: any = null;
+        let savedSettings: {
+          sections?: Array<{ id: string; name?: string; visible?: boolean; fields?: Record<string, string | undefined> }>;
+          committee?: Array<{ id: string; name: string; role: string; published?: boolean }>;
+        } | null = null;
         try {
           const sf = path.join(process.cwd(), "storage", "settings.json");
           if (fs.existsSync(sf)) {

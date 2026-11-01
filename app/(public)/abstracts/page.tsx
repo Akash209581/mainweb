@@ -33,9 +33,9 @@ export default async function AbstractsPage({ searchParams }: AbstractsPageProps
         abstractSettings = data.abstractSettings;
       }
       if (Array.isArray(data.tracks) && data.tracks.length > 0) {
-        availableTracks = data.tracks
-          .filter((t: any) => t.published !== false)
-          .map((t: any) => t.name);
+        availableTracks = (data.tracks as Array<{ published?: boolean; name: string }>)
+          .filter((t) => t.published !== false)
+          .map((t) => t.name);
       }
     }
   } catch {}

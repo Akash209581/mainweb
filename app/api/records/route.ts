@@ -6,7 +6,7 @@ import path from "path";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const records: any[] = [];
+  const records: Record<string, unknown>[] = [];
 
   // 1. Fetch Registrations
   try {
@@ -45,7 +45,7 @@ export async function GET() {
     if (fs.existsSync(backupFile)) {
       try {
         const list = JSON.parse(fs.readFileSync(backupFile, "utf8"));
-        list.forEach((r: any) => {
+        list.forEach((r: Record<string, unknown>) => {
           records.push({
             id: r.id,
             kind: "registration",
@@ -78,16 +78,16 @@ export async function GET() {
   if (fs.existsSync(absBackup)) {
     try {
       const list = JSON.parse(fs.readFileSync(absBackup, "utf8"));
-      list.forEach((a: any) => {
+      list.forEach((a: Record<string, unknown>) => {
         records.push({
           id: a.id,
           kind: "abstract",
-          name: a.presentingAuthor,
+          name: a.presentingAuthor || a.name,
           email: a.email,
-          phone: a.phone || "",
-          organisation: a.institution || "",
+          phone: a.phone || a.number || "",
+          organisation: a.institution || a.organization || "",
           status: "Under review",
-          created_at: a.submittedAt,
+          created_at: a.submittedAt || a.createdAt,
           file_name: a.fileName,
           payload: {
             title: a.title,
@@ -130,7 +130,7 @@ export async function GET() {
   } catch {}
 
   // Sort newest first
-  records.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  records.sort((a, b) => new Date(b.created_at as string).getTime() - new Date(a.created_at as string).getTime());
 
   return NextResponse.json({ records });
 }
@@ -139,8 +139,9 @@ export async function PATCH(request: Request) {
   try {
     const { id, status, notes } = await request.json();
     return NextResponse.json({ ok: true, id, status, notes });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to update record" }, { status: 400 });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : "Failed to update record";
+    return NextResponse.json({ error: msg }, { status: 400 });
   }
 }
 

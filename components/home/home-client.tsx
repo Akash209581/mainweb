@@ -53,18 +53,33 @@ export interface ConferenceInfo {
   mode: string;
 }
 
+export interface HomeCommitteeMember {
+  id: string;
+  name: string;
+  role: string;
+  group?: string;
+  code?: string;
+  affiliation?: string;
+  country?: string;
+  expertise?: string;
+  bio?: string;
+  placeholder?: boolean;
+  published?: boolean;
+  photo?: string | null;
+}
+
 interface HomeClientProps {
   speakers: SpeakerInfo[];
   tracks: TrackInfo[];
   customContent?: Array<{
     id: string;
-    name: string;
+    name?: string;
     visible?: boolean;
-    fields: Record<string, string>;
+    fields?: Record<string, string | undefined>;
   }>;
   conferenceInfo?: ConferenceInfo;
   themeTokens?: Record<string, string> | null;
-  committeeMembers?: any[];
+  committeeMembers?: HomeCommitteeMember[];
 }
 
 /* ------------------------------------------------------------------ */
@@ -934,23 +949,24 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
       <div className="relative z-10 space-y-0 pb-10">
         {sectionsList.map((sec) => {
           if (sec.visible === false) return null;
+          const fields = sec.fields || {};
           switch (sec.id) {
             case "hero":
-              return renderHero(sec.fields);
+              return renderHero(fields);
             case "countdown":
-              return renderCountdown(sec.fields);
+              return renderCountdown(fields);
             case "about":
-              return renderAbout(sec.fields);
+              return renderAbout(fields);
             case "sessions":
-              return renderSessions(sec.fields);
+              return renderSessions(fields);
             case "committee":
-              return renderCommittee(sec.fields);
+              return renderCommittee(fields);
             case "speakers":
-              return renderSpeakers(sec.fields);
+              return renderSpeakers(fields);
             case "venue":
-              return renderVenue(sec.fields);
+              return renderVenue(fields);
             case "contact":
-              return renderContact(sec.fields);
+              return renderContact(fields);
             default:
               return null;
           }

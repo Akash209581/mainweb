@@ -151,7 +151,16 @@ export const SCIENTIFIC_TRACKS = [
   }
 ];
 
-export function SessionsLayout({ initialTracks = SCIENTIFIC_TRACKS }: { initialTracks?: typeof SCIENTIFIC_TRACKS }) {
+export interface TrackSessionItem {
+  id: string;
+  name: string;
+  category: string;
+  summary: string;
+  topics: string[];
+  published?: boolean;
+}
+
+export function SessionsLayout({ initialTracks = SCIENTIFIC_TRACKS }: { initialTracks?: TrackSessionItem[] }) {
   const [query, setQuery] = useState("");
   const [group, setGroup] = useState("All tracks");
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/common/page-header";
 import { Section } from "@/components/common/section";
-import { CommitteeClient } from "@/components/committee/committee-client";
+import { CommitteeClient, type CommitteeMember } from "@/components/committee/committee-client";
 import fs from "fs";
 import path from "path";
 
@@ -13,13 +13,15 @@ export const metadata: Metadata = {
 };
 
 export default function CommitteePage() {
-  let initialMembers = undefined;
+  let initialMembers: CommitteeMember[] | undefined = undefined;
   try {
     const settingsFile = path.join(process.cwd(), "storage", "settings.json");
     if (fs.existsSync(settingsFile)) {
       const data = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
       if (Array.isArray(data.committee) && data.committee.length > 0) {
-        initialMembers = data.committee.filter((m: any) => m.published !== false);
+        initialMembers = (data.committee as (CommitteeMember & { published?: boolean })[]).filter(
+          (m) => m.published !== false
+        );
       }
     }
   } catch {}

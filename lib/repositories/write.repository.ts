@@ -1,5 +1,5 @@
 import type { AbstractSubmissionInput, ContactInput, RegistrationInput } from "@/lib/validation/schemas";
-import type { FileVisibility } from "@prisma/client";
+import type { FileVisibility, Registration } from "@prisma/client";
 import { prisma } from "@/lib/prisma/client";
 import { NotFoundError } from "@/lib/errors/app-error";
 
@@ -87,7 +87,7 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
         });
       }
 
-      let packageId = input.packageId;
+      const packageId = input.packageId;
       if (packageId) {
         const pkgExists = await tx.registrationPackage.findUnique({
           where: { id: packageId }
@@ -208,8 +208,8 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
       firstName,
       lastName,
       email: input.email,
-      number: (input as any).phone || "N/A",
-      phone: (input as any).phone || "N/A",
+      number: (input as unknown as { phone?: string }).phone || "N/A",
+      phone: (input as unknown as { phone?: string }).phone || "N/A",
       organization,
       institution: organization || "Independent",
       country: countryName || "N/A",
@@ -250,7 +250,7 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
       try {
         if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
         const targetFile = path.join(d, "registrations_backup.json");
-        let existingList: any[] = [];
+        let existingList: unknown[] = [];
         if (fs.existsSync(targetFile)) {
           try {
             existingList = JSON.parse(fs.readFileSync(targetFile, "utf8"));
@@ -265,7 +265,7 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
       }
     }
 
-    return fallbackRegistration as any;
+    return fallbackRegistration as unknown as Registration;
   }
 }
 
