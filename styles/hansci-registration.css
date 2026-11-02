@@ -23,7 +23,7 @@
 .hansci-reg .tax,
 .hansci-reg label,
 .hansci-reg span {
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .hansci-reg .currencybar {
@@ -110,7 +110,7 @@
 }
 
 .hansci-reg .sub {
-  font-size: 14px;
+  font-size: 18px;
   color: var(--reg-muted);
   margin: 0 0 24px;
 }
@@ -160,19 +160,19 @@
 .hansci-reg .summary h3,
 .hansci-reg .faq h3,
 .hansci-reg .subheading {
-  font-size: 16px !important;
+  font-size: 18px !important;
   line-height: 1.4 !important;
 }
 
 .hansci-reg .ticket h3 {
-  font-size: 16px !important;
+  font-size: 18px !important;
   font-weight: 700;
   margin: 8px 0;
   color: var(--reg-navy);
 }
 
 .hansci-reg .ticket p {
-  font-size: 12px;
+  font-size: 16px;
   color: var(--reg-muted);
   min-height: 38px;
   line-height: 1.5;
@@ -208,7 +208,7 @@
   margin: 14px 0 20px;
   border-top: 1px solid var(--reg-border);
   list-style: none;
-  font-size: 12px;
+  font-size: 16px;
   color: #4c6073;
   flex: 1;
 }
@@ -271,7 +271,7 @@
   background: #ebeff4;
   padding: 16px 20px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 16px;
   color: #52667b;
   line-height: 1.6;
 }
@@ -296,7 +296,7 @@
 }
 
 .hansci-reg .fields label {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 500;
   color: #4c6073;
   display: block;
@@ -313,7 +313,7 @@
   border: 1px solid #cbd5df;
   border-radius: 6px;
   color: var(--reg-navy);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .hansci-reg .fields input:focus,
@@ -324,7 +324,7 @@
 }
 
 .hansci-reg .sectiontitle {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   border-bottom: 1px solid var(--reg-border);
   padding: 5px 0 12px;
@@ -375,7 +375,7 @@
 }
 
 .hansci-reg .summary h3 {
-  font-size: 16px !important;
+  font-size: 18px !important;
   font-weight: 700;
   margin: 6px 0 16px;
   color: var(--reg-navy);
@@ -387,7 +387,7 @@
   gap: 12px;
   padding: 11px 0;
   border-bottom: 1px solid var(--reg-border);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .hansci-reg .sumrow span:first-child {
@@ -405,7 +405,7 @@
 }
 
 .hansci-reg .summary p {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--reg-muted);
   line-height: 1.5;
   margin-top: 12px;
@@ -417,7 +417,7 @@
   border: 1px solid #ebd9b8;
   color: #745b2e;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.6;
   margin-top: 18px;
 }
@@ -451,7 +451,7 @@
 
 .hansci-reg .reviewgrid dd {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--reg-navy);
   overflow-wrap: anywhere;
@@ -473,7 +473,7 @@
   border: 0;
   color: var(--reg-blue);
   text-decoration: underline;
-  font-size: 12px;
+  font-size: 16px;
   cursor: pointer;
   padding: 0;
 }
@@ -499,7 +499,7 @@
 }
 
 .hansci-reg .captcha-top b {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--reg-navy);
 }
 
@@ -509,7 +509,7 @@
 }
 
 .hansci-reg .stayintro {
-  font-size: 12px;
+  font-size: 16px;
   color: var(--reg-muted);
   margin: 0 0 14px;
 }
@@ -517,12 +517,12 @@
 .hansci-reg .stay-preview {
   margin-top: 14px;
   color: var(--reg-blue);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .hansci-reg .mini {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--reg-muted);
   margin-top: 6px;
 }
@@ -532,7 +532,7 @@
 }
 
 .hansci-reg .faq h3 {
-  font-size: 16px !important;
+  font-size: 18px !important;
   font-weight: 700;
   color: var(--reg-navy);
   margin-bottom: 12px;
@@ -541,7 +541,7 @@
 .hansci-reg details {
   border-bottom: 1px solid var(--reg-border);
   padding: 14px 0;
-  font-size: 13px;
+  font-size: 16px;
 }
 
 .hansci-reg summary {
@@ -551,7 +551,7 @@
 }
 
 .hansci-reg details p {
-  font-size: 12px;
+  font-size: 16px;
   color: var(--reg-muted);
   margin: 8px 0 0;
   line-height: 1.6;
