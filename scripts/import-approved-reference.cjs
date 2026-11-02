@@ -1,0 +1,41 @@
+﻿const fs = require('fs');
+const path = require('path');
+const sourceRoot = path.join(process.cwd(), 'Hansci_Novum/user-website');
+const output = path.join(process.cwd(), 'components/approved-reference');
+const name = process.argv[2];
+if (!['registration','abstracts','brochure','sessions','committee'].includes(name)) throw Error('Select a reference page');
+fs.mkdirSync(output,{recursive:true});
+let component;
+let title;
+let description;
+if (name === 'registration' || name === 'abstracts') {
+ const html = fs.readFileSync(path.join(sourceRoot,'public',name === 'registration' ? 'index.html' : 'abstract.html'),'utf8');
+ const css = [...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m=>m[1]).join('\n');
+ const body = html.match(/<body>([\s\S]*?)<\/body>/)[1];
+ const script = [...body.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n') + '\n' + fs.readFileSync(path.join(sourceRoot,'public/site-content.js'),'utf8');
+ const markup = body.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g,'');
+ fs.writeFileSync(path.join(output,name+'-source.ts'),'// Generated verbatim from the supplied HTML; regenerate with scripts/import-approved-reference.cjs.\nexport const source = '+JSON.stringify({markup,css,script})+';\n');
+ component = `import { HtmlReferencePage } from '@/components/approved-reference/html-page';\nimport { source } from '@/components/approved-reference/${name}-source';\n`;
+ component += name === 'registration' ? `import { registrationCountries } from '@/components/approved-reference/registration-data';\nexport default async function Page(){return <HtmlReferencePage source={source} countries={await registrationCountries()}/>;}\n` : `export default function Page(){return <HtmlReferencePage source={source}/>;}\n`;
+ title = html.match(/<title>(.*?)<\/title>/)[1];
+ description = html.match(/<meta name="description" content="(.*?)"/)[1];
+} else {
+ const slug = {brochure:'brochure',sessions:'scientific-tracks',committee:'organizing-committee'}[name];
+ const dir = path.join(sourceRoot,'editable-page-sources',slug,'app');
+ let jsx = fs.readFileSync(path.join(dir,'page.jsx'),'utf8');
+ jsx = '// @ts-nocheck -- Preserve supplied JSX verbatim; only network/document adapters differ.\n' + jsx;
+ jsx = jsx.replace("import {useState,useEffect,useRef} from 'react';", "import {useState,useEffect,useRef} from 'react';\nimport {referenceFetch as fetch} from './transport';\nimport {useReferenceDocument} from './surface';");
+ jsx = jsx.replace("import {useState,useEffect} from 'react';", "import {useState,useEffect} from 'react';\nimport {referenceFetch as fetch} from './transport';");
+ if(name==='brochure') jsx=jsx.replace('function BrochureDownload(){','function BrochureDownload(){\n const document=useReferenceDocument();');
+ fs.writeFileSync(path.join(output,name+'-design.tsx'),jsx);
+ const css=fs.readFileSync(path.join(dir,'globals.css'),'utf8');
+ fs.writeFileSync(path.join(output,name+'-style.ts'),'// Supplied stylesheet, unchanged.\nexport const css = '+JSON.stringify(css)+';\n');
+ component = `import { ReferenceSurface } from './surface';\nimport Design from './${name}-design';\nimport { css } from './${name}-style';\nexport default function Page(){return <ReferenceSurface css={css}><Design/></ReferenceSurface>;}\n`;
+ fs.writeFileSync(path.join(output,name+'-page.tsx'),component);
+ component = `export { default } from '@/components/approved-reference/${name}-page';\n`;
+ const layout=fs.readFileSync(path.join(dir,'layout.jsx'),'utf8');
+ title=layout.match(/title:'([^']*)'/)[1];
+ description=layout.match(/description:'([^']*)'/)[1];
+}
+fs.writeFileSync(path.join('app/(public)',name,'page.tsx'),`export const metadata = ${JSON.stringify({title,description})};\n`+component);
+console.log('Imported '+name+' from supplied source; UI strings and CSS unchanged.');

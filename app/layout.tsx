@@ -11,6 +11,7 @@ import { prisma } from "@/lib/prisma/client";
 import { memoize } from "@/lib/cache";
 import { ClientBlocker } from "@/components/security/client-blocker";
 import { LiveContentWatcher } from "@/components/common/live-content-watcher";
+import { PageChrome } from "@/components/layout/page-chrome";
 import "./globals.css";
 
 export const dynamic = "force-dynamic";
@@ -262,10 +263,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <AuthProvider>
           <LiveContentWatcher intervalMs={4000} />
           <ClientBlocker />
-          <ClientParticles />
-          <Header items={menuItems} branding={branding} />
-          <main>{children}</main>
-          <Footer conference={conferenceInfo} navItems={menuItems} footerContent={footerContent} />
+          <PageChrome
+            particles={<ClientParticles />}
+            header={<Header items={menuItems} branding={branding} />}
+            footer={<Footer conference={conferenceInfo} navItems={menuItems} footerContent={footerContent} />}
+          >{children}</PageChrome>
         </AuthProvider>
       </body>
     </html>

@@ -1,0 +1,4 @@
+:HL["/organizing-committee/_next/static/css/d9c2c3c1b9d5ae8f.css","style"]
+2:[["children",{"s":"__PAGE__","h":160}]]
+1:[["children",{"s":"_not-found","h":96,"c":"$Q2"}]]
+0:{"b":"kcd7riqErhQ6Kn7R-gjoW","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
