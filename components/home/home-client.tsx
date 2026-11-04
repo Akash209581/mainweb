@@ -822,6 +822,14 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
               </div>
             ))}
           </div>
+
+          <div className="text-center pt-2">
+            <Button asChild size="lg" className="bg-[#281b58] hover:bg-[#382678] !text-white font-bold shadow-md">
+              <Link href={fields.ctaLink1 || "/speakers"} className="!text-white">
+                {fields.ctaText1 || "Explore All Keynote Speakers & Topics"} <ArrowRight className="ml-2 size-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
     );
