@@ -376,7 +376,7 @@ export function BrochureLayout() {
             <div className="rounded-2xl bg-[#102e4c] text-white p-6 md:p-8 flex flex-col justify-between min-h-[360px] shadow-lg">
               <div className="space-y-2">
                 <span className="text-[10px] uppercase tracking-widest text-amber-300 font-bold">
-                  HANSCI NOVUM
+                  ICGIT 2026
                 </span>
                 <h3 className="font-heading text-2xl font-bold text-white leading-tight">
                   Ideas connect.

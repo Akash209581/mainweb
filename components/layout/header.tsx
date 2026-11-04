@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, UserCircle, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -168,11 +168,6 @@ export function Header({ items = NAVIGATION_ITEMS, branding }: HeaderProps) {
             >
               <span>Register Now</span>
               <span aria-hidden="true">→</span>
-            </Link>
-          </Button>
-          <Button asChild variant="ghost" size="icon" aria-label="User profile" className="shrink-0 size-9">
-            <Link href="/profile">
-              <UserCircle className="size-5" />
             </Link>
           </Button>
         </div>
