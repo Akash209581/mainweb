@@ -1,3 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+.hansci-reg,
+.hansci-reg *,
+.hansci-reg *::before,
+.hansci-reg *::after,
+.hansci-reg button,
+.hansci-reg input,
+.hansci-reg select,
+.hansci-reg textarea {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
 .hansci-reg {
   --reg-navy: #102e4c;
   --reg-blue: #214b70;
@@ -6,12 +19,15 @@
   --reg-paper: #f5f7f9;
   --reg-gold: #b4935b;
   color: var(--reg-navy);
-  font-family: "Times New Roman", Times, serif !important;
+}
+
+.hansci-reg .hero .eyebrow,
+.hero .heroin > .eyebrow.gold {
+  display: none !important;
 }
 
 .hansci-reg * {
   box-sizing: border-box;
-  font-family: "Times New Roman", Times, serif !important;
 }
 
 .hansci-reg p,
@@ -23,7 +39,7 @@
 .hansci-reg .tax,
 .hansci-reg label,
 .hansci-reg span {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .hansci-reg .currencybar {

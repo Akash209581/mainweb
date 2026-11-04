@@ -44,8 +44,8 @@ export function DynamicTheme({ tokens }: DynamicThemeProps) {
       ${colors.hover ? `--color-hover: ${convert(colors.hover)} !important;` : ""}
       
       ${tokens.borderRadius ? `--border-radius: ${tokens.borderRadius} !important;` : ""}
-      --font-outfit: "Times New Roman", Times, serif !important;
-      --font-inter: "Times New Roman", Times, serif !important;
+      --font-outfit: 'DM Sans', sans-serif !important;
+      --font-inter: 'DM Sans', sans-serif !important;
     }
   `;
 

@@ -103,16 +103,16 @@ export function Footer({ conference, navItems, footerContent }: FooterProps) {
           </h2>
           <div className="mt-4 grid gap-3 text-sm text-muted">
             <p className="flex gap-3">
-              <MapPin className="size-4 shrink-0 text-accent" aria-hidden="true" />
-              <span>{address}</span>
+              <Phone className="size-4 shrink-0 text-accent" aria-hidden="true" />
+              <span>{phone}</span>
             </p>
             <p className="flex gap-3">
               <Mail className="size-4 shrink-0 text-accent" aria-hidden="true" />
               <span>{email}</span>
             </p>
             <p className="flex gap-3">
-              <Phone className="size-4 shrink-0 text-accent" aria-hidden="true" />
-              <span>{phone}</span>
+              <MapPin className="size-4 shrink-0 text-accent" aria-hidden="true" />
+              <span>{address}</span>
             </p>
           </div>
         </div>

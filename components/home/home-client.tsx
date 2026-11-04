@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -204,6 +204,35 @@ export function HomeClient({ speakers, tracks, customContent, conferenceInfo, th
   const confCity = conferenceInfo?.venueCity || "Dubai";
   const confMode = conferenceInfo?.mode || "Hybrid (Onsite & Online)";
   const confStartDate = conferenceInfo?.startDateIso || "2026-12-08T09:00:00Z";
+
+  useEffect(() => {
+    const scrollToTarget = () => {
+      let targetId = typeof window !== "undefined" ? sessionStorage.getItem("target_nav_hash") : null;
+      if (targetId) {
+        sessionStorage.removeItem("target_nav_hash");
+      } else if (typeof window !== "undefined" && window.location.hash) {
+        targetId = window.location.hash.replace("#", "");
+      }
+      if (!targetId || targetId === "home") return;
+
+      const tryScroll = (attempts = 0) => {
+        const el = document.getElementById(targetId!);
+        if (el) {
+          const headerHeight = 80;
+          const rect = el.getBoundingClientRect();
+          const targetY = window.pageYOffset + rect.top - headerHeight - 12;
+          window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+        } else if (attempts < 15) {
+          setTimeout(() => tryScroll(attempts + 1), 100);
+        }
+      };
+      setTimeout(() => tryScroll(0), 120);
+    };
+
+    scrollToTarget();
+    window.addEventListener("hashchange", scrollToTarget);
+    return () => window.removeEventListener("hashchange", scrollToTarget);
+  }, []);
 
   function handleContactSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

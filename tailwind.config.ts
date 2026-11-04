@@ -22,10 +22,10 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        heading: ['"Times New Roman"', "Times", "serif"],
-        body: ['"Times New Roman"', "Times", "serif"],
-        sans: ['"Times New Roman"', "Times", "serif"],
-        serif: ['"Times New Roman"', "Times", "serif"]
+        heading: ["'Libre Caslon Display'", "Georgia", "serif"],
+        body: ["'DM Sans'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        sans: ["'DM Sans'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        serif: ["'Libre Caslon Display'", "Georgia", "serif"]
       },
       fontSize: {
         xs: ["12px", { lineHeight: "1.5" }],
