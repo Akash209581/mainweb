@@ -189,7 +189,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         };
 
         const menuItems = rawMenuItems && Array.isArray(rawMenuItems) && rawMenuItems.length > 0
-          ? rawMenuItems
+          ? rawMenuItems.map((item) => {
+              if (item.label === "Committee" && item.href === "/#committee") return { ...item, href: "/committee" };
+              if (item.label === "Speakers" && item.href === "/#speakers") return { ...item, href: "/speakers" };
+              return item;
+            })
           : undefined;
 
         return {

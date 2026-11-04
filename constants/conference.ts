@@ -38,8 +38,8 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   { label: "About", href: "/#about" },
   { label: "Brochure", href: "/brochure" },
   { label: "Tracks", href: "/sessions" },
-  { label: "Committee", href: "/#committee" },
-  { label: "Speakers", href: "/#speakers" },
+  { label: "Committee", href: "/committee" },
+  { label: "Speakers", href: "/speakers" },
   { label: "Abstracts", href: "/abstracts" },
   { label: "Registration", href: "/registration" },
   { label: "Contact Us", href: "/#contact" }
