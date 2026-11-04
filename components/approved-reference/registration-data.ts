@@ -4,7 +4,7 @@ import { DEFAULT_COUNTRIES } from "@/constants/conference";
 
 /** Keep the existing registration page's database-backed country list. */
 export async function registrationCountries(): Promise<string[]> {
-  return memoize("registration_page_countries", 15000, async () => {
+  return memoize("registration_page_countries", 120000, async () => {
     try {
       const countries = await prisma.country.findMany({ orderBy: { name: "asc" } });
       return (countries.length ? countries : DEFAULT_COUNTRIES).map(

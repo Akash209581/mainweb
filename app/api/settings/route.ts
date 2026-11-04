@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { invalidateCache } from "@/lib/cache";
 // @ts-expect-error Untyped JS module from admin portal
 import { INITIAL_TRACKS, INITIAL_COMMITTEE } from "@/hansci-novum-admin-portal/app/content-defaults";
 import fs from "fs";
@@ -64,6 +65,7 @@ export async function PUT(request: Request) {
       fs.mkdirSync(dir, { recursive: true });
     }
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), "utf8");
+    invalidateCache();
     return NextResponse.json({ ok: true, version: "v1." + Date.now() });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : "Failed to save settings";

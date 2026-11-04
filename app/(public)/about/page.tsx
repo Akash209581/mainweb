@@ -38,7 +38,7 @@ const HIGHLIGHTS = [
 ];
 
 export default async function AboutPage() {
-  const sections = await memoize("about_page_setting", 15000, async () => {
+  const sections = await memoize("about_page_setting", 60000, async () => {
     try {
       const aboutSetting = await prisma.systemSetting.findFirst({
         where: { key: "page_content_about" }

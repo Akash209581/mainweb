@@ -21,11 +21,6 @@
   color: var(--reg-navy);
 }
 
-.hansci-reg .hero .eyebrow,
-.hero .heroin > .eyebrow.gold {
-  display: none !important;
-}
-
 .hansci-reg * {
   box-sizing: border-box;
 }

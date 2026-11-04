@@ -20,6 +20,8 @@ function HtmlContent({
   const container = useRef<HTMLDivElement>(null);
   const document = useReferenceDocument();
   useLayoutEffect(() => {
+    // Always start reference page from the top
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     // Recreate the original DOM for Strict Mode effect replays and route changes.
     container.current!.innerHTML = source.markup;
     const controller = new AbortController();

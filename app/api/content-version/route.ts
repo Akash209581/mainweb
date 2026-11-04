@@ -1,23 +1,26 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma/client";
+import { memoize } from "@/lib/cache";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET() {
   try {
-    const [settingAgg, speakerAgg] = await Promise.all([
-      prisma.systemSetting.aggregate({
-        _max: { updatedAt: true }
-      }),
-      prisma.speaker.aggregate({
-        _max: { updatedAt: true }
-      })
-    ]);
+    const maxTimestamp = await memoize("content_version_check", 15000, async () => {
+      const [settingAgg, speakerAgg] = await Promise.all([
+        prisma.systemSetting.aggregate({
+          _max: { updatedAt: true }
+        }),
+        prisma.speaker.aggregate({
+          _max: { updatedAt: true }
+        })
+      ]);
 
-    const settingTime = settingAgg._max.updatedAt ? new Date(settingAgg._max.updatedAt).getTime() : 0;
-    const speakerTime = speakerAgg._max.updatedAt ? new Date(speakerAgg._max.updatedAt).getTime() : 0;
-    const maxTimestamp = Math.max(settingTime, speakerTime, 1);
+      const settingTime = settingAgg._max.updatedAt ? new Date(settingAgg._max.updatedAt).getTime() : 0;
+      const speakerTime = speakerAgg._max.updatedAt ? new Date(speakerAgg._max.updatedAt).getTime() : 0;
+      return Math.max(settingTime, speakerTime, 1);
+    });
 
     return NextResponse.json(
       { version: maxTimestamp },

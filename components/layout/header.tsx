@@ -93,6 +93,12 @@ export function Header({ items = NAVIGATION_ITEMS, branding }: HeaderProps) {
           sessionStorage.setItem("target_nav_hash", id);
         }
       }
+    } else {
+      // Opening a new tab / page: always start from the top section
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("target_nav_hash");
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      }
     }
   };
 
@@ -134,7 +140,6 @@ export function Header({ items = NAVIGATION_ITEMS, branding }: HeaderProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                prefetch={false}
                 onClick={(e) => handleNavClick(e, item.href)}
                 className={cn(
                   "focus-ring px-2 xl:px-2.5 py-1 text-[13px] xl:text-[14px] font-medium transition-all duration-200 border-b-2 whitespace-nowrap shrink-0",
@@ -151,7 +156,16 @@ export function Header({ items = NAVIGATION_ITEMS, branding }: HeaderProps) {
 
         <div className="hidden items-center gap-2 xl:gap-3 lg:flex shrink-0">
           <Button asChild size="sm" className="bg-violet-600 hover:bg-violet-500 text-white border-0 font-bold whitespace-nowrap shrink-0 px-3.5 py-2">
-            <Link href="/registration" className="whitespace-nowrap flex items-center gap-1.5">
+            <Link
+              href="/registration"
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  sessionStorage.removeItem("target_nav_hash");
+                  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+                }
+              }}
+              className="whitespace-nowrap flex items-center gap-1.5"
+            >
               <span>Register Now</span>
               <span aria-hidden="true">→</span>
             </Link>
@@ -186,7 +200,6 @@ export function Header({ items = NAVIGATION_ITEMS, branding }: HeaderProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  prefetch={false}
                   onClick={(e) => {
                     handleNavClick(e, item.href);
                     setOpen(false);
@@ -204,7 +217,18 @@ export function Header({ items = NAVIGATION_ITEMS, branding }: HeaderProps) {
             })}
             <div className="mt-4 flex flex-col gap-3">
               <Button asChild className="bg-violet-600 hover:bg-violet-500 text-white border-0 font-bold">
-                <Link href="/registration">Register Now</Link>
+                <Link
+                  href="/registration"
+                  onClick={() => {
+                    setOpen(false);
+                    if (typeof window !== "undefined") {
+                      sessionStorage.removeItem("target_nav_hash");
+                      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+                    }
+                  }}
+                >
+                  Register Now
+                </Link>
               </Button>
             </div>
           </nav>

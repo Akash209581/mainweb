@@ -10,41 +10,43 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const [conf, seoSetting] = await Promise.all([
-      prisma.conference.findFirst({
-        where: { deletedAt: null },
-        include: { venue: true }
-      }),
-      prisma.systemSetting.findFirst({
-        where: { key: "seo_metadata" }
-      })
-    ]);
+  return memoize("home_metadata_live", 60000, async () => {
+    try {
+      const [conf, seoSetting] = await Promise.all([
+        prisma.conference.findFirst({
+          where: { deletedAt: null },
+          include: { venue: true }
+        }),
+        prisma.systemSetting.findFirst({
+          where: { key: "seo_metadata" }
+        })
+      ]);
 
-    const seoVal = (seoSetting?.value as Record<string, string>) || {};
-    const confName = conf?.name || "ICGIT 2026";
-    const metaTitle = seoVal.metaTitle || `${confName} - Global Innovation & Technology Summit`;
-    const metaDescription =
-      seoVal.metaDescription ||
-      conf?.description ||
-      "8th International Conference on Global Innovation & Technology, Dubai, UAE.";
+      const seoVal = (seoSetting?.value as Record<string, string>) || {};
+      const confName = conf?.name || "ICGIT 2026";
+      const metaTitle = seoVal.metaTitle || `${confName} - Global Innovation & Technology Summit`;
+      const metaDescription =
+        seoVal.metaDescription ||
+        conf?.description ||
+        "8th International Conference on Global Innovation & Technology, Dubai, UAE.";
 
-    return {
-      title: metaTitle,
-      description: metaDescription
-    };
-  } catch {
-    return {
-      title: "ICGIT 2026 - Global Innovation & Technology Summit",
-      description: "8th International Conference on Global Innovation & Technology, Dubai, UAE."
-    };
-  }
+      return {
+        title: metaTitle,
+        description: metaDescription
+      };
+    } catch {
+      return {
+        title: "ICGIT 2026 - Global Innovation & Technology Summit",
+        description: "8th International Conference on Global Innovation & Technology, Dubai, UAE."
+      };
+    }
+  });
 }
 
 export default async function HomePage() {
   const { mappedSpeakers, mappedTracks, customContent, conferenceInfo, themeTokens, committeeMembers } = await memoize(
     "home_page_data_live",
-    500,
+    60000,
     async () => {
       try {
         const [speakers, tracks, homeSetting, conf, activeTheme] = await Promise.all([

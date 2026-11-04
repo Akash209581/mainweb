@@ -5,36 +5,44 @@ import { PageHeader } from "@/components/common/page-header";
 import { Section } from "@/components/common/section";
 import { PublicInquiryForm } from "@/components/forms/public-inquiry-form";
 import { prisma } from "@/lib/prisma/client";
+import { memoize } from "@/lib/cache";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const conf = await prisma.conference.findFirst({ where: { deletedAt: null } });
-  const name = conf?.name || "ICGIT 2026";
-  return {
-    title: `Contact | ${name}`,
-    description: `Contact the ${name} secretariat and organizing team.`
-  };
+  return memoize("contact_metadata", 60000, async () => {
+    const conf = await prisma.conference.findFirst({ where: { deletedAt: null } });
+    const name = conf?.name || "ICGIT 2026";
+    return {
+      title: `Contact | ${name}`,
+      description: `Contact the ${name} secretariat and organizing team.`
+    };
+  });
 }
 
 export default async function ContactPage() {
-  const [conf, contactSetting] = await Promise.all([
-    prisma.conference.findFirst({
-      where: { deletedAt: null },
-      include: { venue: true }
-    }),
-    prisma.systemSetting.findFirst({
-      where: { key: "page_content_contact" }
-    })
-  ]);
+  const { confName, email, phone, locationStr } = await memoize("contact_page_data", 60000, async () => {
+    const [conf, contactSetting] = await Promise.all([
+      prisma.conference.findFirst({
+        where: { deletedAt: null },
+        include: { venue: true }
+      }),
+      prisma.systemSetting.findFirst({
+        where: { key: "page_content_contact" }
+      })
+    ]);
 
-  const contactData = (contactSetting?.value as Record<string, string>) || {};
-  const confName = conf?.name || "ICGIT 2026";
-  const venue = conf?.venue?.name || "Dubai World Trade Centre";
-  const city = conf?.venue?.city || "Dubai";
-  const country = "United Arab Emirates";
-  const email = contactData.email || "secretariat@icgit2026.org";
-  const phone = contactData.phone || "+971 4 000 2026";
+    const contactData = (contactSetting?.value as Record<string, string>) || {};
+    const confName = conf?.name || "ICGIT 2026";
+    const venue = conf?.venue?.name || "Dubai World Trade Centre";
+    const city = conf?.venue?.city || "Dubai";
+    const country = "United Arab Emirates";
+    const email = contactData.email || "secretariat@icgit2026.org";
+    const phone = contactData.phone || "+971 4 000 2026";
+    const locationStr = `${venue}, ${city}, ${country}`;
+
+    return { confName, email, phone, locationStr };
+  });
 
   return (
     <>
@@ -50,7 +58,7 @@ export default async function ContactPage() {
               <p className="flex gap-3">
                 <MapPin className="size-5 shrink-0 text-accent" aria-hidden="true" />
                 <span>
-                  {venue}, {city}, {country}
+                  {locationStr}
                 </span>
               </p>
               <p className="flex gap-3">

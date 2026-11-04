@@ -17,26 +17,26 @@ export function ParticleBackground() {
   const options = useMemo<ISourceOptions>(
     () => ({
       fullScreen: { enable: true, zIndex: -1 },
-      fpsLimit: 40,
-      detectRetina: true,
+      fpsLimit: 25,
+      detectRetina: false,
       particles: {
-        number: { value: 36, density: { enable: true } },
+        number: { value: 16, density: { enable: false } },
         color: { value: ["#7c5cff", "#1ed5ff", "#38bdf8"] },
         links: {
           enable: true,
-          distance: 140,
+          distance: 120,
           color: "#7c5cff",
-          opacity: 0.18,
+          opacity: 0.12,
           width: 1
         },
         move: {
           enable: true,
-          speed: 0.35,
+          speed: 0.3,
           direction: "none",
           outModes: { default: "bounce" }
         },
-        opacity: { value: { min: 0.15, max: 0.35 } },
-        size: { value: { min: 1, max: 3 } }
+        opacity: { value: { min: 0.12, max: 0.28 } },
+        size: { value: { min: 1, max: 2.5 } }
       },
       interactivity: {
         detectsOn: "window",

@@ -29,3 +29,17 @@ export async function memoize<T>(key: string, ttlMs: number, fn: () => Promise<T
 
   return inFlight as Promise<T>;
 }
+
+export function invalidateCache(keyPrefix?: string) {
+  if (keyPrefix) {
+    for (const k of cacheMap.keys()) {
+      if (k.startsWith(keyPrefix)) cacheMap.delete(k);
+    }
+    for (const k of inFlightMap.keys()) {
+      if (k.startsWith(keyPrefix)) inFlightMap.delete(k);
+    }
+  } else {
+    cacheMap.clear();
+    inFlightMap.clear();
+  }
+}

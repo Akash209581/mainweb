@@ -30,25 +30,34 @@ function resolveFaviconUrl(src?: string): string {
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const [conf, seoSetting, activeTheme, brandingSetting] = await Promise.all([
-      prisma.conference.findFirst({
-        where: { deletedAt: null },
-        include: { venue: true }
-      }),
-      prisma.systemSetting.findFirst({
-        where: { key: "seo_metadata" }
-      }),
-      prisma.themeSetting.findFirst({
-        where: { isActive: true }
-      }),
-      prisma.systemSetting.findFirst({
-        where: { key: "branding_assets" }
-      })
-    ]);
+    const { conf, seoVal, themeTokens, brandingVal } = await memoize(
+      "layout_metadata_live",
+      60000,
+      async () => {
+        const [c, sSetting, aTheme, bSetting] = await Promise.all([
+          prisma.conference.findFirst({
+            where: { deletedAt: null },
+            include: { venue: true }
+          }),
+          prisma.systemSetting.findFirst({
+            where: { key: "seo_metadata" }
+          }),
+          prisma.themeSetting.findFirst({
+            where: { isActive: true }
+          }),
+          prisma.systemSetting.findFirst({
+            where: { key: "branding_assets" }
+          })
+        ]);
+        return {
+          conf: c,
+          seoVal: (sSetting?.value as Record<string, string>) || {},
+          themeTokens: (aTheme?.tokens as Record<string, string>) || {},
+          brandingVal: (bSetting?.value as Record<string, string>) || {}
+        };
+      }
+    );
 
-    const seoVal = (seoSetting?.value as Record<string, string>) || {};
-    const themeTokens = (activeTheme?.tokens as Record<string, string>) || {};
-    const brandingVal = (brandingSetting?.value as Record<string, string>) || {};
     const confName = conf?.name || CONFERENCE.name;
     const confFullName = conf?.fullName || CONFERENCE.fullName;
     const metaTitle = seoVal.metaTitle || `${confName} | ${confFullName}`;
@@ -115,7 +124,7 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: RootLayoutProps) {
   const { menuItems, branding, themeTokens, conferenceInfo, footerContent, faviconUrl } = await memoize(
     "layout_settings_live",
-    500,
+    60000,
     async () => {
       try {
         const [dbMenuSetting, activeTheme, conf, footerSetting, brandingSetting] = await Promise.all([
@@ -264,7 +273,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className="min-h-screen antialiased">
         <AuthProvider>
-          <LiveContentWatcher intervalMs={4000} />
+          <LiveContentWatcher intervalMs={30000} />
           <ClientBlocker />
           <PageChrome
             particles={<ClientParticles />}
