@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { invalidateCache } from "@/lib/cache";
 // @ts-expect-error Untyped JS module from admin portal
 import { INITIAL_TRACKS, INITIAL_COMMITTEE } from "@/hansci-novum-admin-portal/app/content-defaults";
 import fs from "fs";
 import path from "path";
+import { prisma } from "@/lib/prisma/client";
 
 export const dynamic = "force-dynamic";
 
@@ -34,8 +34,10 @@ const DEFAULTS = {
     maxFileMB: 5
   },
   policies: {
-    privacy: "Your personal details will be processed exclusively for conference management, registration, and certification in compliance with international privacy protocols.",
-    terms: "All accepted abstracts are subject to double-blind scientific committee review and presentation requirements."
+    privacy:
+      "Your personal details will be processed exclusively for conference management, registration, and certification in compliance with international privacy protocols.",
+    terms:
+      "All accepted abstracts are subject to double-blind scientific committee review and presentation requirements."
   },
   assets: {},
   tracks: INITIAL_TRACKS,
@@ -54,21 +56,69 @@ export async function GET() {
     } catch {}
   }
 
-  return NextResponse.json({ settings, version });
+  try {
+    const conference = await prisma.conference.findFirst({
+      where: {
+        slug: {
+          equals: process.env.PUBLIC_CONFERENCE_SLUG || "icgit-2026",
+          mode: "insensitive"
+        },
+        deletedAt: null
+      },
+      include: { settings: true }
+    });
+    if (conference) {
+      const merged: Record<string, any> = { ...settings };
+      const keys: Record<string, string> = {
+        conference_display: "conference",
+        registration_pricing: "registration",
+        accommodation_pricing: "accommodation",
+        abstract_settings: "abstract",
+        policies: "policies",
+        scientific_tracks: "tracks",
+        organizing_committee: "committee",
+        document_assets: "assets",
+        approved_page_copy: "pageCopy"
+      };
+      for (const row of conference.settings) {
+        const key = keys[row.key];
+        if (key)
+          merged[key] = Array.isArray(row.value)
+            ? row.value
+            : { ...merged[key], ...(row.value as object) };
+      }
+      // Prefer canonical database values over older local-file aliases.
+      merged.pricing = {
+        ...merged.registration,
+        accommodation: merged.registration.accommodation || merged.accommodation
+      };
+      merged.accommodation = merged.pricing.accommodation;
+      merged.abstractSettings = {
+        ...merged.abstract,
+        maxFileSizeMb: merged.abstract.maxFileSizeMb ?? merged.abstract.maxFileMB
+      };
+      for (const key of ["tracks", "committee"])
+        if (Array.isArray(merged[key]))
+          merged[key] = merged[key].filter((item: any) => item.published !== false);
+      settings = merged as typeof DEFAULTS;
+      version =
+        conference.settings
+          .map((row) => row.updatedAt.toISOString())
+          .sort()
+          .pop() || version;
+    }
+  } catch {
+    // Retain the existing local/default read fallback while the database is unavailable.
+  }
+  return NextResponse.json(
+    { settings, version },
+    { headers: { "Cache-Control": "no-store" } }
+  );
 }
 
-export async function PUT(request: Request) {
-  try {
-    const { settings } = await request.json();
-    const dir = path.dirname(SETTINGS_FILE);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), "utf8");
-    invalidateCache();
-    return NextResponse.json({ ok: true, version: "v1." + Date.now() });
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : "Failed to save settings";
-    return NextResponse.json({ error: msg }, { status: 400 });
-  }
+export async function PUT() {
+  return NextResponse.json(
+    { error: "Use the authenticated conference admin to publish settings." },
+    { status: 403 }
+  );
 }

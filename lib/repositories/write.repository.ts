@@ -1,8 +1,11 @@
-import type { AbstractSubmissionInput, ContactInput, RegistrationInput } from "@/lib/validation/schemas";
+import type {
+  AbstractSubmissionInput,
+  ContactInput,
+  RegistrationInput
+} from "@/lib/validation/schemas";
 import type { FileVisibility, Registration } from "@prisma/client";
 import { prisma } from "@/lib/prisma/client";
 import { NotFoundError } from "@/lib/errors/app-error";
-
 
 export async function createContactMessage(
   input: ContactInput,
@@ -40,10 +43,47 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
   const organization = input.organization || input.institution || null;
   const countryName = input.country || null;
 
-  const isQuoteRequired = input.category === "exhibition" || input.category === "sponsorship";
+  let categoryPrices = CATEGORY_PRICES;
+  let roomRates = ROOM_RATES;
+  try {
+    const saved = await prisma.systemSetting.findFirst({
+      where: {
+        key: "registration_pricing",
+        conference: {
+          slug: { equals: input.conferenceSlug || "icgit-2026", mode: "insensitive" },
+          deletedAt: null
+        }
+      }
+    });
+    const pricing = saved?.value as Record<string, any> | undefined;
+    const validRate = (value: unknown): value is number =>
+      typeof value === "number" &&
+      Number.isFinite(value) &&
+      value >= 0 &&
+      value <= 1000000;
+    if (pricing) {
+      categoryPrices = structuredClone(CATEGORY_PRICES);
+      roomRates = structuredClone(ROOM_RATES);
+      for (const category of ["student", "academic", "industry"])
+        for (const code of ["EUR", "USD", "GBP"])
+          if (validRate(pricing[category]?.[code]))
+            categoryPrices[category][code] = pricing[category][code];
+      for (const room of ["single", "double"])
+        for (const code of ["EUR", "USD", "GBP"])
+          if (validRate(pricing.accommodation?.[room]?.[code]))
+            roomRates[room][code] = pricing.accommodation[room][code];
+    }
+  } catch {
+    /* Retain existing fallback rates if saved configuration is unavailable. */
+  }
+  const isQuoteRequired =
+    input.category === "exhibition" || input.category === "sponsorship";
   const currency = input.currency || "EUR";
-  const regFeeUnit = !isQuoteRequired && CATEGORY_PRICES[input.category] ? CATEGORY_PRICES[input.category][currency] || 0 : 0;
-  const registrationFeeCents = regFeeUnit * 100;
+  const regFeeUnit =
+    !isQuoteRequired && categoryPrices[input.category]
+      ? categoryPrices[input.category][currency] || 0
+      : 0;
+  const registrationFeeCents = Math.round(regFeeUnit * 100);
 
   let accommodationFeeCents = 0;
   let checkInDate: Date | null = null;
@@ -55,11 +95,13 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
     checkOutDate = new Date(input.checkout);
     const diffTime = Math.max(0, checkOutDate.getTime() - checkInDate.getTime());
     const nights = Math.round(diffTime / (1000 * 60 * 60 * 24));
-    const roomRate = (ROOM_RATES[input.room] && ROOM_RATES[input.room][currency]) || 120;
-    accommodationFeeCents = nights * (input.rooms || 1) * roomRate * 100;
+    const roomRate = (roomRates[input.room] && roomRates[input.room][currency]) ?? 120;
+    accommodationFeeCents = Math.round(nights * (input.rooms || 1) * roomRate * 100);
   }
 
-  const totalAmountCents = isQuoteRequired ? 0 : registrationFeeCents + accommodationFeeCents;
+  const totalAmountCents = isQuoteRequired
+    ? 0
+    : registrationFeeCents + accommodationFeeCents;
   const randomDigits = Math.floor(100000 + Math.random() * 900000);
   const referenceNumber = `HNS-${new Date().getFullYear()}-${randomDigits}`;
 
@@ -135,6 +177,7 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
           firstName,
           lastName,
           email: input.email,
+          phone: input.phone || null,
           organization,
           countryId: input.countryId || null,
           countryName,
@@ -146,7 +189,9 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
           totalAmountCents,
           isQuoteRequired,
           partnerPackage: input.package || null,
-          representativesCount: input.representatives ? Number(input.representatives) : null,
+          representativesCount: input.representatives
+            ? Number(input.representatives)
+            : null,
           partnerInterests: input.interests || null,
           hasStay,
           checkInDate,
@@ -190,7 +235,10 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
       return registration;
     });
   } catch (dbError) {
-    console.warn("Database storage failed or not connected, persisting to local storage backup:", dbError);
+    console.warn(
+      "Database storage failed or not connected, persisting to local storage backup:",
+      dbError
+    );
     const syncDirs = [
       path.join(process.cwd(), "storage"),
       "C:\\Users\\banda\\Desktop\\conference-admin\\storage"
@@ -215,7 +263,11 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
       country: countryName || "N/A",
       countryName,
       category: input.category,
-      title: input.role || (input.category ? `${input.category.charAt(0).toUpperCase() + input.category.slice(1)} Delegate` : "Academic Delegate"),
+      title:
+        input.role ||
+        (input.category
+          ? `${input.category.charAt(0).toUpperCase() + input.category.slice(1)} Delegate`
+          : "Academic Delegate"),
       participationRole: input.role || null,
       abstractReference: input.abstract || null,
       currency,
@@ -269,7 +321,10 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
   }
 }
 
-export async function createAbstractSubmission(input: AbstractSubmissionInput, authorId: string) {
+export async function createAbstractSubmission(
+  input: AbstractSubmissionInput,
+  authorId: string
+) {
   return prisma.$transaction(async (tx) => {
     let conference = await tx.conference.findUnique({
       where: { slug: input.conferenceSlug }
@@ -367,4 +422,3 @@ export async function createFileAsset(data: {
     return fileAsset;
   });
 }
-

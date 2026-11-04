@@ -88,7 +88,7 @@ export async function submitBrochureRequestAction(payload: {
 
     return { ok: true, message: "Brochure request registered successfully!" };
   } catch (error) {
-    return { ok: true, message: "Brochure request received." };
+    return { ok: false, message: "Unable to save your brochure request. Please try again." };
   }
 }
 
@@ -118,7 +118,7 @@ export async function submitConferenceQueryAction(payload: {
 
     return { ok: true, message: "Your query has been submitted to the secretariat." };
   } catch (error) {
-    return { ok: true, message: "Your query has been received." };
+    return { ok: false, message: "Unable to save your query. Please try again." };
   }
 }
 

@@ -1,3 +1,4 @@
+import { hasAdminSession } from '@/lib/security/admin-access';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import type { PermissionKey, RoleName } from "@prisma/client";
 import { AuthenticationError, AuthorizationError } from "@/lib/errors/app-error";
@@ -12,6 +13,7 @@ export const routeRoleMap = {
 } satisfies Record<string, RoleName[]>;
 
 export async function requireAuthenticatedUser() {
+  if (!await hasAdminSession()) throw new AuthenticationError();
   let mockUser = await prisma.user.findFirst({
     where: { email: "admin@icgit2026.org" },
     include: { roles: { include: { role: { include: { permissions: { include: { permission: true } } } } } } }

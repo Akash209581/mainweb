@@ -1,0 +1,2452 @@
+{
+  "registration": [
+    {
+      "textIndex": 0,
+      "id": "1",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "Great ideas begin",
+      "label": "Great ideas begin",
+      "value": "Great ideas begin"
+    },
+    {
+      "textIndex": 1,
+      "id": "2",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "with a connection.",
+      "label": "with a connection.",
+      "value": "with a connection."
+    },
+    {
+      "textIndex": 0,
+      "id": "3",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Join a community of researchers, academics and industry professionals. Choose your registration and take the next step.",
+      "label": "Join a community of researchers, academics and industry professionals. Choose your registr",
+      "value": "Join a community of researchers, academics and industry professionals. Choose your registration and take the next step."
+    },
+    {
+      "textIndex": 0,
+      "id": "4",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": " Conference title to be confirmed",
+      "label": "Conference title to be confirmed",
+      "value": " Conference title to be confirmed"
+    },
+    {
+      "textIndex": 0,
+      "id": "5",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(2)",
+      "original": " Date & venue to be confirmed",
+      "label": "Date & venue to be confirmed",
+      "value": " Date & venue to be confirmed"
+    },
+    {
+      "textIndex": 0,
+      "id": "6",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(2) > label:nth-of-type(1) > b:nth-of-type(1)",
+      "original": "Choose currency",
+      "label": "Choose currency",
+      "value": "Choose currency"
+    },
+    {
+      "textIndex": 0,
+      "id": "7",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > div:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Sample prices in each currency · not live exchange rates",
+      "label": "Sample prices in each currency · not live exchange rates",
+      "value": "Sample prices in each currency · not live exchange rates"
+    },
+    {
+      "textIndex": 0,
+      "id": "8",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "A place for every perspective.",
+      "label": "A place for every perspective.",
+      "value": "A place for every perspective."
+    },
+    {
+      "textIndex": 0,
+      "id": "9",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Choose your registration category. You can add venue accommodation in the next step.",
+      "label": "Choose your registration category. You can add venue accommodation in the next step.",
+      "value": "Choose your registration category. You can add venue accommodation in the next step."
+    },
+    {
+      "textIndex": 0,
+      "id": "10",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "Sample early-bird rates",
+      "label": "Sample early-bird rates",
+      "value": "Sample early-bird rates"
+    },
+    {
+      "textIndex": 0,
+      "id": "11",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Student",
+      "label": "Student",
+      "value": "Student"
+    },
+    {
+      "textIndex": 0,
+      "id": "12",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "For undergraduate, postgraduate and doctoral students.",
+      "label": "For undergraduate, postgraduate and doctoral students.",
+      "value": "For undergraduate, postgraduate and doctoral students."
+    },
+    {
+      "textIndex": 0,
+      "id": "13",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "€199",
+      "label": "€199",
+      "value": "€199"
+    },
+    {
+      "textIndex": 0,
+      "id": "14",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > div:nth-of-type(2) > small:nth-of-type(1)",
+      "original": "/ participant",
+      "label": "/ participant",
+      "value": "/ participant"
+    },
+    {
+      "textIndex": 0,
+      "id": "15",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "Illustrative rate · tax not configured",
+      "label": "Illustrative rate · tax not configured",
+      "value": "Illustrative rate · tax not configured"
+    },
+    {
+      "textIndex": 0,
+      "id": "16",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Select student →",
+      "label": "Select student →",
+      "value": "Select student →"
+    },
+    {
+      "textIndex": 0,
+      "id": "17",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "ACADEMIC COMMUNITY",
+      "label": "ACADEMIC COMMUNITY",
+      "value": "ACADEMIC COMMUNITY"
+    },
+    {
+      "textIndex": 0,
+      "id": "18",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > h3:nth-of-type(1)",
+      "original": "Academic delegate",
+      "label": "Academic delegate",
+      "value": "Academic delegate"
+    },
+    {
+      "textIndex": 0,
+      "id": "19",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "For faculty members, researchers and scientific professionals.",
+      "label": "For faculty members, researchers and scientific professionals.",
+      "value": "For faculty members, researchers and scientific professionals."
+    },
+    {
+      "textIndex": 0,
+      "id": "20",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "€399",
+      "label": "€399",
+      "value": "€399"
+    },
+    {
+      "textIndex": 0,
+      "id": "21",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > div:nth-of-type(2) > small:nth-of-type(1)",
+      "original": "/ participant",
+      "label": "/ participant",
+      "value": "/ participant"
+    },
+    {
+      "textIndex": 0,
+      "id": "22",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > span:nth-of-type(2)",
+      "original": "Illustrative rate · tax not configured",
+      "label": "Illustrative rate · tax not configured",
+      "value": "Illustrative rate · tax not configured"
+    },
+    {
+      "textIndex": 0,
+      "id": "23",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > button:nth-of-type(1)",
+      "original": "Select academic →",
+      "label": "Select academic →",
+      "value": "Select academic →"
+    },
+    {
+      "textIndex": 0,
+      "id": "24",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(3) > h3:nth-of-type(1)",
+      "original": "Industry delegate",
+      "label": "Industry delegate",
+      "value": "Industry delegate"
+    },
+    {
+      "textIndex": 0,
+      "id": "25",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "For professionals from companies and commercial organisations.",
+      "label": "For professionals from companies and commercial organisations.",
+      "value": "For professionals from companies and commercial organisations."
+    },
+    {
+      "textIndex": 0,
+      "id": "26",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(3) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "€499",
+      "label": "€499",
+      "value": "€499"
+    },
+    {
+      "textIndex": 0,
+      "id": "27",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(3) > div:nth-of-type(2) > small:nth-of-type(1)",
+      "original": "/ participant",
+      "label": "/ participant",
+      "value": "/ participant"
+    },
+    {
+      "textIndex": 0,
+      "id": "28",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(3) > span:nth-of-type(1)",
+      "original": "Illustrative rate · tax not configured",
+      "label": "Illustrative rate · tax not configured",
+      "value": "Illustrative rate · tax not configured"
+    },
+    {
+      "textIndex": 0,
+      "id": "29",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(3) > button:nth-of-type(1)",
+      "original": "Select industry →",
+      "label": "Select industry →",
+      "value": "Select industry →"
+    },
+    {
+      "textIndex": 0,
+      "id": "30",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "Partner with us. Stay connected.",
+      "label": "Partner with us. Stay connected.",
+      "value": "Partner with us. Stay connected."
+    },
+    {
+      "textIndex": 0,
+      "id": "31",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Exhibit, sponsor or arrange a stay at the conference venue.",
+      "label": "Exhibit, sponsor or arrange a stay at the conference venue.",
+      "value": "Exhibit, sponsor or arrange a stay at the conference venue."
+    },
+    {
+      "textIndex": 0,
+      "id": "32",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Exhibition",
+      "label": "Exhibition",
+      "value": "Exhibition"
+    },
+    {
+      "textIndex": 0,
+      "id": "33",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Explore exhibition space to present products, services and research solutions.",
+      "label": "Explore exhibition space to present products, services and research solutions.",
+      "value": "Explore exhibition space to present products, services and research solutions."
+    },
+    {
+      "textIndex": 0,
+      "id": "34",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "Package and availability to be confirmed",
+      "label": "Package and availability to be confirmed",
+      "value": "Package and availability to be confirmed"
+    },
+    {
+      "textIndex": 0,
+      "id": "35",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Select exhibition →",
+      "label": "Select exhibition →",
+      "value": "Select exhibition →"
+    },
+    {
+      "textIndex": 0,
+      "id": "36",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(2) > h3:nth-of-type(1)",
+      "original": "Sponsorship",
+      "label": "Sponsorship",
+      "value": "Sponsorship"
+    },
+    {
+      "textIndex": 0,
+      "id": "37",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Explore a partnership package that aligns with your organisation’s goals.",
+      "label": "Explore a partnership package that aligns with your organisation’s goals.",
+      "value": "Explore a partnership package that aligns with your organisation’s goals."
+    },
+    {
+      "textIndex": 0,
+      "id": "38",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "Benefits and pricing subject to agreement",
+      "label": "Benefits and pricing subject to agreement",
+      "value": "Benefits and pricing subject to agreement"
+    },
+    {
+      "textIndex": 0,
+      "id": "39",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(2) > button:nth-of-type(1)",
+      "original": "Select sponsorship →",
+      "label": "Select sponsorship →",
+      "value": "Select sponsorship →"
+    },
+    {
+      "textIndex": 0,
+      "id": "40",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > h3:nth-of-type(1)",
+      "original": "Accommodation",
+      "label": "Accommodation",
+      "value": "Accommodation"
+    },
+    {
+      "textIndex": 0,
+      "id": "41",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "Request a room at the conference venue for your conference stay.",
+      "label": "Request a room at the conference venue for your conference stay.",
+      "value": "Request a room at the conference venue for your conference stay."
+    },
+    {
+      "textIndex": 0,
+      "id": "42",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "€120",
+      "label": "€120",
+      "value": "€120"
+    },
+    {
+      "textIndex": 0,
+      "id": "43",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > div:nth-of-type(2) > small:nth-of-type(1)",
+      "original": "/ room / night, from",
+      "label": "/ room / night, from",
+      "value": "/ room / night, from"
+    },
+    {
+      "textIndex": 0,
+      "id": "44",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > span:nth-of-type(1)",
+      "original": "Sample room rate · subject to availability",
+      "label": "Sample room rate · subject to availability",
+      "value": "Sample room rate · subject to availability"
+    },
+    {
+      "textIndex": 0,
+      "id": "45",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(4) > article:nth-of-type(3) > button:nth-of-type(1)",
+      "original": "Select accommodation →",
+      "label": "Select accommodation →",
+      "value": "Select accommodation →"
+    },
+    {
+      "textIndex": 0,
+      "id": "46",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(5) > span:nth-of-type(1)",
+      "original": "i",
+      "label": "i",
+      "value": "i"
+    },
+    {
+      "textIndex": 0,
+      "id": "47",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(5) > div:nth-of-type(1) > b:nth-of-type(1)",
+      "original": "Planning to present your research?",
+      "label": "Planning to present your research?",
+      "value": "Planning to present your research?"
+    },
+    {
+      "textIndex": 0,
+      "id": "48",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Clear pricing",
+      "label": "Clear pricing",
+      "value": "Clear pricing"
+    },
+    {
+      "textIndex": 0,
+      "id": "49",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Review your selected category and fee before proceeding. Final rates, taxes and deadlines require confirmation.",
+      "label": "Review your selected category and fee before proceeding. Final rates, taxes and deadlines ",
+      "value": "Review your selected category and fee before proceeding. Final rates, taxes and deadlines require confirmation."
+    },
+    {
+      "textIndex": 0,
+      "id": "50",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(2) > h3:nth-of-type(1)",
+      "original": "Institutional invoicing",
+      "label": "Institutional invoicing",
+      "value": "Institutional invoicing"
+    },
+    {
+      "textIndex": 0,
+      "id": "51",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Add your organisation’s billing details and purchase-order reference when needed.",
+      "label": "Add your organisation’s billing details and purchase-order reference when needed.",
+      "value": "Add your organisation’s billing details and purchase-order reference when needed."
+    },
+    {
+      "textIndex": 0,
+      "id": "52",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(3) > h3:nth-of-type(1)",
+      "original": "Simple registration",
+      "label": "Simple registration",
+      "value": "Simple registration"
+    },
+    {
+      "textIndex": 0,
+      "id": "53",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "Choose a category, enter participant details and check your registration summary.",
+      "label": "Choose a category, enter participant details and check your registration summary.",
+      "value": "Choose a category, enter participant details and check your registration summary."
+    },
+    {
+      "textIndex": 0,
+      "id": "54",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > h2:nth-of-type(1)",
+      "original": "Your next chapter starts here.",
+      "label": "Your next chapter starts here.",
+      "value": "Your next chapter starts here."
+    },
+    {
+      "textIndex": 0,
+      "id": "55",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Enter your participant details. Fields marked * are required.",
+      "label": "Enter your participant details. Fields marked * are required.",
+      "value": "Enter your participant details. Fields marked * are required."
+    },
+    {
+      "textIndex": 0,
+      "id": "56",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Contact / participant information",
+      "label": "Contact / participant information",
+      "value": "Contact / participant information"
+    },
+    {
+      "textIndex": 0,
+      "id": "57",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+      "original": "First name *",
+      "label": "First name *",
+      "value": "First name *"
+    },
+    {
+      "textIndex": 0,
+      "id": "58",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(2)",
+      "original": "Last name *",
+      "label": "Last name *",
+      "value": "Last name *"
+    },
+    {
+      "textIndex": 0,
+      "id": "59",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(3)",
+      "original": "Email address *",
+      "label": "Email address *",
+      "value": "Email address *"
+    },
+    {
+      "textIndex": 0,
+      "id": "60",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(4)",
+      "original": "Institution / organisation *",
+      "label": "Institution / organisation *",
+      "value": "Institution / organisation *"
+    },
+    {
+      "textIndex": 0,
+      "id": "61",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(5)",
+      "original": "Country / region *",
+      "label": "Country / region *",
+      "value": "Country / region *"
+    },
+    {
+      "textIndex": 0,
+      "id": "62",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(6)",
+      "original": "Participation role *",
+      "label": "Participation role *",
+      "value": "Participation role *"
+    },
+    {
+      "textIndex": 0,
+      "id": "63",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(7)",
+      "original": "Abstract reference (if available)",
+      "label": "Abstract reference (if available)",
+      "value": "Abstract reference (if available)"
+    },
+    {
+      "textIndex": 0,
+      "id": "64",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Student registration requires verification. The verification process will be provided when registration opens.",
+      "label": "Student registration requires verification. The verification process will be provided when",
+      "value": "Student registration requires verification. The verification process will be provided when registration opens."
+    },
+    {
+      "textIndex": 0,
+      "id": "65",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(2) > h3:nth-of-type(1)",
+      "original": "Partnership details",
+      "label": "Partnership details",
+      "value": "Partnership details"
+    },
+    {
+      "textIndex": 0,
+      "id": "66",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > label:nth-of-type(1)",
+      "original": "Preferred exhibition format *",
+      "label": "Preferred exhibition format *",
+      "value": "Preferred exhibition format *"
+    },
+    {
+      "textIndex": 0,
+      "id": "67",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > label:nth-of-type(2)",
+      "original": "Preferred sponsorship tier *",
+      "label": "Preferred sponsorship tier *",
+      "value": "Preferred sponsorship tier *"
+    },
+    {
+      "textIndex": 0,
+      "id": "68",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > label:nth-of-type(3)",
+      "original": "Representatives *",
+      "label": "Representatives *",
+      "value": "Representatives *"
+    },
+    {
+      "textIndex": 0,
+      "id": "69",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > label:nth-of-type(4)",
+      "original": "Products, services or partnership interests",
+      "label": "Products, services or partnership interests",
+      "value": "Products, services or partnership interests"
+    },
+    {
+      "textIndex": 0,
+      "id": "70",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "This is a package enquiry. Space, benefits, delegate passes and fees require confirmation by the conference team.",
+      "label": "This is a package enquiry. Space, benefits, delegate passes and fees require confirmation ",
+      "value": "This is a package enquiry. Space, benefits, delegate passes and fees require confirmation by the conference team."
+    },
+    {
+      "textIndex": 0,
+      "id": "71",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(2)",
+      "original": "Add accommodation to your registration",
+      "label": "Add accommodation to your registration",
+      "value": "Add accommodation to your registration"
+    },
+    {
+      "textIndex": 0,
+      "id": "72",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(2)",
+      "original": "Stay where the conference takes place. All room requests are subject to venue availability and confirmation.",
+      "label": "Stay where the conference takes place. All room requests are subject to venue availability",
+      "value": "Stay where the conference takes place. All room requests are subject to venue availability and confirmation."
+    },
+    {
+      "textIndex": 0,
+      "id": "73",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "Yes, include a stay at the conference venue with my registration.",
+      "label": "Yes, include a stay at the conference venue with my registration.",
+      "value": "Yes, include a stay at the conference venue with my registration."
+    },
+    {
+      "textIndex": 0,
+      "id": "74",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > span:nth-of-type(1) > b:nth-of-type(1)",
+      "original": "Registration + accommodation",
+      "label": "Registration + accommodation",
+      "value": "Registration + accommodation"
+    },
+    {
+      "textIndex": 0,
+      "id": "75",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > label:nth-of-type(1)",
+      "original": "Check-in *",
+      "label": "Check-in *",
+      "value": "Check-in *"
+    },
+    {
+      "textIndex": 0,
+      "id": "76",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > label:nth-of-type(2)",
+      "original": "Check-out *",
+      "label": "Check-out *",
+      "value": "Check-out *"
+    },
+    {
+      "textIndex": 0,
+      "id": "77",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > label:nth-of-type(3)",
+      "original": "Room type *",
+      "label": "Room type *",
+      "value": "Room type *"
+    },
+    {
+      "textIndex": 0,
+      "id": "78",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > label:nth-of-type(4)",
+      "original": "Number of rooms *",
+      "label": "Number of rooms *",
+      "value": "Number of rooms *"
+    },
+    {
+      "textIndex": 0,
+      "id": "79",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > label:nth-of-type(5)",
+      "original": "Guests per room *",
+      "label": "Guests per room *",
+      "value": "Guests per room *"
+    },
+    {
+      "textIndex": 0,
+      "id": "80",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > label:nth-of-type(6)",
+      "original": "Room preference (optional)",
+      "label": "Room preference (optional)",
+      "value": "Room preference (optional)"
+    },
+    {
+      "textIndex": 0,
+      "id": "81",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > label:nth-of-type(7)",
+      "original": "Accommodation requests (optional)",
+      "label": "Accommodation requests (optional)",
+      "value": "Accommodation requests (optional)"
+    },
+    {
+      "textIndex": 0,
+      "id": "82",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "Sample accommodation rate only. Meals, venue taxes and booking terms are not configured. Selecting a room does not reserve it.",
+      "label": "Sample accommodation rate only. Meals, venue taxes and booking terms are not configured. S",
+      "value": "Sample accommodation rate only. Meals, venue taxes and booking terms are not configured. Selecting a room does not reserve it."
+    },
+    {
+      "textIndex": 0,
+      "id": "83",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(3)",
+      "original": "Invoice information",
+      "label": "Invoice information",
+      "value": "Invoice information"
+    },
+    {
+      "textIndex": 0,
+      "id": "84",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "I need an invoice addressed to my institution / organisation.",
+      "label": "I need an invoice addressed to my institution / organisation.",
+      "value": "I need an invoice addressed to my institution / organisation."
+    },
+    {
+      "textIndex": 0,
+      "id": "85",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(4) > label:nth-of-type(1)",
+      "original": "Billing organisation *",
+      "label": "Billing organisation *",
+      "value": "Billing organisation *"
+    },
+    {
+      "textIndex": 0,
+      "id": "86",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(4) > label:nth-of-type(2)",
+      "original": "Billing address *",
+      "label": "Billing address *",
+      "value": "Billing address *"
+    },
+    {
+      "textIndex": 0,
+      "id": "87",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(4) > label:nth-of-type(3)",
+      "original": "Tax / VAT / GST number (optional)",
+      "label": "Tax / VAT / GST number (optional)",
+      "value": "Tax / VAT / GST number (optional)"
+    },
+    {
+      "textIndex": 0,
+      "id": "88",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(4) > label:nth-of-type(4)",
+      "original": "Purchase-order reference (optional)",
+      "label": "Purchase-order reference (optional)",
+      "value": "Purchase-order reference (optional)"
+    },
+    {
+      "textIndex": 0,
+      "id": "89",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(4)",
+      "original": "Verification & consent",
+      "label": "Verification & consent",
+      "value": "Verification & consent"
+    },
+    {
+      "textIndex": 0,
+      "id": "90",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1)",
+      "original": "I accept the ",
+      "label": "I accept the",
+      "value": "I accept the "
+    },
+    {
+      "textIndex": 1,
+      "id": "91",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1)",
+      "original": " and acknowledge the ",
+      "label": "and acknowledge the",
+      "value": " and acknowledge the "
+    },
+    {
+      "textIndex": 2,
+      "id": "92",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1)",
+      "original": ". *",
+      "label": ". *",
+      "value": ". *"
+    },
+    {
+      "textIndex": 0,
+      "id": "93",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Terms & Conditions",
+      "label": "Terms & Conditions",
+      "value": "Terms & Conditions"
+    },
+    {
+      "textIndex": 0,
+      "id": "94",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1) > button:nth-of-type(2)",
+      "original": "Privacy Notice",
+      "label": "Privacy Notice",
+      "value": "Privacy Notice"
+    },
+    {
+      "textIndex": 0,
+      "id": "95",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(3)",
+      "original": "Design preview: final conference terms will be published before registration opens.",
+      "label": "Design preview: final conference terms will be published before registration opens.",
+      "value": "Design preview: final conference terms will be published before registration opens."
+    },
+    {
+      "textIndex": 0,
+      "id": "96",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(6) > button:nth-of-type(1)",
+      "original": "← Change category",
+      "label": "← Change category",
+      "value": "← Change category"
+    },
+    {
+      "textIndex": 0,
+      "id": "97",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(6) > button:nth-of-type(2)",
+      "original": "Review registration →",
+      "label": "Review registration →",
+      "value": "Review registration →"
+    },
+    {
+      "textIndex": 0,
+      "id": "98",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > h2:nth-of-type(1)",
+      "original": "One final look.",
+      "label": "One final look.",
+      "value": "One final look."
+    },
+    {
+      "textIndex": 0,
+      "id": "99",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "Check your details and selected registration before continuing.",
+      "label": "Check your details and selected registration before continuing.",
+      "value": "Check your details and selected registration before continuing."
+    },
+    {
+      "textIndex": 0,
+      "id": "100",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Participant details",
+      "label": "Participant details",
+      "value": "Participant details"
+    },
+    {
+      "textIndex": 0,
+      "id": "101",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Edit details",
+      "label": "Edit details",
+      "value": "Edit details"
+    },
+    {
+      "textIndex": 0,
+      "id": "102",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) > h3:nth-of-type(1)",
+      "original": "Venue accommodation request",
+      "label": "Venue accommodation request",
+      "value": "Venue accommodation request"
+    },
+    {
+      "textIndex": 0,
+      "id": "103",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > h3:nth-of-type(1)",
+      "original": "Invoice details",
+      "label": "Invoice details",
+      "value": "Invoice details"
+    },
+    {
+      "textIndex": 0,
+      "id": "104",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Payment",
+      "label": "Payment",
+      "value": "Payment"
+    },
+    {
+      "textIndex": 0,
+      "id": "105",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Payment checkout will be available once conference fees and the payment provider are configured. Exhibition and sponsorship packages require a confirmed quote; accommodation requires venue confirmation.",
+      "label": "Payment checkout will be available once conference fees and the payment provider are confi",
+      "value": "Payment checkout will be available once conference fees and the payment provider are configured. Exhibition and sponsorship packages require a confirmed quote; accommodation requires venue confirmation."
+    },
+    {
+      "textIndex": 0,
+      "id": "106",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(6) > button:nth-of-type(1)",
+      "original": "← Back to details",
+      "label": "← Back to details",
+      "value": "← Back to details"
+    },
+    {
+      "textIndex": 0,
+      "id": "107",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(6) > button:nth-of-type(2)",
+      "original": "Save registration →",
+      "label": "Save registration →",
+      "value": "Save registration →"
+    },
+    {
+      "textIndex": 0,
+      "id": "108",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(6) > button:nth-of-type(3)",
+      "original": "Payment setup details",
+      "label": "Payment setup details",
+      "value": "Payment setup details"
+    },
+    {
+      "textIndex": 0,
+      "id": "109",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > h3:nth-of-type(1)",
+      "original": "Accommodation & partnerships",
+      "label": "Accommodation & partnerships",
+      "value": "Accommodation & partnerships"
+    },
+    {
+      "textIndex": 0,
+      "id": "110",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "original": "Can I stay at the conference venue?",
+      "label": "Can I stay at the conference venue?",
+      "value": "Can I stay at the conference venue?"
+    },
+    {
+      "textIndex": 0,
+      "id": "111",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Choose Accommodation for a room-only request, or add venue accommodation to any registration, exhibition or sponsorship enquiry. Select dates, room type and number of rooms. Availability, venue details and booking terms must be confirmed before a reservation is made. Accommodation-only requests do not include conference admission.",
+      "label": "Choose Accommodation for a room-only request, or add venue accommodation to any registrati",
+      "value": "Choose Accommodation for a room-only request, or add venue accommodation to any registration, exhibition or sponsorship enquiry. Select dates, room type and number of rooms. Availability, venue details and booking terms must be confirmed before a reservation is made. Accommodation-only requests do not include conference admission."
+    },
+    {
+      "textIndex": 0,
+      "id": "112",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(2) > summary:nth-of-type(1)",
+      "original": "How are exhibition and sponsorship packages priced?",
+      "label": "How are exhibition and sponsorship packages priced?",
+      "value": "How are exhibition and sponsorship packages priced?"
+    },
+    {
+      "textIndex": 0,
+      "id": "113",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Select your preferred exhibition format or sponsorship tier and provide your organisation’s details. Packages require an individual quote. Prices and benefits will be confirmed separately.",
+      "label": "Select your preferred exhibition format or sponsorship tier and provide your organisation’",
+      "value": "Select your preferred exhibition format or sponsorship tier and provide your organisation’s details. Packages require an individual quote. Prices and benefits will be confirmed separately."
+    },
+    {
+      "textIndex": 0,
+      "id": "114",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(3) > summary:nth-of-type(1)",
+      "original": "Are the currency prices live conversions?",
+      "label": "Are the currency prices live conversions?",
+      "value": "Are the currency prices live conversions?"
+    },
+    {
+      "textIndex": 0,
+      "id": "115",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "No. USD, EUR and GBP show illustrative prices configured for this preview. Final prices in each currency must be approved before payments are enabled.",
+      "label": "No. USD, EUR and GBP show illustrative prices configured for this preview. Final prices in",
+      "value": "No. USD, EUR and GBP show illustrative prices configured for this preview. Final prices in each currency must be approved before payments are enabled."
+    },
+    {
+      "textIndex": 0,
+      "id": "116",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > h3:nth-of-type(2)",
+      "original": "Before you register",
+      "label": "Before you register",
+      "value": "Before you register"
+    },
+    {
+      "textIndex": 0,
+      "id": "117",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(4) > summary:nth-of-type(1)",
+      "original": "Does registration include abstract acceptance?",
+      "label": "Does registration include abstract acceptance?",
+      "value": "Does registration include abstract acceptance?"
+    },
+    {
+      "textIndex": 0,
+      "id": "118",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(4) > p:nth-of-type(1)",
+      "original": "No. Scientific submissions are reviewed separately. An abstract reference can be added to your registration, but payment does not guarantee acceptance.",
+      "label": "No. Scientific submissions are reviewed separately. An abstract reference can be added to ",
+      "value": "No. Scientific submissions are reviewed separately. An abstract reference can be added to your registration, but payment does not guarantee acceptance."
+    },
+    {
+      "textIndex": 0,
+      "id": "119",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(5) > summary:nth-of-type(1)",
+      "original": "What is included in the registration fee?",
+      "label": "What is included in the registration fee?",
+      "value": "What is included in the registration fee?"
+    },
+    {
+      "textIndex": 0,
+      "id": "120",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(5) > p:nth-of-type(1)",
+      "original": "The inclusions above demonstrate the proposed layout. Confirmed inclusions will be published for the specific conference. Travel and accommodation should be booked separately unless explicitly included.",
+      "label": "The inclusions above demonstrate the proposed layout. Confirmed inclusions will be publish",
+      "value": "The inclusions above demonstrate the proposed layout. Confirmed inclusions will be published for the specific conference. Travel and accommodation should be booked separately unless explicitly included."
+    },
+    {
+      "textIndex": 0,
+      "id": "121",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(6) > summary:nth-of-type(1)",
+      "original": "What is the cancellation and refund policy?",
+      "label": "What is the cancellation and refund policy?",
+      "value": "What is the cancellation and refund policy?"
+    },
+    {
+      "textIndex": 0,
+      "id": "122",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(6) > p:nth-of-type(1)",
+      "original": "The conference-specific cancellation deadlines and refund terms have not yet been configured. They must be published and acknowledged before payment is enabled.",
+      "label": "The conference-specific cancellation deadlines and refund terms have not yet been configur",
+      "value": "The conference-specific cancellation deadlines and refund terms have not yet been configured. They must be published and acknowledged before payment is enabled."
+    },
+    {
+      "textIndex": 0,
+      "id": "123",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(7) > summary:nth-of-type(1)",
+      "original": "Can I pay on behalf of my institution?",
+      "label": "Can I pay on behalf of my institution?",
+      "value": "Can I pay on behalf of my institution?"
+    },
+    {
+      "textIndex": 0,
+      "id": "124",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(7) > p:nth-of-type(1)",
+      "original": "The form supports institutional invoice details and a purchase-order reference. Available payment methods will be confirmed when registration opens.",
+      "label": "The form supports institutional invoice details and a purchase-order reference. Available ",
+      "value": "The form supports institutional invoice details and a purchase-order reference. Available payment methods will be confirmed when registration opens."
+    },
+    {
+      "textIndex": 0,
+      "id": "125",
+      "selector": ".reference-body > div:nth-of-type(1) > footer:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "© ",
+      "label": "©",
+      "value": "© "
+    },
+    {
+      "textIndex": 1,
+      "id": "126",
+      "selector": ".reference-body > div:nth-of-type(1) > footer:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "original": " ICGIT 2026",
+      "label": "ICGIT 2026",
+      "value": " ICGIT 2026"
+    },
+    {
+      "textIndex": 0,
+      "id": "127",
+      "selector": ".reference-body > div:nth-of-type(1) > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Privacy notice",
+      "label": "Privacy notice",
+      "value": "Privacy notice"
+    },
+    {
+      "textIndex": 0,
+      "id": "128",
+      "selector": ".reference-body > div:nth-of-type(1) > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(2)",
+      "original": "Registration terms",
+      "label": "Registration terms",
+      "value": "Registration terms"
+    },
+    {
+      "textIndex": 0,
+      "id": "129",
+      "selector": ".reference-body > div:nth-of-type(1) > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+      "original": "Home",
+      "label": "Home",
+      "value": "Home"
+    },
+    {
+      "textIndex": 0,
+      "id": "130",
+      "selector": ".reference-body > div:nth-of-type(1) > dialog:nth-of-type(1) > form:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Close",
+      "label": "Close",
+      "value": "Close"
+    }
+  ],
+  "abstracts": [
+    {
+      "textIndex": 0,
+      "id": "1",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "Your research deserves",
+      "label": "Your research deserves",
+      "value": "Your research deserves"
+    },
+    {
+      "textIndex": 1,
+      "id": "2",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "a wider conversation.",
+      "label": "a wider conversation.",
+      "value": "a wider conversation."
+    },
+    {
+      "textIndex": 0,
+      "id": "3",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Share your findings with the scientific community. Submit an abstract for consideration as an oral or poster presentation.",
+      "label": "Share your findings with the scientific community. Submit an abstract for consideration as",
+      "value": "Share your findings with the scientific community. Submit an abstract for consideration as an oral or poster presentation."
+    },
+    {
+      "textIndex": 0,
+      "id": "4",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "Conference title to be confirmed",
+      "label": "Conference title to be confirmed",
+      "value": "Conference title to be confirmed"
+    },
+    {
+      "textIndex": 0,
+      "id": "5",
+      "selector": ".reference-body > div:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(2)",
+      "original": "Submission deadline to be announced",
+      "label": "Submission deadline to be announced",
+      "value": "Submission deadline to be announced"
+    },
+    {
+      "textIndex": 0,
+      "id": "6",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "Bring your work to the discussion.",
+      "label": "Bring your work to the discussion.",
+      "value": "Bring your work to the discussion."
+    },
+    {
+      "textIndex": 0,
+      "id": "7",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Add your authors and research details. Fields marked * are required.",
+      "label": "Add your authors and research details. Fields marked * are required.",
+      "value": "Add your authors and research details. Fields marked * are required."
+    },
+    {
+      "textIndex": 0,
+      "id": "8",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Presenting author & correspondence",
+      "label": "Presenting author & correspondence",
+      "value": "Presenting author & correspondence"
+    },
+    {
+      "textIndex": 0,
+      "id": "9",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+      "original": "First name *",
+      "label": "First name *",
+      "value": "First name *"
+    },
+    {
+      "textIndex": 0,
+      "id": "10",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(2)",
+      "original": "Last name *",
+      "label": "Last name *",
+      "value": "Last name *"
+    },
+    {
+      "textIndex": 0,
+      "id": "11",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(3)",
+      "original": "Email address *",
+      "label": "Email address *",
+      "value": "Email address *"
+    },
+    {
+      "textIndex": 0,
+      "id": "12",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(4)",
+      "original": "Institution / organisation *",
+      "label": "Institution / organisation *",
+      "value": "Institution / organisation *"
+    },
+    {
+      "textIndex": 0,
+      "id": "13",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(5)",
+      "original": "Phone number with country code *",
+      "label": "Phone number with country code *",
+      "value": "Phone number with country code *"
+    },
+    {
+      "textIndex": 0,
+      "id": "14",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(6)",
+      "original": "Country / region *",
+      "label": "Country / region *",
+      "value": "Country / region *"
+    },
+    {
+      "textIndex": 0,
+      "id": "15",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "The presenting author is the correspondence contact for this preview.",
+      "label": "The presenting author is the correspondence contact for this preview.",
+      "value": "The presenting author is the correspondence contact for this preview."
+    },
+    {
+      "textIndex": 0,
+      "id": "16",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(2)",
+      "original": "Co-authors",
+      "label": "Co-authors",
+      "value": "Co-authors"
+    },
+    {
+      "textIndex": 0,
+      "id": "17",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(2)",
+      "original": "Add co-authors in the order they should appear. Do not repeat the presenting author.",
+      "label": "Add co-authors in the order they should appear. Do not repeat the presenting author.",
+      "value": "Add co-authors in the order they should appear. Do not repeat the presenting author."
+    },
+    {
+      "textIndex": 0,
+      "id": "18",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "+ Add co-author",
+      "label": "+ Add co-author",
+      "value": "+ Add co-author"
+    },
+    {
+      "textIndex": 0,
+      "id": "19",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(3)",
+      "original": "No co-authors added.",
+      "label": "No co-authors added.",
+      "value": "No co-authors added."
+    },
+    {
+      "textIndex": 0,
+      "id": "20",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(3)",
+      "original": "Research & presentation",
+      "label": "Research & presentation",
+      "value": "Research & presentation"
+    },
+    {
+      "textIndex": 0,
+      "id": "21",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > label:nth-of-type(1)",
+      "original": "Abstract title *",
+      "label": "Abstract title *",
+      "value": "Abstract title *"
+    },
+    {
+      "textIndex": 0,
+      "id": "22",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > label:nth-of-type(2)",
+      "original": "Scientific track *",
+      "label": "Scientific track *",
+      "value": "Scientific track *"
+    },
+    {
+      "textIndex": 0,
+      "id": "23",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(3) > label:nth-of-type(3)",
+      "original": "Presentation preference *",
+      "label": "Presentation preference *",
+      "value": "Presentation preference *"
+    },
+    {
+      "textIndex": 0,
+      "id": "24",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(4)",
+      "original": "Your abstract",
+      "label": "Your abstract",
+      "value": "Your abstract"
+    },
+    {
+      "textIndex": 0,
+      "id": "25",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(4) > label:nth-of-type(1)",
+      "original": "Upload abstract document *",
+      "label": "Upload abstract document *",
+      "value": "Upload abstract document *"
+    },
+    {
+      "textIndex": 0,
+      "id": "26",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(4) > p:nth-of-type(1)",
+      "original": "Upload your 500–600 word abstract as PDF, DOC or DOCX · maximum 5 MB. Only the filename is shown in this preview. Document word count will be checked during review.",
+      "label": "Upload your 500–600 word abstract as PDF, DOC or DOCX · maximum 5 MB. Only the filename is",
+      "value": "Upload your 500–600 word abstract as PDF, DOC or DOCX · maximum 5 MB. Only the filename is shown in this preview. Document word count will be checked during review."
+    },
+    {
+      "textIndex": 0,
+      "id": "27",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(4) > p:nth-of-type(2)",
+      "original": "No file selected.",
+      "label": "No file selected.",
+      "value": "No file selected."
+    },
+    {
+      "textIndex": 0,
+      "id": "28",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(5)",
+      "original": "Declarations & verification",
+      "label": "Declarations & verification",
+      "value": "Declarations & verification"
+    },
+    {
+      "textIndex": 0,
+      "id": "29",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "I confirm that all authors have approved this abstract and that I am authorised to submit it. *",
+      "label": "I confirm that all authors have approved this abstract and that I am authorised to submit ",
+      "value": "I confirm that all authors have approved this abstract and that I am authorised to submit it. *"
+    },
+    {
+      "textIndex": 0,
+      "id": "30",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "I confirm that the work meets applicable research ethics requirements and that this abstract contains no identifying participant information. *",
+      "label": "I confirm that the work meets applicable research ethics requirements and that this abstra",
+      "value": "I confirm that the work meets applicable research ethics requirements and that this abstract contains no identifying participant information. *"
+    },
+    {
+      "textIndex": 0,
+      "id": "31",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1)",
+      "original": "I accept the ",
+      "label": "I accept the",
+      "value": "I accept the "
+    },
+    {
+      "textIndex": 1,
+      "id": "32",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1)",
+      "original": " and acknowledge the ",
+      "label": "and acknowledge the",
+      "value": " and acknowledge the "
+    },
+    {
+      "textIndex": 2,
+      "id": "33",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1)",
+      "original": ". *",
+      "label": ". *",
+      "value": ". *"
+    },
+    {
+      "textIndex": 0,
+      "id": "34",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Submission Terms",
+      "label": "Submission Terms",
+      "value": "Submission Terms"
+    },
+    {
+      "textIndex": 0,
+      "id": "35",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(3) > span:nth-of-type(1) > button:nth-of-type(2)",
+      "original": "Privacy Notice",
+      "label": "Privacy Notice",
+      "value": "Privacy Notice"
+    },
+    {
+      "textIndex": 0,
+      "id": "36",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(4)",
+      "original": "Design preview only: final conference terms must be added before submissions open.",
+      "label": "Design preview only: final conference terms must be added before submissions open.",
+      "value": "Design preview only: final conference terms must be added before submissions open."
+    },
+    {
+      "textIndex": 0,
+      "id": "37",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(6) > a:nth-of-type(1)",
+      "original": "View registration",
+      "label": "View registration",
+      "value": "View registration"
+    },
+    {
+      "textIndex": 0,
+      "id": "38",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(6) > button:nth-of-type(1)",
+      "original": "Review abstract →",
+      "label": "Review abstract →",
+      "value": "Review abstract →"
+    },
+    {
+      "textIndex": 0,
+      "id": "39",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(5)",
+      "original": "Nothing is uploaded or submitted when you review.",
+      "label": "Nothing is uploaded or submitted when you review.",
+      "value": "Nothing is uploaded or submitted when you review."
+    },
+    {
+      "textIndex": 0,
+      "id": "40",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > a:nth-of-type(1)",
+      "original": "Download sample abstract ↓",
+      "label": "Download sample abstract ↓",
+      "value": "Download sample abstract ↓"
+    },
+    {
+      "textIndex": 0,
+      "id": "41",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "A clear abstract.",
+      "label": "A clear abstract.",
+      "value": "A clear abstract."
+    },
+    {
+      "textIndex": 1,
+      "id": "42",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "A strong first impression.",
+      "label": "A strong first impression.",
+      "value": "A strong first impression."
+    },
+    {
+      "textIndex": 0,
+      "id": "43",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Sample guidelines — final requirements will be confirmed for the conference.",
+      "label": "Sample guidelines — final requirements will be confirmed for the conference.",
+      "value": "Sample guidelines — final requirements will be confirmed for the conference."
+    },
+    {
+      "textIndex": 0,
+      "id": "44",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "Abstract language",
+      "label": "Abstract language",
+      "value": "Abstract language"
+    },
+    {
+      "textIndex": 0,
+      "id": "45",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(2)",
+      "original": "English",
+      "label": "English",
+      "value": "English"
+    },
+    {
+      "textIndex": 0,
+      "id": "46",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(3) > span:nth-of-type(1)",
+      "original": "Word limit",
+      "label": "Word limit",
+      "value": "Word limit"
+    },
+    {
+      "textIndex": 0,
+      "id": "47",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(3) > span:nth-of-type(2)",
+      "original": "500–600 words",
+      "label": "500–600 words",
+      "value": "500–600 words"
+    },
+    {
+      "textIndex": 0,
+      "id": "48",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(4) > span:nth-of-type(1)",
+      "original": "Presentation",
+      "label": "Presentation",
+      "value": "Presentation"
+    },
+    {
+      "textIndex": 0,
+      "id": "49",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(4) > span:nth-of-type(2)",
+      "original": "Oral / poster",
+      "label": "Oral / poster",
+      "value": "Oral / poster"
+    },
+    {
+      "textIndex": 0,
+      "id": "50",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(5) > span:nth-of-type(1)",
+      "original": "Required document",
+      "label": "Required document",
+      "value": "Required document"
+    },
+    {
+      "textIndex": 0,
+      "id": "51",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(5) > span:nth-of-type(2)",
+      "original": "PDF / Word · 5 MB",
+      "label": "PDF / Word · 5 MB",
+      "value": "PDF / Word · 5 MB"
+    },
+    {
+      "textIndex": 0,
+      "id": "52",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(6) > h3:nth-of-type(1)",
+      "original": "What happens next?",
+      "label": "What happens next?",
+      "value": "What happens next?"
+    },
+    {
+      "textIndex": 0,
+      "id": "53",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(6) > p:nth-of-type(1)",
+      "original": "Once live: submission acknowledgement, scientific review, then a decision sent to your correspondence email.",
+      "label": "Once live: submission acknowledgement, scientific review, then a decision sent to your cor",
+      "value": "Once live: submission acknowledgement, scientific review, then a decision sent to your correspondence email."
+    },
+    {
+      "textIndex": 0,
+      "id": "54",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > h2:nth-of-type(1)",
+      "original": "Ready for a closer look.",
+      "label": "Ready for a closer look.",
+      "value": "Ready for a closer look."
+    },
+    {
+      "textIndex": 0,
+      "id": "55",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Review your abstract and author information before the final submission step.",
+      "label": "Review your abstract and author information before the final submission step.",
+      "value": "Review your abstract and author information before the final submission step."
+    },
+    {
+      "textIndex": 0,
+      "id": "56",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Submission summary",
+      "label": "Submission summary",
+      "value": "Submission summary"
+    },
+    {
+      "textIndex": 0,
+      "id": "57",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Edit submission",
+      "label": "Edit submission",
+      "value": "Edit submission"
+    },
+    {
+      "textIndex": 0,
+      "id": "58",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(3) > h3:nth-of-type(1)",
+      "original": "Authors",
+      "label": "Authors",
+      "value": "Authors"
+    },
+    {
+      "textIndex": 0,
+      "id": "59",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(6) > button:nth-of-type(1)",
+      "original": "← Edit abstract",
+      "label": "← Edit abstract",
+      "value": "← Edit abstract"
+    },
+    {
+      "textIndex": 0,
+      "id": "60",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(6) > button:nth-of-type(2)",
+      "original": "Submit abstract →",
+      "label": "Submit abstract →",
+      "value": "Submit abstract →"
+    },
+    {
+      "textIndex": 0,
+      "id": "61",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > h2:nth-of-type(1)",
+      "original": "Thank you for your abstract.",
+      "label": "Thank you for your abstract.",
+      "value": "Thank you for your abstract."
+    },
+    {
+      "textIndex": 0,
+      "id": "62",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "Thank you for sharing your research with ICGIT 2026.",
+      "label": "Thank you for sharing your research with ICGIT 2026.",
+      "value": "Thank you for sharing your research with ICGIT 2026."
+    },
+    {
+      "textIndex": 0,
+      "id": "63",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > p:nth-of-type(3)",
+      "original": "Your document is saved securely. No email has been sent because email delivery is not connected.",
+      "label": "Your document is saved securely. No email has been sent because email delivery is not conn",
+      "value": "Your document is saved securely. No email has been sent because email delivery is not connected."
+    },
+    {
+      "textIndex": 0,
+      "id": "64",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(3) > a:nth-of-type(1)",
+      "original": "View registration",
+      "label": "View registration",
+      "value": "View registration"
+    },
+    {
+      "textIndex": 0,
+      "id": "65",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > h3:nth-of-type(1)",
+      "original": "Submission questions",
+      "label": "Submission questions",
+      "value": "Submission questions"
+    },
+    {
+      "textIndex": 0,
+      "id": "66",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "original": "Can I change my presentation preference?",
+      "label": "Can I change my presentation preference?",
+      "value": "Can I change my presentation preference?"
+    },
+    {
+      "textIndex": 0,
+      "id": "67",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "In this preview you can return to the form and change your preference. The scientific committee will determine the final presentation format when the review process is live.",
+      "label": "In this preview you can return to the form and change your preference. The scientific comm",
+      "value": "In this preview you can return to the form and change your preference. The scientific committee will determine the final presentation format when the review process is live."
+    },
+    {
+      "textIndex": 0,
+      "id": "68",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(2) > summary:nth-of-type(1)",
+      "original": "Does abstract acceptance include registration?",
+      "label": "Does abstract acceptance include registration?",
+      "value": "Does abstract acceptance include registration?"
+    },
+    {
+      "textIndex": 0,
+      "id": "69",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "No. Registration is a separate process. Any applicable presenter registration requirements will be published for the conference.",
+      "label": "No. Registration is a separate process. Any applicable presenter registration requirements",
+      "value": "No. Registration is a separate process. Any applicable presenter registration requirements will be published for the conference."
+    },
+    {
+      "textIndex": 0,
+      "id": "70",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(3) > summary:nth-of-type(1)",
+      "original": "Are my details saved?",
+      "label": "Are my details saved?",
+      "value": "Are my details saved?"
+    },
+    {
+      "textIndex": 0,
+      "id": "71",
+      "selector": ".reference-body > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(4) > details:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "Submitted abstracts and documents are saved securely. Unsubmitted form entries are cleared when the page is refreshed or closed.",
+      "label": "Submitted abstracts and documents are saved securely. Unsubmitted form entries are cleared",
+      "value": "Submitted abstracts and documents are saved securely. Unsubmitted form entries are cleared when the page is refreshed or closed."
+    },
+    {
+      "textIndex": 0,
+      "id": "72",
+      "selector": ".reference-body > div:nth-of-type(1) > footer:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "© ICGIT 2026",
+      "label": "© ICGIT 2026",
+      "value": "© ICGIT 2026"
+    },
+    {
+      "textIndex": 0,
+      "id": "73",
+      "selector": ".reference-body > div:nth-of-type(1) > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+      "original": "Registration",
+      "label": "Registration",
+      "value": "Registration"
+    },
+    {
+      "textIndex": 0,
+      "id": "74",
+      "selector": ".reference-body > div:nth-of-type(1) > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Privacy notice",
+      "label": "Privacy notice",
+      "value": "Privacy notice"
+    },
+    {
+      "textIndex": 0,
+      "id": "75",
+      "selector": ".reference-body > div:nth-of-type(1) > dialog:nth-of-type(1) > form:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Close",
+      "label": "Close",
+      "value": "Close"
+    }
+  ],
+  "brochure": [
+    {
+      "textIndex": 0,
+      "id": "1",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "A closer look.",
+      "label": "A closer look.",
+      "value": "A closer look."
+    },
+    {
+      "textIndex": 1,
+      "id": "2",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "A world of possibilities.",
+      "label": "A world of possibilities.",
+      "value": "A world of possibilities."
+    },
+    {
+      "textIndex": 0,
+      "id": "3",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Explore the conference themes, participation opportunities and essential information in one convenient brochure.",
+      "label": "Explore the conference themes, participation opportunities and essential information in on",
+      "value": "Explore the conference themes, participation opportunities and essential information in one convenient brochure."
+    },
+    {
+      "textIndex": 0,
+      "id": "4",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "ICGIT 2026 — International Conference on Global Innovation & Technology",
+      "label": "ICGIT 2026 — International Conference on Global Innovation & Technology",
+      "value": "ICGIT 2026 — International Conference on Global Innovation & Technology"
+    },
+    {
+      "textIndex": 0,
+      "id": "5",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(2)",
+      "original": "December 8–10, 2026 · Dubai World Trade Centre, Dubai, UAE",
+      "label": "December 8–10, 2026 · Dubai World Trade Centre, Dubai, UAE",
+      "value": "December 8–10, 2026 · Dubai World Trade Centre, Dubai, UAE"
+    },
+    {
+      "textIndex": 0,
+      "id": "6",
+      "selector": ".reference-body > main:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "Your conference guide starts here.",
+      "label": "Your conference guide starts here.",
+      "value": "Your conference guide starts here."
+    },
+    {
+      "textIndex": 0,
+      "id": "7",
+      "selector": ".reference-body > main:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Share your details to request the brochure. Fields marked * are required.",
+      "label": "Share your details to request the brochure. Fields marked * are required.",
+      "value": "Share your details to request the brochure. Fields marked * are required."
+    },
+    {
+      "textIndex": 0,
+      "id": "8",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Your contact details",
+      "label": "Your contact details",
+      "value": "Your contact details"
+    },
+    {
+      "textIndex": 0,
+      "id": "9",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+      "original": "First name *",
+      "label": "First name *",
+      "value": "First name *"
+    },
+    {
+      "textIndex": 0,
+      "id": "10",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(2)",
+      "original": "Last name *",
+      "label": "Last name *",
+      "value": "Last name *"
+    },
+    {
+      "textIndex": 0,
+      "id": "11",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(3)",
+      "original": "Email address *",
+      "label": "Email address *",
+      "value": "Email address *"
+    },
+    {
+      "textIndex": 0,
+      "id": "12",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(4)",
+      "original": "Institution / organisation *",
+      "label": "Institution / organisation *",
+      "value": "Institution / organisation *"
+    },
+    {
+      "textIndex": 0,
+      "id": "13",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(5)",
+      "original": "Phone number with country code *",
+      "label": "Phone number with country code *",
+      "value": "Phone number with country code *"
+    },
+    {
+      "textIndex": 0,
+      "id": "14",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(6)",
+      "original": "Country / region *",
+      "label": "Country / region *",
+      "value": "Country / region *"
+    },
+    {
+      "textIndex": 0,
+      "id": "15",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(2)",
+      "original": "Your conference interest",
+      "label": "Your conference interest",
+      "value": "Your conference interest"
+    },
+    {
+      "textIndex": 0,
+      "id": "16",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > div:nth-of-type(2) > label:nth-of-type(1)",
+      "original": "I am interested in *",
+      "label": "I am interested in *",
+      "value": "I am interested in *"
+    },
+    {
+      "textIndex": 0,
+      "id": "17",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > h3:nth-of-type(3)",
+      "original": "Consent & verification",
+      "label": "Consent & verification",
+      "value": "Consent & verification"
+    },
+    {
+      "textIndex": 0,
+      "id": "18",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "I acknowledge the ",
+      "label": "I acknowledge the",
+      "value": "I acknowledge the "
+    },
+    {
+      "textIndex": 1,
+      "id": "19",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > span:nth-of-type(1)",
+      "original": " and request access to the conference brochure. *",
+      "label": "and request access to the conference brochure. *",
+      "value": " and request access to the conference brochure. *"
+    },
+    {
+      "textIndex": 0,
+      "id": "20",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > span:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Privacy Notice",
+      "label": "Privacy Notice",
+      "value": "Privacy Notice"
+    },
+    {
+      "textIndex": 0,
+      "id": "21",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "I would like to receive conference updates by email. (Optional)",
+      "label": "I would like to receive conference updates by email. (Optional)",
+      "value": "I would like to receive conference updates by email. (Optional)"
+    },
+    {
+      "textIndex": 0,
+      "id": "22",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Conference updates are optional and separate from your brochure request.",
+      "label": "Conference updates are optional and separate from your brochure request.",
+      "value": "Conference updates are optional and separate from your brochure request."
+    },
+    {
+      "textIndex": 0,
+      "id": "23",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Request brochure ↓",
+      "label": "Request brochure ↓",
+      "value": "Request brochure ↓"
+    },
+    {
+      "textIndex": 0,
+      "id": "24",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > form:nth-of-type(1) > p:nth-of-type(2)",
+      "original": "Your request will be saved securely. No email is sent yet.",
+      "label": "Your request will be saved securely. No email is sent yet.",
+      "value": "Your request will be saved securely. No email is sent yet."
+    },
+    {
+      "textIndex": 0,
+      "id": "25",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Ideas connect.",
+      "label": "Ideas connect.",
+      "value": "Ideas connect."
+    },
+    {
+      "textIndex": 1,
+      "id": "26",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Science advances.",
+      "label": "Science advances.",
+      "value": "Science advances."
+    },
+    {
+      "textIndex": 0,
+      "id": "27",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "CONFERENCE",
+      "label": "CONFERENCE",
+      "value": "CONFERENCE"
+    },
+    {
+      "textIndex": 1,
+      "id": "28",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "BROCHURE",
+      "label": "BROCHURE",
+      "value": "BROCHURE"
+    },
+    {
+      "textIndex": 0,
+      "id": "29",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "ICGIT 2026 — International Conference on Global Innovation & Technology",
+      "label": "ICGIT 2026 — International Conference on Global Innovation & Technology",
+      "value": "ICGIT 2026 — International Conference on Global Innovation & Technology"
+    },
+    {
+      "textIndex": 1,
+      "id": "30",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "December 8–10, 2026 · Dubai World Trade Centre, Dubai, UAE",
+      "label": "December 8–10, 2026 · Dubai World Trade Centre, Dubai, UAE",
+      "value": "December 8–10, 2026 · Dubai World Trade Centre, Dubai, UAE"
+    },
+    {
+      "textIndex": 0,
+      "id": "31",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Have a query? Contact us →",
+      "label": "Have a query? Contact us →",
+      "value": "Have a query? Contact us →"
+    },
+    {
+      "textIndex": 0,
+      "id": "32",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "A guide to your next connection.",
+      "label": "A guide to your next connection.",
+      "value": "A guide to your next connection."
+    },
+    {
+      "textIndex": 0,
+      "id": "33",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "The final brochure will bring the conference information together in a downloadable PDF.",
+      "label": "The final brochure will bring the conference information together in a downloadable PDF.",
+      "value": "The final brochure will bring the conference information together in a downloadable PDF."
+    },
+    {
+      "textIndex": 0,
+      "id": "34",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > div:nth-of-type(2) > h3:nth-of-type(1)",
+      "original": "Planned brochure contents",
+      "label": "Planned brochure contents",
+      "value": "Planned brochure contents"
+    },
+    {
+      "textIndex": 0,
+      "id": "35",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > aside:nth-of-type(1) > p:nth-of-type(2)",
+      "original": "The approved conference PDF is not attached yet. Download will be enabled when the file is supplied.",
+      "label": "The approved conference PDF is not attached yet. Download will be enabled when the file is",
+      "value": "The approved conference PDF is not attached yet. Download will be enabled when the file is supplied."
+    },
+    {
+      "textIndex": 0,
+      "id": "36",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Brochure questions",
+      "label": "Brochure questions",
+      "value": "Brochure questions"
+    },
+    {
+      "textIndex": 0,
+      "id": "37",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "original": "Does requesting a brochure register me for the conference?",
+      "label": "Does requesting a brochure register me for the conference?",
+      "value": "Does requesting a brochure register me for the conference?"
+    },
+    {
+      "textIndex": 0,
+      "id": "38",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > details:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "No. Conference registration and abstract submission are separate.",
+      "label": "No. Conference registration and abstract submission are separate.",
+      "value": "No. Conference registration and abstract submission are separate."
+    },
+    {
+      "textIndex": 0,
+      "id": "39",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+      "original": "Will I be subscribed to updates?",
+      "label": "Will I be subscribed to updates?",
+      "value": "Will I be subscribed to updates?"
+    },
+    {
+      "textIndex": 0,
+      "id": "40",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > details:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Only if you select the optional conference updates checkbox when the live service is connected.",
+      "label": "Only if you select the optional conference updates checkbox when the live service is conne",
+      "value": "Only if you select the optional conference updates checkbox when the live service is connected."
+    },
+    {
+      "textIndex": 0,
+      "id": "41",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > details:nth-of-type(3) > summary:nth-of-type(1)",
+      "original": "Will a copy be emailed?",
+      "label": "Will a copy be emailed?",
+      "value": "Will a copy be emailed?"
+    },
+    {
+      "textIndex": 0,
+      "id": "42",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > details:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "The live service can email the brochure link to your entered address. This preview does not send emails.",
+      "label": "The live service can email the brochure link to your entered address. This preview does no",
+      "value": "The live service can email the brochure link to your entered address. This preview does not send emails."
+    },
+    {
+      "textIndex": 0,
+      "id": "43",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(2) > button:nth-of-type(1)",
+      "original": "Have a query? Ask the conference team",
+      "label": "Have a query? Ask the conference team",
+      "value": "Have a query? Ask the conference team"
+    },
+    {
+      "textIndex": 0,
+      "id": "44",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "ICGIT 2026",
+      "label": "ICGIT 2026",
+      "value": "ICGIT 2026"
+    },
+    {
+      "textIndex": 0,
+      "id": "45",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(1)",
+      "original": "Privacy Notice",
+      "label": "Privacy Notice",
+      "value": "Privacy Notice"
+    }
+  ],
+  "sessions": [
+    {
+      "textIndex": 0,
+      "id": "1",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "Many disciplines.",
+      "label": "Many disciplines.",
+      "value": "Many disciplines."
+    },
+    {
+      "textIndex": 1,
+      "id": "2",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "One scientific conversation.",
+      "label": "One scientific conversation.",
+      "value": "One scientific conversation."
+    },
+    {
+      "textIndex": 0,
+      "id": "3",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Explore proposed scientific tracks, find the themes that connect with your work, and prepare your contribution to the conference.",
+      "label": "Explore proposed scientific tracks, find the themes that connect with your work, and prepa",
+      "value": "Explore proposed scientific tracks, find the themes that connect with your work, and prepare your contribution to the conference."
+    },
+    {
+      "textIndex": 0,
+      "id": "4",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "Conference title, dates & venue to be confirmed",
+      "label": "Conference title, dates & venue to be confirmed",
+      "value": "Conference title, dates & venue to be confirmed"
+    },
+    {
+      "textIndex": 0,
+      "id": "5",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "Where does your research belong?",
+      "label": "Where does your research belong?",
+      "value": "Where does your research belong?"
+    },
+    {
+      "textIndex": 0,
+      "id": "6",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Browse the proposed themes and expand a track to see suggested topics.",
+      "label": "Browse the proposed themes and expand a track to see suggested topics.",
+      "value": "Browse the proposed themes and expand a track to see suggested topics."
+    },
+    {
+      "textIndex": 0,
+      "id": "7",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+      "original": "Share your research →",
+      "label": "Share your research →",
+      "value": "Share your research →"
+    },
+    {
+      "textIndex": 0,
+      "id": "8",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "Choose your presentation preference.",
+      "label": "Choose your presentation preference.",
+      "value": "Choose your presentation preference."
+    },
+    {
+      "textIndex": 0,
+      "id": "9",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "Oral presentation",
+      "label": "Oral presentation",
+      "value": "Oral presentation"
+    },
+    {
+      "textIndex": 0,
+      "id": "10",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Present your findings.",
+      "label": "Present your findings.",
+      "value": "Present your findings."
+    },
+    {
+      "textIndex": 1,
+      "id": "11",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Open the discussion.",
+      "label": "Open the discussion.",
+      "value": "Open the discussion."
+    },
+    {
+      "textIndex": 0,
+      "id": "12",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Share your research in a spoken scientific session with opportunities for questions and exchange.",
+      "label": "Share your research in a spoken scientific session with opportunities for questions and ex",
+      "value": "Share your research in a spoken scientific session with opportunities for questions and exchange."
+    },
+    {
+      "textIndex": 0,
+      "id": "13",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "Poster presentation",
+      "label": "Poster presentation",
+      "value": "Poster presentation"
+    },
+    {
+      "textIndex": 0,
+      "id": "14",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > h3:nth-of-type(1)",
+      "original": "Make your research visible.",
+      "label": "Make your research visible.",
+      "value": "Make your research visible."
+    },
+    {
+      "textIndex": 1,
+      "id": "15",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > h3:nth-of-type(1)",
+      "original": "Connect through conversation.",
+      "label": "Connect through conversation.",
+      "value": "Connect through conversation."
+    },
+    {
+      "textIndex": 0,
+      "id": "16",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Communicate your work through a poster and discuss it with colleagues during the conference.",
+      "label": "Communicate your work through a poster and discuss it with colleagues during the conferenc",
+      "value": "Communicate your work through a poster and discuss it with colleagues during the conference."
+    },
+    {
+      "textIndex": 0,
+      "id": "17",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Formats, timing, chairs and session allocations will be announced with the confirmed programme.",
+      "label": "Formats, timing, chairs and session allocations will be announced with the confirmed progr",
+      "value": "Formats, timing, chairs and session allocations will be announced with the confirmed programme."
+    },
+    {
+      "textIndex": 0,
+      "id": "18",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "Bring your perspective.",
+      "label": "Bring your perspective.",
+      "value": "Bring your perspective."
+    },
+    {
+      "textIndex": 0,
+      "id": "19",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Prepare a 500–600 word abstract document and select Oral or Poster as your preference.",
+      "label": "Prepare a 500–600 word abstract document and select Oral or Poster as your preference.",
+      "value": "Prepare a 500–600 word abstract document and select Oral or Poster as your preference."
+    },
+    {
+      "textIndex": 0,
+      "id": "20",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(2) > a:nth-of-type(1)",
+      "original": "Submit your abstract →",
+      "label": "Submit your abstract →",
+      "value": "Submit your abstract →"
+    },
+    {
+      "textIndex": 0,
+      "id": "21",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(3) > h3:nth-of-type(1)",
+      "original": "Scientific programme questions",
+      "label": "Scientific programme questions",
+      "value": "Scientific programme questions"
+    },
+    {
+      "textIndex": 0,
+      "id": "22",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(3) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "original": "Are these the final sessions?",
+      "label": "Are these the final sessions?",
+      "value": "Are these the final sessions?"
+    },
+    {
+      "textIndex": 0,
+      "id": "23",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(3) > details:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "No. These are proposed hematology themes. Final session titles, speakers, chairs and schedules require confirmation by the scientific committee.",
+      "label": "No. These are proposed hematology themes. Final session titles, speakers, chairs and sched",
+      "value": "No. These are proposed hematology themes. Final session titles, speakers, chairs and schedules require confirmation by the scientific committee."
+    },
+    {
+      "textIndex": 0,
+      "id": "24",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(3) > details:nth-of-type(2) > summary:nth-of-type(1)",
+      "original": "Can I submit interdisciplinary research?",
+      "label": "Can I submit interdisciplinary research?",
+      "value": "Can I submit interdisciplinary research?"
+    },
+    {
+      "textIndex": 0,
+      "id": "25",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(3) > details:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Yes. Choose the closest theme when submitting. The committee can confirm the most appropriate track.",
+      "label": "Yes. Choose the closest theme when submitting. The committee can confirm the most appropri",
+      "value": "Yes. Choose the closest theme when submitting. The committee can confirm the most appropriate track."
+    },
+    {
+      "textIndex": 0,
+      "id": "26",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(3) > details:nth-of-type(3) > summary:nth-of-type(1)",
+      "original": "Does selecting a track guarantee acceptance?",
+      "label": "Does selecting a track guarantee acceptance?",
+      "value": "Does selecting a track guarantee acceptance?"
+    },
+    {
+      "textIndex": 0,
+      "id": "27",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(3) > details:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "No. Abstracts are reviewed separately. Track selection and presentation preference do not confirm acceptance or a particular presentation format.",
+      "label": "No. Abstracts are reviewed separately. Track selection and presentation preference do not ",
+      "value": "No. Abstracts are reviewed separately. Track selection and presentation preference do not confirm acceptance or a particular presentation format."
+    },
+    {
+      "textIndex": 0,
+      "id": "28",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "ICGIT 2026",
+      "label": "ICGIT 2026",
+      "value": "ICGIT 2026"
+    },
+    {
+      "textIndex": 0,
+      "id": "29",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+      "original": "Registration",
+      "label": "Registration",
+      "value": "Registration"
+    },
+    {
+      "textIndex": 0,
+      "id": "30",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(2)",
+      "original": "Abstract submission",
+      "label": "Abstract submission",
+      "value": "Abstract submission"
+    },
+    {
+      "textIndex": 0,
+      "id": "31",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(3)",
+      "original": "Brochure",
+      "label": "Brochure",
+      "value": "Brochure"
+    }
+  ],
+  "committee": [
+    {
+      "textIndex": 0,
+      "id": "1",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "Shared expertise.",
+      "label": "Shared expertise.",
+      "value": "Shared expertise."
+    },
+    {
+      "textIndex": 1,
+      "id": "2",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "original": "A common purpose.",
+      "label": "A common purpose.",
+      "value": "A common purpose."
+    },
+    {
+      "textIndex": 0,
+      "id": "3",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Meet the people who will help shape the scientific programme and conference experience.",
+      "label": "Meet the people who will help shape the scientific programme and conference experience.",
+      "value": "Meet the people who will help shape the scientific programme and conference experience."
+    },
+    {
+      "textIndex": 0,
+      "id": "4",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "Conference title to be confirmed",
+      "label": "Conference title to be confirmed",
+      "value": "Conference title to be confirmed"
+    },
+    {
+      "textIndex": 0,
+      "id": "5",
+      "selector": ".reference-body > section:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(2)",
+      "original": "Committee appointments pending",
+      "label": "Committee appointments pending",
+      "value": "Committee appointments pending"
+    },
+    {
+      "textIndex": 0,
+      "id": "6",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "Leadership. Collaboration. Scientific exchange.",
+      "label": "Leadership. Collaboration. Scientific exchange.",
+      "value": "Leadership. Collaboration. Scientific exchange."
+    },
+    {
+      "textIndex": 0,
+      "id": "7",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Explore the committee roles, affiliations and professional biographies.",
+      "label": "Explore the committee roles, affiliations and professional biographies.",
+      "value": "Explore the committee roles, affiliations and professional biographies."
+    },
+    {
+      "textIndex": 0,
+      "id": "8",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(1)",
+      "original": "i",
+      "label": "i",
+      "value": "i"
+    },
+    {
+      "textIndex": 0,
+      "id": "9",
+      "selector": ".reference-body > main:nth-of-type(1) > div:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Profiles marked to be confirmed are placeholders, not appointments.",
+      "label": "Profiles marked to be confirmed are placeholders, not appointments.",
+      "value": "Profiles marked to be confirmed are placeholders, not appointments."
+    },
+    {
+      "textIndex": 0,
+      "id": "10",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "A considered approach to conference organisation.",
+      "label": "A considered approach to conference organisation.",
+      "value": "A considered approach to conference organisation."
+    },
+    {
+      "textIndex": 0,
+      "id": "11",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > h3:nth-of-type(1)",
+      "original": "Scientific programme",
+      "label": "Scientific programme",
+      "value": "Scientific programme"
+    },
+    {
+      "textIndex": 0,
+      "id": "12",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Proposed remit: help define themes, review contributions and support meaningful scientific discussion.",
+      "label": "Proposed remit: help define themes, review contributions and support meaningful scientific",
+      "value": "Proposed remit: help define themes, review contributions and support meaningful scientific discussion."
+    },
+    {
+      "textIndex": 0,
+      "id": "13",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > h3:nth-of-type(1)",
+      "original": "Academic collaboration",
+      "label": "Academic collaboration",
+      "value": "Academic collaboration"
+    },
+    {
+      "textIndex": 0,
+      "id": "14",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(2) > p:nth-of-type(1)",
+      "original": "Proposed remit: connect participating researchers, institutions and scientific communities.",
+      "label": "Proposed remit: connect participating researchers, institutions and scientific communities",
+      "value": "Proposed remit: connect participating researchers, institutions and scientific communities."
+    },
+    {
+      "textIndex": 0,
+      "id": "15",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(3) > h3:nth-of-type(1)",
+      "original": "Conference experience",
+      "label": "Conference experience",
+      "value": "Conference experience"
+    },
+    {
+      "textIndex": 0,
+      "id": "16",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > article:nth-of-type(3) > p:nth-of-type(1)",
+      "original": "Proposed remit: coordinate planning, local arrangements and participant communication.",
+      "label": "Proposed remit: coordinate planning, local arrangements and participant communication.",
+      "value": "Proposed remit: coordinate planning, local arrangements and participant communication."
+    },
+    {
+      "textIndex": 0,
+      "id": "17",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Final committee roles and responsibilities are subject to organiser and member agreement.",
+      "label": "Final committee roles and responsibilities are subject to organiser and member agreement.",
+      "value": "Final committee roles and responsibilities are subject to organiser and member agreement."
+    },
+    {
+      "textIndex": 0,
+      "id": "18",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > h2:nth-of-type(1)",
+      "original": "Share your research with the community.",
+      "label": "Share your research with the community.",
+      "value": "Share your research with the community."
+    },
+    {
+      "textIndex": 0,
+      "id": "19",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(2) > div:nth-of-type(1) > p:nth-of-type(1)",
+      "original": "Explore the proposed scientific tracks and prepare your abstract.",
+      "label": "Explore the proposed scientific tracks and prepare your abstract.",
+      "value": "Explore the proposed scientific tracks and prepare your abstract."
+    },
+    {
+      "textIndex": 0,
+      "id": "20",
+      "selector": ".reference-body > main:nth-of-type(1) > section:nth-of-type(2) > a:nth-of-type(1)",
+      "original": "Explore scientific tracks →",
+      "label": "Explore scientific tracks →",
+      "value": "Explore scientific tracks →"
+    },
+    {
+      "textIndex": 0,
+      "id": "21",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "original": "ICGIT 2026",
+      "label": "ICGIT 2026",
+      "value": "ICGIT 2026"
+    },
+    {
+      "textIndex": 0,
+      "id": "22",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+      "original": "Registration",
+      "label": "Registration",
+      "value": "Registration"
+    },
+    {
+      "textIndex": 0,
+      "id": "23",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(2)",
+      "original": "Submit abstract",
+      "label": "Submit abstract",
+      "value": "Submit abstract"
+    },
+    {
+      "textIndex": 0,
+      "id": "24",
+      "selector": ".reference-body > footer:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(3)",
+      "original": "Brochure",
+      "label": "Brochure",
+      "value": "Brochure"
+    }
+  ]
+}

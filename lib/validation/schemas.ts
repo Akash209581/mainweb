@@ -20,6 +20,7 @@ export const registrationSchema = z.object({
   packageId: z.string().uuid().optional(),
   fullName: z.string().trim().min(2).max(160).optional(),
   email: z.string().trim().email().max(180),
+  phone: z.string().trim().max(40).optional(),
   organization: z.string().trim().max(180).optional(),
   countryId: z.string().uuid().optional(),
 

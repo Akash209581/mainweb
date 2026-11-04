@@ -1,3 +1,4 @@
+import { hasAdminSession } from '@/lib/security/admin-access';
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma/client";
 import fs from "fs";
@@ -6,6 +7,8 @@ import path from "path";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  if (!await hasAdminSession()) return NextResponse.json({ error: 'Administrator authentication required. Use the conference admin portal.' }, { status: 401 });
+
   const records: Record<string, unknown>[] = [];
 
   // 1. Fetch Registrations
@@ -136,6 +139,8 @@ export async function GET() {
 }
 
 export async function PATCH(request: Request) {
+  if (!await hasAdminSession()) return NextResponse.json({ error: 'Administrator authentication required. Use the conference admin portal.' }, { status: 401 });
+
   try {
     const { id, status, notes } = await request.json();
     return NextResponse.json({ ok: true, id, status, notes });

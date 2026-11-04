@@ -10,6 +10,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { referenceHref } from "./transport";
+import { attachPageCopy } from "./page-copy";
 
 const ReferenceDocument = createContext<Document | null>(null);
 export function useReferenceDocument() {
@@ -43,6 +44,7 @@ export function ReferenceSurface({
       }
     });
     setSurface({ root, document: scopedDocument });
+    const detachPageCopy = attachPageCopy(root);
     const observer = new MutationObserver(() => {
       root.querySelectorAll<HTMLAnchorElement>("a[href]").forEach((anchor) => {
         const href = anchor.getAttribute("href")!;
@@ -68,6 +70,7 @@ export function ReferenceSurface({
     };
     root.addEventListener("click", followFragment);
     return () => {
+      detachPageCopy();
       observer.disconnect();
       root.removeEventListener("click", followFragment);
     };
