@@ -1,3 +1,4 @@
+import { NotFoundError } from "@/lib/errors/app-error";
 import type { Prisma, RoleName } from "@prisma/client";
 import { prisma } from "@/lib/prisma/client";
 
@@ -6,7 +7,9 @@ export async function findUserByClerkId(clerkUserId: string) {
     where: { clerkUserId },
     include: {
       profile: { include: { organization: true } },
-      roles: { include: { role: { include: { permissions: { include: { permission: true } } } } } }
+      roles: {
+        include: { role: { include: { permissions: { include: { permission: true } } } } }
+      }
     }
   });
 }
@@ -46,31 +49,67 @@ export async function upsertUserFromClerk(input: {
           }
         : undefined
     },
-    include: { profile: { include: { organization: true } }, roles: { include: { role: true } } }
+    include: {
+      profile: { include: { organization: true } },
+      roles: { include: { role: true } }
+    }
   });
 }
 
 export async function updateUserProfile(
   clerkUserId: string,
-  data: Prisma.ProfileUpdateInput & {
-    user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput;
-  }
+  data: Prisma.ProfileUpdateInput,
+  identity?: { firstName: string; lastName: string; organizationName?: string }
 ) {
   const user = await prisma.user.findUnique({ where: { clerkUserId } });
-  if (!user) {
-    return null;
-  }
-
-  return prisma.profile.upsert({
-    where: { userId: user.id },
-    update: data,
-    create: {
-      userId: user.id,
-      title: typeof data.title === "string" ? data.title : undefined,
-      designation: typeof data.designation === "string" ? data.designation : undefined,
-      phone: typeof data.phone === "string" ? data.phone : undefined,
-      bio: typeof data.bio === "string" ? data.bio : undefined
+  if (!user) throw new NotFoundError("Authenticated user not found.");
+  return prisma.$transaction(async (tx) => {
+    if (
+      data.country?.connect?.id &&
+      !(await tx.country.findUnique({ where: { id: data.country.connect.id } }))
+    )
+      throw new NotFoundError("Country not found.");
+    if (identity)
+      await tx.user.update({
+        where: { id: user.id },
+        data: { firstName: identity.firstName, lastName: identity.lastName }
+      });
+    let organizationId: string | null | undefined;
+    if (identity?.organizationName !== undefined) {
+      if (!identity.organizationName.trim()) organizationId = null;
+      else {
+        let org = await tx.organization.findFirst({
+          where: { name: identity.organizationName, deletedAt: null }
+        });
+        if (!org)
+          org = await tx.organization.create({
+            data: { name: identity.organizationName }
+          });
+        organizationId = org.id;
+      }
     }
+    return tx.profile.upsert({
+      where: { userId: user.id },
+      update: {
+        ...data,
+        ...(organizationId !== undefined
+          ? {
+              organization: organizationId
+                ? { connect: { id: organizationId } }
+                : { disconnect: true }
+            }
+          : {})
+      },
+      create: {
+        userId: user.id,
+        title: typeof data.title === "string" ? data.title : undefined,
+        designation: typeof data.designation === "string" ? data.designation : undefined,
+        phone: typeof data.phone === "string" ? data.phone : undefined,
+        bio: typeof data.bio === "string" ? data.bio : undefined,
+        countryId: data.country?.connect?.id,
+        organizationId: organizationId ?? undefined
+      }
+    });
   });
 }
 
@@ -147,4 +186,3 @@ export async function updateUserRole(userId: string, targetRoleName: RoleName) {
     });
   });
 }
-

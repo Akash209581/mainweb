@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   basePath: "/ICGIT",
   productionBrowserSourceMaps: false,
+  experimental: { serverActions: { bodySizeLimit: "12mb" } },
   eslint: {
     ignoreDuringBuilds: true
   },

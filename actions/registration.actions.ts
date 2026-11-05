@@ -1,5 +1,6 @@
 "use server";
 
+import { verifySubmissionChallenge } from "@/lib/security/submission-challenge";
 import { auth } from "@/lib/auth/server";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -11,7 +12,7 @@ import { findUserByClerkId } from "@/lib/repositories/user.repository";
 import { enforceRateLimit, getClientIp } from "@/lib/security/rate-limit";
 import { submitRegistration } from "@/lib/services/registration.service";
 import { formatZodError } from "@/lib/validation/format";
-import { registrationSchema } from "@/lib/validation/schemas";
+import { registrationSchema, publicRegistrationSchema } from "@/lib/validation/schemas";
 import type { ActionState } from "@/actions/contact.actions";
 import type { RegistrationStatus } from "@prisma/client";
 
@@ -21,6 +22,7 @@ export interface RegistrationActionResult {
   referenceNumber?: string;
   isQuoteRequired?: boolean;
   totalAmountCents?: number;
+  status?: number;
 }
 
 export async function submitRegistrationAction(
@@ -37,6 +39,7 @@ export async function submitRegistrationAction(
       packageId: formData.get("packageId") || undefined,
       fullName: formData.get("fullName") || undefined,
       email: formData.get("email"),
+      phone: formData.get("phone") || undefined,
       organization: formData.get("organization") || undefined,
       countryId: formData.get("countryId") || undefined,
       first: formData.get("first") || undefined,
@@ -67,12 +70,10 @@ export async function submitRegistrationAction(
     });
 
     if (!parsed.success) {
-      return { ok: false, message: formatZodError(parsed.error) };
+      return { ok: false, message: formatZodError(parsed.error), status: 400 };
     }
 
-    const { userId: clerkUserId } = await auth();
-    const user = clerkUserId ? await findUserByClerkId(clerkUserId) : null;
-    const reg = await submitRegistration(parsed.data, user?.id);
+    const reg = await submitRegistration(parsed.data);
 
     return {
       ok: true,
@@ -80,7 +81,7 @@ export async function submitRegistrationAction(
     };
   } catch (error) {
     if (error instanceof AppError) {
-      return { ok: false, message: error.message };
+      return { ok: false, message: error.message, status: error.statusCode };
     }
 
     logger.error("submitRegistrationAction unexpected error", {
@@ -90,38 +91,45 @@ export async function submitRegistrationAction(
       }
     });
 
-    return { ok: false, message: "An unexpected error occurred. Please try again later." };
+    return {
+      ok: false,
+      message: "An unexpected error occurred. Please try again later."
+    };
   }
 }
 
 export async function submitHansciRegistrationAction(
   payload: any
 ): Promise<RegistrationActionResult> {
+  let releaseVerification: (() => void) | undefined;
   try {
     const requestHeaders = await headers();
     const ipAddress = getClientIp(requestHeaders);
     enforceRateLimit(`registration-hansci:${ipAddress}`, 5, 60_000);
 
-    const parsed = registrationSchema.safeParse(payload);
+    const parsed = publicRegistrationSchema.safeParse(payload);
 
     if (!parsed.success) {
-      return { ok: false, message: formatZodError(parsed.error) };
+      return { ok: false, message: formatZodError(parsed.error), status: 400 };
     }
 
-    const { userId: clerkUserId } = await auth();
-    const user = clerkUserId ? await findUserByClerkId(clerkUserId) : null;
-    const reg = await submitRegistration(parsed.data, user?.id);
+    releaseVerification = verifySubmissionChallenge(
+      payload.captchaToken,
+      payload.captchaAnswer
+    );
+    const reg = await submitRegistration(parsed.data);
 
     return {
       ok: true,
-      message: "Registration successfully confirmed!",
+      message: "Registration saved successfully.",
       referenceNumber: reg.referenceNumber || reg.id,
       isQuoteRequired: reg.isQuoteRequired,
       totalAmountCents: reg.totalAmountCents
     };
   } catch (error) {
+    releaseVerification?.();
     if (error instanceof AppError) {
-      return { ok: false, message: error.message };
+      return { ok: false, message: error.message, status: error.statusCode };
     }
 
     logger.error("submitHansciRegistrationAction error", {
@@ -131,7 +139,11 @@ export async function submitHansciRegistrationAction(
       }
     });
 
-    return { ok: false, message: "Failed to process registration. Please check your details and try again." };
+    return {
+      ok: false,
+      status: 503,
+      message: "Failed to save registration. Please try again."
+    };
   }
 }
 
@@ -150,11 +162,11 @@ export async function updateRegistrationStatusAction(
     return { ok: true, message: `Registration status updated to ${status}.` };
   } catch (error) {
     if (error instanceof AppError) {
-      return { ok: false, message: error.message };
+      return { ok: false, message: error.message, status: error.statusCode };
     }
-    logger.error("updateRegistrationStatusAction error", { metadata: { error: String(error) } });
+    logger.error("updateRegistrationStatusAction error", {
+      metadata: { error: String(error) }
+    });
     return { ok: false, message: "Failed to update registration status." };
   }
 }
-
-

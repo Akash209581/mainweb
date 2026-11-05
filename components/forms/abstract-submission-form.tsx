@@ -52,6 +52,7 @@ export function AbstractSubmissionForm({
   const trackList = availableTracks && availableTracks.length > 0 ? availableTracks : TRACK_NAMES;
 
   const [step, setStep] = useState<number>(0);
+  const [captchaToken,setCaptchaToken]=useState<string|null>(null);
   const [data, setData] = useState({ ...INITIAL, track: defaultTrack || "" });
   const [authors, setAuthors] = useState<CoAuthor[]>([]);
   const [countries, setCountries] = useState<string[]>([]);
@@ -65,13 +66,7 @@ export function AbstractSubmissionForm({
   const policyDialogRef = useRef<HTMLDialogElement>(null);
   const authorIdRef = useRef<number>(0);
 
-  function newChallenge() {
-    const v = new Uint32Array(2);
-    crypto.getRandomValues(v);
-    setChallenge([2 + (v[0] % 8), 1 + (v[1] % 9)]);
-    setData((d) => ({ ...d, captcha: "" }));
-    setError("");
-  }
+  async function newChallenge(){setChallenge(null);try{const response=await fetch('/ICGIT/api/challenge',{cache:'no-store'});const challenge=await response.json();if(!response.ok)throw Error(challenge.error);setChallenge([challenge.a,challenge.b]);setCaptchaToken(challenge.token);setData(d=>({...d,captcha:''}));setError('')}catch{setError('Unable to load verification. Please try again.')}}
 
   useEffect(() => {
     try {
@@ -156,9 +151,10 @@ export function AbstractSubmissionForm({
         track: data.track,
         presentation: data.presentation,
         coAuthors: authors.map((a) => ({ name: a.name, affiliation: a.affiliation })),
+        captchaToken,captchaAnswer:data.captcha,authorsConsent:data.authorsConsent,ethics:data.ethics,terms:data.terms,
         fileName: file?.name,
         fileSize: file?.size
-      });
+      },file||undefined);
 
       if (!res.ok) {
         throw new Error(res.message);

@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import { ReferenceSurface, useReferenceDocument } from "./surface";
+import { validatedReferenceScript } from "./validated-script";
 import { referenceFetch } from "./transport";
 
 export interface HtmlReference {
@@ -23,7 +24,10 @@ function HtmlContent({
     // Always start reference page from the top
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     // Recreate the original DOM for Strict Mode effect replays and route changes.
-    container.current!.innerHTML = source.markup;
+    container.current!.innerHTML = source.markup.replaceAll(
+      "Preview challenge only. Server-verified protection is required before launch.",
+      "Solve the verification challenge to continue."
+    );
     const controller = new AbortController();
     const scopedFetch = async (input: string, init?: RequestInit) => {
       controller.signal.throwIfAborted();
@@ -31,7 +35,11 @@ function HtmlContent({
       controller.signal.throwIfAborted();
       return response;
     };
-    const execute = new Function("document", "fetch", source.script);
+    const execute = new Function(
+      "document",
+      "fetch",
+      validatedReferenceScript(source.script)
+    );
     execute(document, scopedFetch);
     return () => {
       controller.abort();

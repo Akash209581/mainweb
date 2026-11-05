@@ -99,6 +99,7 @@ export function RegistrationForm({ initialCountries = [], customPricing }: Regis
   const [step, setStep] = useState<number>(0);
   const [currency, setCurrency] = useState<"EUR" | "USD" | "GBP">("EUR");
   const [category, setCategory] = useState<string>("academic");
+  const [captchaToken,setCaptchaToken]=useState<string|null>(null);
   const [data, setData] = useState(INITIAL);
   const [countries, setCountries] = useState<string[]>([]);
   const [challenge, setChallenge] = useState<[number, number] | null>(null);
@@ -150,13 +151,7 @@ export function RegistrationForm({ initialCountries = [], customPricing }: Regis
       maximumFractionDigits: 0
     }).format(value);
 
-  function refreshCaptcha() {
-    const values = new Uint32Array(2);
-    crypto.getRandomValues(values);
-    setChallenge([2 + (values[0] % 8), 1 + (values[1] % 9)]);
-    setData((d) => ({ ...d, captcha: "" }));
-    setError("");
-  }
+  async function refreshCaptcha(){setChallenge(null);try{const response=await fetch('/ICGIT/api/challenge',{cache:'no-store'});const challenge=await response.json();if(!response.ok)throw Error(challenge.error);setChallenge([challenge.a,challenge.b]);setCaptchaToken(challenge.token);setData(d=>({...d,captcha:''}));setError('')}catch{setError('Unable to load verification. Please try again.')}}
 
   useEffect(() => {
     if (initialCountries.length > 0) {
@@ -268,6 +263,7 @@ export function RegistrationForm({ initialCountries = [], customPricing }: Regis
         address: data.invoice ? data.address : undefined,
         taxid: data.invoice ? data.taxid : undefined,
         po: data.invoice ? data.po : undefined,
+        captchaToken, captchaAnswer:data.captcha,
         terms: data.terms
       };
 

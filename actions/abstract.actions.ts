@@ -1,5 +1,8 @@
 "use server";
 
+import { verifySubmissionChallenge } from "@/lib/security/submission-challenge";
+import { savePublicAbstract } from "@/lib/services/public-abstract.service";
+import { ZodError } from "zod";
 import { auth } from "@/lib/auth/server";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -58,7 +61,10 @@ export async function submitAbstractAction(
       }
     });
 
-    return { ok: false, message: "An unexpected error occurred. Please try again later." };
+    return {
+      ok: false,
+      message: "An unexpected error occurred. Please try again later."
+    };
   }
 }
 
@@ -66,98 +72,38 @@ export interface HansciAbstractResult {
   ok: boolean;
   message: string;
   referenceNumber?: string;
+  status?: number;
 }
 
-export async function submitHansciAbstractAction(payload: {
-  first: string;
-  last: string;
-  email: string;
-  institution: string;
-  phone?: string;
-  country: string;
-  title: string;
-  track: string;
-  presentation: string;
-  coAuthors?: Array<{ name: string; affiliation: string }>;
-  fileName?: string;
-  fileSize?: number;
-}): Promise<HansciAbstractResult> {
+export async function submitHansciAbstractAction(
+  payload: unknown,
+  file?: File
+): Promise<HansciAbstractResult> {
+  let releaseVerification: (() => void) | undefined;
   try {
     const requestHeaders = await headers();
-    const ipAddress = getClientIp(requestHeaders);
-    enforceRateLimit(`abstract-submit:${ipAddress}`, 5, 60_000);
-
-    const randomDigits = Math.floor(100000 + Math.random() * 900000);
-    const referenceNumber = `ABS-2026-${randomDigits}`;
-
-    // Persist to storage backup
-    const fs = await import("fs");
-    const path = await import("path");
-    const syncDirs = [
-      path.join(process.cwd(), "storage"),
-      "C:\\Users\\banda\\Desktop\\conference-admin\\storage"
-    ];
-
-    const record = {
-      id: `abs-${randomDigits}`,
-      referenceNumber,
-      name: `${payload.first} ${payload.last}`.trim(),
-      presentingAuthor: `${payload.first} ${payload.last}`.trim(),
-      first: payload.first,
-      last: payload.last,
-      email: payload.email,
-      number: payload.phone || "N/A",
-      phone: payload.phone || "N/A",
-      institution: payload.institution,
-      country: payload.country,
-      title: payload.title,
-      track: payload.track,
-      presentationPreference: payload.presentation,
-      coAuthors: payload.coAuthors || [],
-      fileName: payload.fileName || "abstract-document.pdf",
-      fileSize: payload.fileSize || 0,
-      status: "SUBMITTED",
-      submittedAt: new Date().toISOString()
-    };
-
-    for (const d of syncDirs) {
-      try {
-        if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
-        const targetFile = path.join(d, "abstracts_backup.json");
-        let existing: any[] = [];
-        if (fs.existsSync(targetFile)) {
-          try {
-            existing = JSON.parse(fs.readFileSync(targetFile, "utf8"));
-          } catch {
-            existing = [];
-          }
-        }
-        existing.push(record);
-        fs.writeFileSync(targetFile, JSON.stringify(existing, null, 2), "utf8");
-      } catch (syncErr) {
-        console.warn("Abstract backup sync error for dir", d, syncErr);
-      }
-    }
-
-    try {
-      await emailService.sendRegistrationConfirmation(
-        payload.email,
-        `${payload.first} ${payload.last}`
-      );
-    } catch {}
-
+    enforceRateLimit("abstract-submit:" + getClientIp(requestHeaders), 5, 60000);
+    releaseVerification = verifySubmissionChallenge(
+      (payload as any)?.captchaToken,
+      (payload as any)?.captchaAnswer
+    );
+    const saved = await savePublicAbstract(payload, file);
     return {
       ok: true,
-      message: "Abstract submitted successfully!",
-      referenceNumber
+      message: "Abstract saved successfully.",
+      referenceNumber: saved.referenceNumber
     };
   } catch (error) {
-    logger.error("submitHansciAbstractAction error", {
-      metadata: { error: String(error) }
-    });
+    releaseVerification?.();
+    if (error instanceof ZodError)
+      return { ok: false, message: formatZodError(error), status: 400 };
+    if (error instanceof AppError)
+      return { ok: false, message: error.message, status: error.statusCode };
+    logger.error("Public abstract save failed", { metadata: { error: String(error) } });
     return {
       ok: false,
-      message: "Failed to submit abstract. Please try again."
+      message: "Unable to save your abstract. Please try again.",
+      status: 503
     };
   }
 }
@@ -189,7 +135,9 @@ export async function assignAbstractReviewerAction(
     if (error instanceof AppError) {
       return { ok: false, message: error.message };
     }
-    logger.error("assignAbstractReviewerAction error", { metadata: { error: String(error) } });
+    logger.error("assignAbstractReviewerAction error", {
+      metadata: { error: String(error) }
+    });
     return { ok: false, message: "Failed to assign reviewer." };
   }
 }
@@ -209,21 +157,29 @@ export async function updateAbstractStatusAction(
 
     if (status === "ACCEPTED" && abstract.author.email) {
       try {
-        await emailService.sendAcceptanceNotification(abstract.author.email, abstract.title);
+        await emailService.sendAcceptanceNotification(
+          abstract.author.email,
+          abstract.title
+        );
       } catch (emailErr) {
-        logger.error("Failed to send acceptance notification email", { metadata: { error: String(emailErr) } });
+        logger.error("Failed to send acceptance notification email", {
+          metadata: { error: String(emailErr) }
+        });
       }
     }
 
     revalidatePath("/committee/manage");
-    return { ok: true, message: `Abstract status updated to ${status.replace("_", " ")}.` };
+    return {
+      ok: true,
+      message: `Abstract status updated to ${status.replace("_", " ")}.`
+    };
   } catch (error) {
     if (error instanceof AppError) {
       return { ok: false, message: error.message };
     }
-    logger.error("updateAbstractStatusAction error", { metadata: { error: String(error) } });
+    logger.error("updateAbstractStatusAction error", {
+      metadata: { error: String(error) }
+    });
     return { ok: false, message: "Failed to update abstract status." };
   }
 }
-
-

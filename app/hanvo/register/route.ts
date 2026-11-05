@@ -10,9 +10,7 @@ export async function POST(request: Request) {
     const ipAddress = getClientIp(request.headers);
     enforceRateLimit(`api-registration:${ipAddress}`, 5, 60_000);
     const input = registrationSchema.parse(await request.json());
-    const { userId: clerkUserId } = await auth();
-    const user = clerkUserId ? await findUserByClerkId(clerkUserId) : null;
-    const registration = await submitRegistration(input, user?.id);
+    const registration = await submitRegistration(input);
     return ok(
       {
         id: registration.id,

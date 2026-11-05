@@ -5,15 +5,11 @@ import { Send, CheckCircle, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import {contactSchema} from "@/lib/validation/schemas";
 import { Button } from "@/components/buttons/button";
 import { submitContactAction } from "@/actions/contact.actions";
 
-const inquirySchema = z.object({
-  name: z.string().min(2, "Enter your full name"),
-  email: z.string().email("Enter a valid email"),
-  category: z.enum(["delegate", "author", "sponsor", "committee"]),
-  message: z.string().min(12, "Add a little more detail")
-});
+const inquirySchema = contactSchema;
 
 type InquiryFormValues = z.infer<typeof inquirySchema>;
 

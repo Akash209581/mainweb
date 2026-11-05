@@ -5,7 +5,7 @@ import type {
 } from "@/lib/validation/schemas";
 import type { FileVisibility, Registration } from "@prisma/client";
 import { prisma } from "@/lib/prisma/client";
-import { NotFoundError } from "@/lib/errors/app-error";
+import { NotFoundError,ValidationError } from "@/lib/errors/app-error";
 
 export async function createContactMessage(
   input: ContactInput,
@@ -39,7 +39,7 @@ const ROOM_RATES: Record<string, Record<string, number>> = {
 export async function createRegistration(input: RegistrationInput, userId?: string) {
   const firstName = input.first || input.fullName?.split(" ")[0] || "";
   const lastName = input.last || input.fullName?.split(" ").slice(1).join(" ") || "";
-  const fullName = (input.fullName || `${firstName} ${lastName}`).trim() || "Participant";
+  const fullName = ((firstName && lastName ? `${firstName} ${lastName}` : input.fullName) || "").trim() || "Participant";
   const organization = input.organization || input.institution || null;
   const countryName = input.country || null;
 
@@ -102,6 +102,7 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
   const totalAmountCents = isQuoteRequired
     ? 0
     : registrationFeeCents + accommodationFeeCents;
+  if(!Number.isSafeInteger(totalAmountCents)||totalAmountCents>2147483647)throw new ValidationError("The requested total is too large. Contact the secretariat for a quote.");
   const randomDigits = Math.floor(100000 + Math.random() * 900000);
   const referenceNumber = `HNS-${new Date().getFullYear()}-${randomDigits}`;
 
@@ -110,61 +111,21 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
       let conference = await tx.conference.findUnique({
         where: { slug: input.conferenceSlug }
       });
-      if (!conference) {
-        conference = await tx.conference.findFirst({
-          where: { deletedAt: null }
-        });
-      }
-      if (!conference) {
-        conference = await tx.conference.create({
-          data: {
-            slug: input.conferenceSlug || "icgit-2026",
-            name: "ICGIT 2026",
-            fullName: "International Conference on Global Innovative Technology 2026",
-            description: "Leading scientific exchange and global innovation conference.",
-            startDate: new Date("2026-10-15T09:00:00Z"),
-            endDate: new Date("2026-10-18T18:00:00Z"),
-            mode: "HYBRID"
-          }
-        });
-      }
+      if (!conference || conference.deletedAt) throw new NotFoundError("Conference not found.");
 
       const packageId = input.packageId;
       if (packageId) {
         const pkgExists = await tx.registrationPackage.findUnique({
           where: { id: packageId }
         });
-        if (!pkgExists) {
-          const fallbackPkg = DEFAULT_PACKAGES.find((p) => p.id === packageId);
-          await tx.registrationPackage.create({
-            data: {
-              id: packageId,
-              conferenceId: conference.id,
-              name: fallbackPkg?.name || `${input.category.toUpperCase()} Pass`,
-              description: fallbackPkg?.description || "Conference access pass",
-              priceCents: fallbackPkg?.priceCents || registrationFeeCents || 39900,
-              attendanceMode: "ONSITE"
-            }
-          });
-        }
+        if (!pkgExists || pkgExists.conferenceId !== conference.id || pkgExists.deletedAt) throw new NotFoundError("Registration package not found for this conference.");
       }
 
       if (input.countryId) {
         const countryExists = await tx.country.findUnique({
           where: { id: input.countryId }
         });
-        if (!countryExists) {
-          const fallbackCountry = DEFAULT_COUNTRIES.find((c) => c.id === input.countryId);
-          if (fallbackCountry) {
-            await tx.country.create({
-              data: {
-                id: input.countryId,
-                iso2: fallbackCountry.name.slice(0, 2).toUpperCase(),
-                name: fallbackCountry.name
-              }
-            });
-          }
-        }
+        if (!countryExists) throw new NotFoundError("Country not found.");
       }
 
       const registration = await tx.registration.create({
@@ -228,96 +189,14 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
           action: "registration.created",
           entity: "Registration",
           entityId: registration.id,
-          metadata: { referenceNumber, category: input.category, totalAmountCents }
+          metadata: { referenceNumber, category: input.category, totalAmountCents, termsAccepted: input.terms }
         }
       });
 
       return registration;
     });
   } catch (dbError) {
-    console.warn(
-      "Database storage failed or not connected, persisting to local storage backup:",
-      dbError
-    );
-    const syncDirs = [
-      path.join(process.cwd(), "storage"),
-      "C:\\Users\\banda\\Desktop\\conference-admin\\storage"
-    ];
-
-    const curSymbol: Record<string, string> = { EUR: "€", USD: "$", GBP: "£" };
-    const sym = curSymbol[currency] || currency;
-    const regFeeNumeric = Math.round(registrationFeeCents / 100);
-
-    const fallbackRegistration = {
-      id: `local-${randomDigits}`,
-      referenceNumber,
-      name: fullName,
-      fullName,
-      firstName,
-      lastName,
-      email: input.email,
-      number: (input as unknown as { phone?: string }).phone || "N/A",
-      phone: (input as unknown as { phone?: string }).phone || "N/A",
-      organization,
-      institution: organization || "Independent",
-      country: countryName || "N/A",
-      countryName,
-      category: input.category,
-      title:
-        input.role ||
-        (input.category
-          ? `${input.category.charAt(0).toUpperCase() + input.category.slice(1)} Delegate`
-          : "Academic Delegate"),
-      participationRole: input.role || null,
-      abstractReference: input.abstract || null,
-      currency,
-      regAmount: regFeeNumeric,
-      registrationFeeCents,
-      totalAmountCents,
-      currencyAndRegAmount: `${currency} ${sym}${regFeeNumeric}`,
-      address: input.address || input.billingOrg || "N/A",
-      billingAddress: input.address || null,
-      isQuoteRequired,
-      partnerPackage: input.package || null,
-      representativesCount: input.representatives ? Number(input.representatives) : null,
-      partnerInterests: input.interests || null,
-      hasStay,
-      checkInDate: checkInDate?.toISOString() || null,
-      checkOutDate: checkOutDate?.toISOString() || null,
-      roomType: hasStay ? input.room : null,
-      roomCount: hasStay ? Number(input.rooms) : 1,
-      guestsPerRoom: hasStay ? String(input.guests) : null,
-      bedPreference: hasStay ? input.beds : null,
-      accommodationNotes: hasStay ? input.staynotes : null,
-      accommodationFeeCents,
-      needsInvoice: Boolean(input.invoice),
-      billingOrg: input.billingOrg || null,
-      taxId: input.taxid || null,
-      poNumber: input.po || null,
-      status: isQuoteRequired ? "PENDING" : "CONFIRMED",
-      createdAt: new Date().toISOString()
-    };
-
-    for (const d of syncDirs) {
-      try {
-        if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
-        const targetFile = path.join(d, "registrations_backup.json");
-        let existingList: unknown[] = [];
-        if (fs.existsSync(targetFile)) {
-          try {
-            existingList = JSON.parse(fs.readFileSync(targetFile, "utf8"));
-          } catch {
-            existingList = [];
-          }
-        }
-        existingList.push(fallbackRegistration);
-        fs.writeFileSync(targetFile, JSON.stringify(existingList, null, 2), "utf8");
-      } catch (syncErr) {
-        console.warn("Registration backup sync error for dir", d, syncErr);
-      }
-    }
-
-    return fallbackRegistration as unknown as Registration;
+    throw dbError;
   }
 }
 

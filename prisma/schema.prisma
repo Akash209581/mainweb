@@ -208,6 +208,7 @@ model Conference {
   settings    SystemSetting[]
   themeSettings ThemeSetting[]
   registrations Registration[]
+  publicAbstracts PublicAbstractSubmission[]
   submissions AbstractSubmission[]
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
@@ -800,4 +801,20 @@ model ThemeSetting {
   @@index([conferenceId, isActive])
   @@index([name])
   @@unique([conferenceId, name])
+}
+
+model PublicAbstractSubmission {
+ id String @id @default(uuid()) @db.Uuid
+ conferenceId String @db.Uuid
+ conference Conference @relation(fields:[conferenceId],references:[id],onDelete:Cascade)
+ referenceNumber String @unique
+ payload Json
+ status SubmissionStatus @default(SUBMITTED)
+ fileName String
+ mimeType String
+ fileData Bytes
+ sizeBytes Int
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([conferenceId,createdAt])
 }

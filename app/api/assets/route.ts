@@ -1,3 +1,4 @@
+import { documentDownloadHeaders } from '@/lib/document-download';
 import { prisma } from "@/lib/prisma/client";
 import fs from "fs/promises";
 import path from "path";
@@ -31,12 +32,7 @@ export async function GET(request: Request) {
       )
     );
     return new Response(bytes, {
-      headers: {
-        "Content-Type": "application/octet-stream",
-        "Content-Disposition":
-          "attachment; filename*=UTF-8''" + encodeURIComponent(asset.fileName),
-        "X-Content-Type-Options": "nosniff"
-      }
+      headers: documentDownloadHeaders(asset.fileName, asset.storageKey)
     });
   } catch {
     return new Response("File unavailable", { status: 404 });

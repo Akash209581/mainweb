@@ -66,4 +66,6 @@ describe("registration server pricing", () => {
     expect(r.registrationFeeCents).toBe(19900);
     expect(r.totalAmountCents).toBe(19900);
   });
+  it('stores a consistent full name from the individual name fields',async()=>{pricing.mockResolvedValue(null);const r=await createRegistration(input({fullName:'Forged Displayname'}));expect(r.fullName).toBe('QA Participant')});
+
 });

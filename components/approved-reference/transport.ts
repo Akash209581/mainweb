@@ -62,15 +62,14 @@ export async function referenceFetch(
         address: invoice ? payload.address : undefined
       });
     } else if (kind === "abstract") {
-      // The existing action stores attachment metadata only. Do not invent a
-      // document API or alter the schema to emulate the separate reference backend.
+      // Send the actual document to the validated server action.
       const file = body.get("document") as File | null;
       result = await submitHansciAbstractAction({
         ...payload,
         coAuthors: payload.authors,
         fileName: file?.name,
         fileSize: file?.size
-      });
+      }, file || undefined);
     } else if (kind === "brochure") {
       result = await submitBrochureRequestAction(payload);
     } else if (kind === "query") {
@@ -79,7 +78,7 @@ export async function referenceFetch(
       return Response.json({ error: "Unsupported submission kind" }, { status: 400 });
     }
     return Response.json(result.ok ? result : { error: result.message }, {
-      status: result.ok ? 200 : 400
+      status: result.ok ? 200 : result.status || 400
     });
   }
   return fetch(input.startsWith("/api/") ? basePath + input : input, init);
@@ -111,7 +110,7 @@ export function referenceHref(href: string): string {
   };
   if (path in routes) return `${basePath}/${routes[path]}${suffix}`;
   if (path === "sample-abstract.txt")
-    return `${basePath}/approved-reference/sample-abstract.txt${suffix}`;
+    return `${basePath}/api/assets?kind=sampleAbstract`;
   if (path.startsWith("/api/")) return basePath + href;
   return href;
 }

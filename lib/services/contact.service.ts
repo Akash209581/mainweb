@@ -7,6 +7,6 @@ export async function submitContactMessage(
   context: { ipAddress?: string; userAgent?: string }
 ) {
   const message = await createContactMessage(input, context);
-  await emailService.sendContactAcknowledgement(input.email, input.name);
+  try { await emailService.sendContactAcknowledgement(input.email, input.name); } catch { /* Persistence succeeded; email is a separate delivery step. */ }
   return message;
 }

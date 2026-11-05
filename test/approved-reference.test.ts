@@ -159,7 +159,7 @@ describe("existing submission boundaries", () => {
       })
     );
   });
-  it("retains co-authors and attachment metadata without inventing a file API", async () => {
+  it("retains co-authors and sends the actual attachment for validated persistence", async () => {
     vi.mocked(submitHansciAbstractAction).mockResolvedValue({
       ok: true,
       message: "Saved"
@@ -178,7 +178,7 @@ describe("existing submission boundaries", () => {
         coAuthors: authors,
         fileName: "abstract.pdf",
         fileSize: 7
-      })
+      }), expect.any(File)
     );
   });
   it("returns action failures to the existing reference error UI", async () => {

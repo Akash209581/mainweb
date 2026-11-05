@@ -1,0 +1,3 @@
+import {describe,expect,it} from 'vitest';import {readFileSync} from 'node:fs';
+const {adaptBrochureVerification}=require('../scripts/adapt-brochure-verification.cjs');
+describe('brochure regeneration validation',()=>{it('keeps signed challenges when importing the original reference again',()=>{const original=readFileSync('Hansci_Novum/user-website/editable-page-sources/brochure/app/page.jsx','utf8').replace('function BrochureDownload(){','function BrochureDownload(){\n const document=useReferenceDocument();');const result=adaptBrochureVerification(original);expect(result).toContain('payload.captchaToken=captchaToken');expect(result).toContain('async function refresh()');expect(adaptBrochureVerification(result)).toBe(result)})});

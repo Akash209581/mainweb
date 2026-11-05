@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Download, FileText, CheckCircle2, ShieldCheck, Mail, HelpCircle, X, Loader2, ArrowRight } from "lucide-react";
 import { submitBrochureRequestAction, submitConferenceQueryAction } from "@/actions/contact.actions";
 
-const BROCHURE_URL = "/resources/icgit-2026-brochure.txt";
+const BROCHURE_URL = "/ICGIT/api/assets?kind=brochure";
 
 const INITIAL = {
   first: "",
@@ -20,6 +20,7 @@ const INITIAL = {
 };
 
 export function BrochureLayout() {
+  const [captchaToken,setCaptchaToken]=useState<string|null>(null);
   const [data, setData] = useState(INITIAL);
   const [countries, setCountries] = useState<string[]>([]);
   const [challenge, setChallenge] = useState<[number, number] | null>(null);
@@ -34,13 +35,7 @@ export function BrochureLayout() {
   const queryDialogRef = useRef<HTMLDialogElement>(null);
   const policyDialogRef = useRef<HTMLDialogElement>(null);
 
-  function refreshChallenge() {
-    const n = new Uint32Array(2);
-    crypto.getRandomValues(n);
-    setChallenge([2 + (n[0] % 8), 1 + (n[1] % 9)]);
-    setData((d) => ({ ...d, captcha: "" }));
-    setError("");
-  }
+  async function refreshChallenge(){setChallenge(null);try{const response=await fetch('/ICGIT/api/challenge',{cache:'no-store'});const challenge=await response.json();if(!response.ok)throw Error(challenge.error);setChallenge([challenge.a,challenge.b]);setCaptchaToken(challenge.token);setData(d=>({...d,captcha:''}));setError('')}catch{setError('Unable to load verification. Please try again.')}}
 
   useEffect(() => {
     try {
@@ -90,7 +85,7 @@ export function BrochureLayout() {
 
     setIsSubmitting(true);
     try {
-      await submitBrochureRequestAction({
+      const response=await submitBrochureRequestAction({
         first: data.first,
         last: data.last,
         email: data.email,
@@ -98,21 +93,25 @@ export function BrochureLayout() {
         institution: data.institution,
         country: data.country,
         interest: data.interest,
+        captchaToken:captchaToken||undefined,captchaAnswer:data.captcha,
+        privacy: data.privacy,
         updates: data.updates
       });
 
+      if(!response.ok)throw new Error(response.message);
       // Programmatic trigger of static download
       const link = document.createElement("a");
       link.href = BROCHURE_URL;
-      link.download = "ICGIT_2026_Conference_Brochure.txt";
+      // The server supplies the uploaded document filename.
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
       setDone(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch {
-      setDone(true);
+    } catch(error) {
+      setError(error instanceof Error?error.message:"Unable to save request.");
+      setDone(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -125,15 +124,18 @@ export function BrochureLayout() {
     const formData = new FormData(form);
 
     try {
-      await submitConferenceQueryAction({
+      const response=await submitConferenceQueryAction({
+        privacy: Boolean((e.currentTarget as HTMLFormElement).querySelector<HTMLInputElement>('input[type="checkbox"]')?.checked),
         name: String(formData.get("queryName") || ""),
         email: String(formData.get("queryEmail") || ""),
         subject: String(formData.get("querySubject") || ""),
         message: String(formData.get("queryMessage") || "")
       });
+      if(!response.ok)throw new Error(response.message);
       setQueryDone(true);
-    } catch {
-      setQueryDone(true);
+    } catch(error) {
+      setQueryDone(false);
+      setError(error instanceof Error?error.message:"Unable to save query.");
     } finally {
       setQuerySubmitting(false);
     }
@@ -448,7 +450,7 @@ export function BrochureLayout() {
           <div className="pt-2">
             <a
               href={BROCHURE_URL}
-              download="ICGIT_2026_Conference_Brochure.txt"
+
               className="inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-accent/90 transition"
             >
               <Download className="size-4" /> Download Conference Brochure Again

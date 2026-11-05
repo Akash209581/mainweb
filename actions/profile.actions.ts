@@ -21,25 +21,43 @@ export async function updateProfileAction(
     const parsed = profileUpdateSchema.safeParse({
       firstName: formData.get("firstName"),
       lastName: formData.get("lastName"),
-      title: formData.get("title") || undefined,
-      designation: formData.get("designation") || undefined,
-      phone: formData.get("phone") || undefined,
-      bio: formData.get("bio") || undefined,
-      countryId: formData.get("countryId") || undefined,
-      organizationName: formData.get("organizationName") || undefined
+      title: formData.has("title") ? String(formData.get("title")) : undefined,
+      designation: formData.has("designation")
+        ? String(formData.get("designation"))
+        : undefined,
+      phone: formData.has("phone") ? String(formData.get("phone")) : undefined,
+      bio: formData.has("bio") ? String(formData.get("bio")) : undefined,
+      countryId: formData.has("countryId")
+        ? String(formData.get("countryId"))
+        : undefined,
+      organizationName: formData.has("organizationName")
+        ? String(formData.get("organizationName"))
+        : undefined
     });
 
     if (!parsed.success) {
       return { ok: false, message: formatZodError(parsed.error) };
     }
 
-    await updateUserProfile(userId, {
-      title: parsed.data.title,
-      designation: parsed.data.designation,
-      phone: parsed.data.phone,
-      bio: parsed.data.bio,
-      country: parsed.data.countryId ? { connect: { id: parsed.data.countryId } } : undefined
-    });
+    await updateUserProfile(
+      userId,
+      {
+        title: parsed.data.title,
+        designation: parsed.data.designation,
+        phone: parsed.data.phone,
+        bio: parsed.data.bio,
+        country: parsed.data.countryId
+          ? { connect: { id: parsed.data.countryId } }
+          : parsed.data.countryId === ""
+            ? { disconnect: true }
+            : undefined
+      },
+      {
+        firstName: parsed.data.firstName,
+        lastName: parsed.data.lastName,
+        organizationName: parsed.data.organizationName
+      }
+    );
 
     return { ok: true, message: "Your profile has been updated." };
   } catch (error) {
@@ -54,7 +72,9 @@ export async function updateProfileAction(
       }
     });
 
-    return { ok: false, message: "An unexpected error occurred. Please try again later." };
+    return {
+      ok: false,
+      message: "An unexpected error occurred. Please try again later."
+    };
   }
 }
-

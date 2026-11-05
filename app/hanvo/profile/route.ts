@@ -16,17 +16,28 @@ export async function PATCH(request: Request) {
     }
 
     const input = profileUpdateSchema.parse(await request.json());
-    const profile = await updateUserProfile(userId, {
-      title: input.title,
-      designation: input.designation,
-      phone: input.phone,
-      bio: input.bio,
-      country: input.countryId ? { connect: { id: input.countryId } } : undefined
-    });
+    const profile = await updateUserProfile(
+      userId,
+      {
+        title: input.title,
+        designation: input.designation,
+        phone: input.phone,
+        bio: input.bio,
+        country: input.countryId
+          ? { connect: { id: input.countryId } }
+          : input.countryId === ""
+            ? { disconnect: true }
+            : undefined
+      },
+      {
+        firstName: input.firstName,
+        lastName: input.lastName,
+        organizationName: input.organizationName
+      }
+    );
 
     return ok({ id: profile?.id });
   } catch (error) {
     return fail(error);
   }
 }
-

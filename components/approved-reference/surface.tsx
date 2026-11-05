@@ -1,4 +1,6 @@
 "use client";
+import { attachInputValidation } from "@/lib/client/input-validation";
+import { normalizeDocumentDownloads } from './document-downloads';
 
 import {
   createContext,
@@ -45,7 +47,9 @@ export function ReferenceSurface({
     });
     setSurface({ root, document: scopedDocument });
     const detachPageCopy = attachPageCopy(root);
+    const detachValidation = attachInputValidation(root);
     const observer = new MutationObserver(() => {
+      normalizeDocumentDownloads(root);
       root.querySelectorAll<HTMLAnchorElement>("a[href]").forEach((anchor) => {
         const href = anchor.getAttribute("href")!;
         const mapped = referenceHref(href);
@@ -56,7 +60,7 @@ export function ReferenceSurface({
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["href"]
+      attributeFilter: ["href", "download"]
     });
     const followFragment = (event: Event) => {
       const anchor = (event.target as Element).closest?.("a[href^='#']");
@@ -71,6 +75,7 @@ export function ReferenceSurface({
     root.addEventListener("click", followFragment);
     return () => {
       detachPageCopy();
+      detachValidation();
       observer.disconnect();
       root.removeEventListener("click", followFragment);
     };

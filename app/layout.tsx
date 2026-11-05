@@ -1,3 +1,4 @@
+import { PublicInputValidation } from '@/components/public-input-validation';
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { AuthProvider } from "@/components/auth/auth-provider";
@@ -277,6 +278,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className="min-h-screen antialiased">
         <AuthProvider>
+          <PublicInputValidation/>
           <LiveContentWatcher intervalMs={30000} />
           <ClientBlocker />
           <PageChrome

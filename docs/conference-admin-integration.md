@@ -29,7 +29,7 @@ The public `/ICGIT/api/settings` reader overlays these database settings on the 
 
 New settings and text saves use optimistic versions, serializable transactions and audit logs. The retained content endpoint now uses a transaction and reports database failures rather than claiming publication. Existing content/branding/media/SEO database contracts are retained. Registration totals now read the saved `registration_pricing` settings on the server, use integer cents, and respect configured zero accommodation rates.
 
-The public forms' abstract action currently writes JSON backups and attachment metadata. The new portal reads these alongside database abstracts; status changes use shared workflow metadata and appear in the retained Abstract review screen. File bytes from public abstract submissions are still not stored. No abstract download is fabricated.
+New public abstract submissions now save validated metadata and original document bytes in `PublicAbstractSubmission`. Historical JSON backups remain available; bytes that were never uploaded cannot be recovered. See [validation and persistence](validation-and-persistence.md) for the current submission path.
 
 ContactMessage has no conference relation. Brochure/query records and unscoped abstract backups are assigned only to `CONTACT_CONFERENCE_SLUG` (default `icgit-2026`), rather than exposed in every conference.
 
@@ -68,3 +68,15 @@ Both Prisma schemas/clients are aligned. No tables, columns or existing registra
 - Reports/screenshots are in ignored `scratch/admin-qa/`; focused public tests are in `test/admin-access.test.ts`, `test/shared-settings.test.ts` and `test/page-copy.test.ts`. Admin tests are in `conference-admin/tests/security.test.cjs`. Server-pricing tests are in `test/registration-pricing.test.ts`.
 
 Real payment processing, email delivery, participant-submitted abstract file storage, and production deployment were not changed or certified by this UI integration. A build and focused security checks are not a complete penetration test. No live registration, submission, payment or conference content was edited for verification.
+
+## Download and retained-screen corrections
+
+Historical sample-abstract and brochure TXT links now resolve to the published document endpoint. The reference surface removes stale download filename attributes even when links appear after a form submission. Both public and authenticated document endpoints use the stored extension to return the correct MIME type, an ASCII filename fallback plus UTF-8 filename, and no-store caching. A missing uploaded file returns 404 instead of substituting a TXT placeholder. The dormant legacy brochure layout also uses the published document endpoint.
+
+The retained management screens use `components/admin/layout/reference-theme.css`. Exact utility-token selectors replace the former substring rules, which incorrectly treated `bg-indigo-50/50` as `bg-indigo-500` and darkened light panels. Primary controls, headings, borders, preview surfaces and gradients now follow the reference navy/light palette without removing editor controls.
+
+Verification: 9 document/link/endpoint tests and 4 existing text-editing tests passed. Browser checks saved sample/brochure PDF fixtures with correct filenames and bytes, and checked desktop/mobile content-editor contrast without runtime errors. No uploaded production document was replaced for testing. Deploy both mainweb and conference-admin to update the public download logic and the separate admin stylesheet. Both processes still need access to the same uploaded document volume.
+
+## Login and public input verification update
+
+The login now uses the reference theme. Public forms have matching client/server validation, signed arithmetic challenges, truthful database failure responses, and database-backed abstract document storage with private admin downloads. Profile fields are saved together and anonymous callers no longer inherit the mock administrator. Current implementation and verification details are in [validation-and-persistence.md](validation-and-persistence.md).

@@ -1,4 +1,5 @@
 ﻿const fs = require('fs');
+const {adaptBrochureVerification}=require('./adapt-brochure-verification.cjs');
 const path = require('path');
 const sourceRoot = path.join(process.cwd(), 'Hansci_Novum/user-website');
 const output = path.join(process.cwd(), 'components/approved-reference');
@@ -27,6 +28,7 @@ if (name === 'registration' || name === 'abstracts') {
  jsx = jsx.replace("import {useState,useEffect,useRef} from 'react';", "import {useState,useEffect,useRef} from 'react';\nimport {referenceFetch as fetch} from './transport';\nimport {useReferenceDocument} from './surface';");
  jsx = jsx.replace("import {useState,useEffect} from 'react';", "import {useState,useEffect} from 'react';\nimport {referenceFetch as fetch} from './transport';");
  if(name==='brochure') jsx=jsx.replace('function BrochureDownload(){','function BrochureDownload(){\n const document=useReferenceDocument();');
+ if(name==='brochure')jsx=adaptBrochureVerification(jsx);
  fs.writeFileSync(path.join(output,name+'-design.tsx'),jsx);
  const css=fs.readFileSync(path.join(dir,'globals.css'),'utf8');
  fs.writeFileSync(path.join(output,name+'-style.ts'),'// Supplied stylesheet, unchanged.\nexport const css = '+JSON.stringify(css)+';\n');
@@ -38,4 +40,4 @@ if (name === 'registration' || name === 'abstracts') {
  description=layout.match(/description:'([^']*)'/)[1];
 }
 fs.writeFileSync(path.join('app/(public)',name,'page.tsx'),`export const metadata = ${JSON.stringify({title,description})};\n`+component);
-console.log('Imported '+name+' from supplied source; UI strings and CSS unchanged.');
+console.log('Imported '+name+' with route, document and submission-validation adapters.');
