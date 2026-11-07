@@ -179,6 +179,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             if (saved.branding) {
               fileBranding = saved.branding;
             }
+            if (saved.conference) {
+              if (saved.conference.title) {
+                conferenceInfo.fullName = saved.conference.title;
+                conferenceInfo.name = saved.conference.title.split("—")[0].trim();
+              }
+              if (saved.conference.dates) conferenceInfo.dates = saved.conference.dates;
+              if (saved.conference.venue) conferenceInfo.venue = saved.conference.venue;
+              if (saved.conference.supportEmail) conferenceInfo.email = saved.conference.supportEmail;
+              if (saved.conference.phone) conferenceInfo.phone = saved.conference.phone;
+            }
           }
         } catch {}
 
@@ -209,6 +219,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         console.error("Layout fetch error:", e);
         let fallbackMenu = undefined;
         let fallbackBranding = undefined;
+        let fallbackConference: FooterConferenceInfo = {
+          name: "ICGIT 2026",
+          fullName: "International Conference on Global Innovation and Technology 2026",
+          dates: "December 8–10, 2026",
+          venue: "Dubai World Trade Centre",
+          city: "Dubai",
+          country: "United Arab Emirates",
+          email: "secretariat@icgit2026.org",
+          phone: "+971 4 000 2026"
+        };
         try {
           const fs = await import("fs");
           const path = await import("path");
@@ -221,6 +241,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             if (saved.branding) {
               fallbackBranding = saved.branding;
             }
+            if (saved.conference) {
+              if (saved.conference.title) {
+                fallbackConference.fullName = saved.conference.title;
+                fallbackConference.name = saved.conference.title.split("—")[0].trim();
+              }
+              if (saved.conference.dates) fallbackConference.dates = saved.conference.dates;
+              if (saved.conference.venue) fallbackConference.venue = saved.conference.venue;
+              if (saved.conference.supportEmail) fallbackConference.email = saved.conference.supportEmail;
+              if (saved.conference.phone) fallbackConference.phone = saved.conference.phone;
+            }
           }
         } catch {}
 
@@ -228,7 +258,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           menuItems: fallbackMenu,
           branding: fallbackBranding,
           themeTokens: null,
-          conferenceInfo: undefined,
+          conferenceInfo: fallbackConference,
           footerContent: undefined,
           faviconUrl: "/ICGIT/favicon.ico"
         };

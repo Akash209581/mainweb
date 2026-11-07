@@ -48,6 +48,21 @@ export default async function HomePage() {
     "home_page_data_live",
     60000,
     async () => {
+      let savedSettings: {
+        sections?: Array<{ id: string; name?: string; visible?: boolean; fields?: Record<string, string | undefined> }>;
+        committee?: Array<{ id: string; name: string; role: string; published?: boolean; photo?: { url?: string } | null }>;
+        speakers?: Array<{ id: string; name: string; role: string; organizationName?: string; topic?: string; bio?: string; published?: boolean; photo?: { url?: string } | null }>;
+        tracks?: Array<{ id: string; name: string; summary?: string; description?: string; published?: boolean }>;
+        conference?: { title?: string; dates?: string; venue?: string; deadline?: string; supportEmail?: string; phone?: string };
+      } | null = null;
+
+      try {
+        const sf = path.join(process.cwd(), "storage", "settings.json");
+        if (fs.existsSync(sf)) {
+          savedSettings = JSON.parse(fs.readFileSync(sf, "utf8"));
+        }
+      } catch {}
+
       try {
         const [speakers, tracks, homeSetting, conf, activeTheme] = await Promise.all([
           prisma.speaker.findMany({
@@ -71,7 +86,7 @@ export default async function HomePage() {
           })
         ]);
 
-        const mappedSpeakers =
+        const dbMappedSpeakers =
           speakers.length > 0
             ? speakers.map((s) => ({
                 id: s.id,
@@ -80,11 +95,28 @@ export default async function HomePage() {
                 topic: s.topic,
                 bio: s.bio,
                 imageAssetId: s.imageAsset?.storageKey || s.imageAssetId || null,
-                organizationName: s.organization?.name ?? "N/A"
+                organizationName: s.organization?.name ?? "Independent"
               }))
             : DEFAULT_FALLBACK_SPEAKERS;
 
-        const mappedTracks =
+        const settingsSpeakers =
+          savedSettings?.speakers && Array.isArray(savedSettings.speakers) && savedSettings.speakers.length > 0
+            ? savedSettings.speakers
+                .filter((s) => s.published !== false)
+                .map((s) => ({
+                  id: s.id || s.name,
+                  name: s.name,
+                  role: s.role || "",
+                  topic: s.topic || "",
+                  bio: s.bio || "",
+                  imageAssetId: s.photo?.url || null,
+                  organizationName: s.organizationName || "Independent"
+                }))
+            : null;
+
+        const mappedSpeakers = settingsSpeakers || dbMappedSpeakers;
+
+        const dbMappedTracks =
           tracks.length > 0
             ? tracks.map((t) => ({
                 id: t.id,
@@ -93,12 +125,28 @@ export default async function HomePage() {
               }))
             : DEFAULT_FALLBACK_TRACKS;
 
-        const customContent = homeSetting?.value as unknown as Array<{
-          id: string;
-          name: string;
-          visible?: boolean;
-          fields: Record<string, string>;
-        }>;
+        const settingsTracks =
+          savedSettings?.tracks && Array.isArray(savedSettings.tracks) && savedSettings.tracks.length > 0
+            ? savedSettings.tracks
+                .filter((t) => t.published !== false)
+                .map((t) => ({
+                  id: t.id || t.name,
+                  name: t.name,
+                  description: t.summary || t.description || ""
+                }))
+            : null;
+
+        const mappedTracks = settingsTracks || dbMappedTracks;
+
+        const customContent =
+          savedSettings?.sections && savedSettings.sections.length > 0
+            ? savedSettings.sections
+            : (homeSetting?.value as unknown as Array<{
+                id: string;
+                name: string;
+                visible?: boolean;
+                fields: Record<string, string>;
+              }>);
 
         const conferenceInfo: ConferenceInfo = {
           name: conf?.name || "ICGIT 2026",
@@ -122,47 +170,88 @@ export default async function HomePage() {
           mode: conf?.mode === "OFFLINE" ? "In-Person Event" : conf?.mode === "VIRTUAL" ? "Virtual Event" : "Hybrid Event"
         };
 
-        let savedSettings: {
-          sections?: Array<{ id: string; name?: string; visible?: boolean; fields?: Record<string, string | undefined> }>;
-          committee?: Array<{ id: string; name: string; role: string; published?: boolean }>;
-        } | null = null;
-        try {
-          const sf = path.join(process.cwd(), "storage", "settings.json");
-          if (fs.existsSync(sf)) {
-            savedSettings = JSON.parse(fs.readFileSync(sf, "utf8"));
+        if (savedSettings?.conference) {
+          if (savedSettings.conference.title) {
+            conferenceInfo.fullName = savedSettings.conference.title;
+            conferenceInfo.name = savedSettings.conference.title.split("—")[0].trim();
           }
-        } catch {}
+          if (savedSettings.conference.dates) {
+            conferenceInfo.dates = savedSettings.conference.dates;
+          }
+          if (savedSettings.conference.venue) {
+            conferenceInfo.venueName = savedSettings.conference.venue;
+            conferenceInfo.venueAddress = savedSettings.conference.venue;
+          }
+        }
 
-        const finalCustomContent = customContent || savedSettings?.sections || undefined;
-        const committeeMembers = savedSettings?.committee || undefined;
+        const committeeMembers = savedSettings?.committee
+          ? savedSettings.committee.map((m: any) => ({
+              ...m,
+              photo: typeof m.photo === "object" && m.photo ? m.photo.url : (m.photo || null)
+            }))
+          : undefined;
 
         return {
           mappedSpeakers,
           mappedTracks,
-          customContent: finalCustomContent,
+          customContent,
           conferenceInfo,
           committeeMembers,
           themeTokens: activeTheme?.tokens as Record<string, string> | null
         };
       } catch (err) {
         console.error("HomePage DB fetch error:", err);
-        let savedSettings: {
-          sections?: Array<{ id: string; name?: string; visible?: boolean; fields?: Record<string, string | undefined> }>;
-          committee?: Array<{ id: string; name: string; role: string; published?: boolean }>;
-        } | null = null;
-        try {
-          const sf = path.join(process.cwd(), "storage", "settings.json");
-          if (fs.existsSync(sf)) {
-            savedSettings = JSON.parse(fs.readFileSync(sf, "utf8"));
-          }
-        } catch {}
+
+        const settingsSpeakers =
+          savedSettings?.speakers && Array.isArray(savedSettings.speakers) && savedSettings.speakers.length > 0
+            ? savedSettings.speakers
+                .filter((s) => s.published !== false)
+                .map((s) => ({
+                  id: s.id || s.name,
+                  name: s.name,
+                  role: s.role || "",
+                  topic: s.topic || "",
+                  bio: s.bio || "",
+                  imageAssetId: s.photo?.url || null,
+                  organizationName: s.organizationName || "Independent"
+                }))
+            : DEFAULT_FALLBACK_SPEAKERS;
+
+        const settingsTracks =
+          savedSettings?.tracks && Array.isArray(savedSettings.tracks) && savedSettings.tracks.length > 0
+            ? savedSettings.tracks
+                .filter((t) => t.published !== false)
+                .map((t) => ({
+                  id: t.id || t.name,
+                  name: t.name,
+                  description: t.summary || t.description || ""
+                }))
+            : DEFAULT_FALLBACK_TRACKS;
+
+        const fallbackConferenceInfo: ConferenceInfo = {
+          name: savedSettings?.conference?.title ? savedSettings.conference.title.split("—")[0].trim() : "ICGIT 2026",
+          fullName: savedSettings?.conference?.title || "International Conference on Global Innovation and Technology 2026",
+          dates: savedSettings?.conference?.dates || "December 8–10, 2026",
+          startDateIso: "2026-12-08T09:00:00Z",
+          venueName: savedSettings?.conference?.venue || "Dubai World Trade Centre",
+          venueAddress: savedSettings?.conference?.venue || "Sheikh Zayed Road",
+          venueCity: "Dubai",
+          mode: "Hybrid Event"
+        };
+
+        const committeeMembers = savedSettings?.committee
+          ? savedSettings.committee.map((m: any) => ({
+              ...m,
+              photo: typeof m.photo === "object" && m.photo ? m.photo.url : (m.photo || null)
+            }))
+          : undefined;
 
         return {
-          mappedSpeakers: DEFAULT_FALLBACK_SPEAKERS,
-          mappedTracks: DEFAULT_FALLBACK_TRACKS,
+          mappedSpeakers: settingsSpeakers,
+          mappedTracks: settingsTracks,
           customContent: savedSettings?.sections || undefined,
-          committeeMembers: savedSettings?.committee || undefined,
-          conferenceInfo: undefined,
+          committeeMembers,
+          conferenceInfo: fallbackConferenceInfo,
           themeTokens: null
         };
       }
