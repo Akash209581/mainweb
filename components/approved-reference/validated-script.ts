@@ -2,8 +2,9 @@
 export function validatedReferenceScript(script: string) {
   let result = "let submissionCaptchaToken=null;\nconst challengeEndpoint='/ICGIT/api/challenge';\n" + script;
   result = result.replace(
-    /function newCaptcha\(\)\{[^\n]+?document\.getElementById\('captcha-error'\)\.hidden=true\}/,
-    `async function newCaptcha(){captchaAnswer.disabled=true;try{const r=await fetch(challengeEndpoint,{cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error);captchaTotal=d.a+d.b;submissionCaptchaToken=d.token;document.getElementById('captcha-question').textContent=d.a+' + '+d.b;captchaAnswer.value='';captchaAnswer.setCustomValidity('');document.getElementById('captcha-error').hidden=true}catch(e){captchaAnswer.setCustomValidity('Unable to load verification. Request a new challenge.')}finally{captchaAnswer.disabled=false}}`
+    /function newCaptcha\(\)\{[\s\S]*?\}\nfunction validateCaptcha/,
+    `async function newCaptcha(){captchaAnswer.disabled=true;try{const r=await fetch(challengeEndpoint,{cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error);captchaTotal=d.a+d.b;submissionCaptchaToken=d.token;document.getElementById('captcha-question').textContent=d.a+' + '+d.b;captchaAnswer.value='';captchaAnswer.setCustomValidity('');document.getElementById('captcha-error').hidden=true}catch(e){captchaAnswer.setCustomValidity('Unable to load verification. Request a new challenge.')}finally{captchaAnswer.disabled=false}}
+function validateCaptcha`
   );
   result = result.replace(
     /function challenge\(\)\{[^\n]+?document\.getElementById\('captcha-error'\)\.hidden=true\}/,
