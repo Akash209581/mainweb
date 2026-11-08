@@ -151,7 +151,27 @@ export function RegistrationForm({ initialCountries = [], customPricing }: Regis
       maximumFractionDigits: 0
     }).format(value);
 
-  async function refreshCaptcha(){setChallenge(null);try{const response=await fetch('/ICGIT/api/challenge',{cache:'no-store'});const challenge=await response.json();if(!response.ok)throw Error(challenge.error);setChallenge([challenge.a,challenge.b]);setCaptchaToken(challenge.token);setData(d=>({...d,captcha:''}));setError('')}catch{setError('Unable to load verification. Please try again.')}}
+  async function refreshCaptcha() {
+    setChallenge(null);
+    try {
+      const response = await fetch("/ICGIT/api/challenge", { cache: "no-store" });
+      const challenge = await response.json();
+      if (
+        !response.ok ||
+        !Number.isFinite(challenge.a) ||
+        !Number.isFinite(challenge.b) ||
+        typeof challenge.token !== "string"
+      ) {
+        throw Error(challenge.error || "Invalid verification challenge.");
+      }
+      setChallenge([challenge.a, challenge.b]);
+      setCaptchaToken(challenge.token);
+      setData((d) => ({ ...d, captcha: "" }));
+      setError("");
+    } catch {
+      setError("Unable to load verification. Please try again.");
+    }
+  }
 
   useEffect(() => {
     if (initialCountries.length > 0) {
@@ -804,7 +824,9 @@ export function RegistrationForm({ initialCountries = [], customPricing }: Regis
                 </div>
                 <div className="fields">
                   <label>
-                    {challenge ? `What is ${challenge[0]} + ${challenge[1]}?` : "Loading challenge..."}
+                    {challenge && Number.isFinite(challenge[0]) && Number.isFinite(challenge[1])
+                      ? `What is ${challenge[0]} + ${challenge[1]}?`
+                      : "Loading challenge..."}
                     <input
                       name="captcha"
                       type="number"
