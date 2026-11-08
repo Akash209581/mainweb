@@ -9,7 +9,7 @@ describe("reference verification adapters", () => {
   ] as const)
     it("loads signed server challenges for " + page, () => {
       const code = validatedReferenceScript(source.script);
-      expect(code).toContain("fetch('/api/challenge'");
+      expect(code).toContain("fetch(challengeEndpoint");
       expect(code).toContain(
         (page === "registration" ? "p" : "payload") +
           ".captchaToken=submissionCaptchaToken"
