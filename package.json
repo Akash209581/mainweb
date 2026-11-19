@@ -12,10 +12,14 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:paypal": "vitest run test/paypal",
+    "paypal:maintain": "tsx scripts/paypal-maintenance.ts",
+    "paypal:worker": "node --env-file-if-exists=.env --import tsx scripts/paypal-worker.ts",
+    "email:verify": "node --env-file-if-exists=.env --import tsx scripts/verify-smtp.ts"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.10.0",
+    "@hookform/resolvers": "5.9.2",
     "@prisma/client": "6.4.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@tsparticles/engine": "^3.8.1",
@@ -25,31 +29,39 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.468.0",
-    "next": "^15.1.0",
+    "next": "15.5.29",
+    "nodemailer": "^10.6.0",
     "prisma": "6.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "resend": "^6.17.0",
-    "sharp": "^0.35.3",
+    "sharp": "0.35.5",
     "tailwind-merge": "^2.5.5",
-    "zod": "^3.24.1"
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "5.2.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.17.0",
-    "eslint-config-next": "^15.1.0",
+    "eslint-config-next": "15.5.29",
     "jsdom": "^25.0.1",
-    "postcss": "^8.4.49",
+    "postcss": "8.5.32",
     "prettier": "^3.4.2",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.23.0",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "vite": "8.3.6",
+    "vitest": "4.1.12"
+  },
+  "overrides": {
+    "next@15.5.29": {
+      "postcss": "8.5.32"
+    }
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

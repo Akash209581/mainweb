@@ -5,12 +5,34 @@ import fs from "fs";
 import path from "path";
 import { prisma } from "@/lib/prisma/client";
 import { invalidateCache } from "@/lib/cache";
+import { z } from "zod";
+import { randomUUID } from "crypto";
+import type { Prisma } from "@prisma/client";
+import { requireAdminMutation } from "@/lib/security/admin-mutation";
+import { limitRequests, readBody, readJson } from "@/lib/security/checkout";
+import { PaymentError } from "@/lib/paypal/config";
 
 export const dynamic = "force-dynamic";
 
 const SETTINGS_FILE = path.join(process.cwd(), "storage", "settings.json");
 
-const DEFAULTS = {
+type Rates = { EUR: number; USD: number; GBP: number };
+type PublishedContent = { id?: string; published?: boolean; photo?: { fileName: string; key: string; url: string }; [key: string]: unknown };
+interface Settings {
+  conference: Record<string, string>;
+  registration: { student: Rates; academic: Rates; industry: Rates; label?: string; note?: string; accommodation?: { single: Rates; double: Rates } };
+  accommodation: { single: Rates; double: Rates };
+  abstract: Record<string, number>;
+  policies: Record<string, string>;
+  assets: Record<string, { fileName: string; storageKey: string; url: string }>;
+  tracks: PublishedContent[];
+  committee: PublishedContent[];
+  speakers: PublishedContent[];
+  sections: PublishedContent[];
+  [key: string]: unknown;
+}
+
+const DEFAULTS: Settings = {
   conference: {
     title: "ICGIT 2026 — International Conference on Global Innovation & Technology",
     dates: "December 8–10, 2026",
@@ -49,7 +71,7 @@ const DEFAULTS = {
 };
 
 export async function GET() {
-  let settings: any = { ...DEFAULTS };
+  let settings: Settings = { ...DEFAULTS };
   let version = "v1.0";
 
   if (fs.existsSync(SETTINGS_FILE)) {
@@ -85,7 +107,7 @@ export async function GET() {
       include: { settings: true }
     });
     if (conference) {
-      const merged: Record<string, any> = { ...settings };
+      const merged: Settings = { ...settings };
       const keys: Record<string, string> = {
         conference_display: "conference",
         registration_pricing: "registration",
@@ -102,20 +124,21 @@ export async function GET() {
         if (key)
           merged[key] = Array.isArray(row.value)
             ? row.value
-            : { ...merged[key], ...(row.value as object) };
+            : { ...(merged[key] as object), ...(row.value as object) };
       }
-      merged.pricing = {
+      const pricing = {
         ...merged.registration,
         accommodation: merged.registration.accommodation || merged.accommodation
       };
-      merged.accommodation = merged.pricing.accommodation;
+      merged.pricing = pricing;
+      merged.accommodation = pricing.accommodation;
       merged.abstractSettings = {
         ...merged.abstract,
         maxFileSizeMb: merged.abstract.maxFileSizeMb ?? merged.abstract.maxFileMB
       };
       for (const key of ["tracks", "committee"]) {
         if (Array.isArray(merged[key])) {
-          merged[key] = merged[key].filter((item: any) => item.published !== false);
+          merged[key] = (merged[key] as PublishedContent[]).filter((item) => item.published !== false);
         }
       }
       settings = merged;
@@ -146,8 +169,10 @@ export async function PUT(request?: Request): Promise<Response> {
   }
 
   try {
-    const body = await request.json();
-    const incomingSettings = body?.settings;
+    await requireAdminMutation(request);
+    await limitRequests("admin-settings", 20);
+    const body = z.object({ settings: z.record(z.string(), z.unknown()), version: z.string().max(100).optional() }).strict().parse(await readJson(request, 512_000));
+    const incomingSettings = body.settings as Partial<Settings>;
     if (!incomingSettings || typeof incomingSettings !== "object") {
       return NextResponse.json({ error: "Invalid settings payload" }, { status: 400 });
     }
@@ -157,7 +182,8 @@ export async function PUT(request?: Request): Promise<Response> {
       fs.mkdirSync(storageDir, { recursive: true });
     }
 
-    let current: Record<string, any> = { ...DEFAULTS };
+    fs.mkdirSync(path.dirname(SETTINGS_FILE), { recursive: true });
+    let current: Settings = { ...DEFAULTS };
     if (fs.existsSync(SETTINGS_FILE)) {
       try {
         current = JSON.parse(fs.readFileSync(SETTINGS_FILE, "utf8"));
@@ -179,7 +205,17 @@ export async function PUT(request?: Request): Promise<Response> {
       sections: incomingSettings.sections ?? current.sections ?? []
     };
 
+    // Keep the existing editor and checkout on the same conference-scoped price table.
+    const rates = z.object({ EUR: z.number().finite().min(0).max(1000000), USD: z.number().finite().min(0).max(1000000), GBP: z.number().finite().min(0).max(1000000) }).strict();
+    const registration = z.object({ student: rates, academic: rates, industry: rates }).passthrough().parse(merged.registration);
+    const accommodation = z.object({ single: rates, double: rates }).strict().parse(merged.accommodation);
+    const conference = await prisma.conference.findFirstOrThrow({ where: { slug: process.env.PUBLIC_CONFERENCE_SLUG || "icgit-2026", deletedAt: null } });
+    await prisma.systemSetting.upsert({ where: { conferenceId_key: { conferenceId: conference.id, key: "registration_pricing" } },
+      create: { conferenceId: conference.id, key: "registration_pricing", value: { ...registration, accommodation } as Prisma.InputJsonValue },
+      update: { value: { ...registration, accommodation } as Prisma.InputJsonValue } });
+
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2), "utf8");
+    await prisma.auditLog.create({ data: { action: "admin.settings.updated", entity: "SystemSetting" } });
 
     // Invalidate memory cache so updates appear instantly on live website
     invalidateCache();
@@ -195,24 +231,28 @@ export async function PUT(request?: Request): Promise<Response> {
           deletedAt: null
         }
       });
-      if (conference && incomingSettings.conference?.title) {
+      if (conference && typeof merged.conference.title === "string") {
         await prisma.conference.update({
           where: { id: conference.id },
-          data: { fullName: incomingSettings.conference.title }
+          data: { fullName: merged.conference.title }
         });
       }
     } catch {}
 
     const version = "v1." + Date.now();
     return NextResponse.json({ ok: true, version });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || "Failed to save settings" }, { status: 500 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof PaymentError ? err.message : "Failed to save settings" }, { status: err instanceof PaymentError ? err.status : err instanceof z.ZodError ? 400 : 503 });
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const formData = await request.formData();
+    await requireAdminMutation(request);
+    await limitRequests("admin-settings-upload", 10);
+    const bytesBody = await readBody(request, 11 * 1024 * 1024);
+    const bounded = new Request(request.url, { method: "POST", headers: request.headers, body: new Uint8Array(bytesBody) });
+    const formData = await bounded.formData();
     const kind = formData.get("kind") as string;
     const file = formData.get("file") as File | null;
 
@@ -220,10 +260,31 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
+    if (file.size < 1 || file.size > 10 * 1024 * 1024) return NextResponse.json({ error: "Select a file up to 10 MB." }, { status: 400 });
+    if (!["brochure", "sampleAbstract", "committeePhoto", "speakerPhoto"].includes(kind)) return NextResponse.json({ error: "Unsupported upload kind." }, { status: 400 });
+    for (const key of ["memberId", "speakerId"]) {
+      const id = formData.get(key);
+      if (id !== null && (typeof id !== "string" || !/^[a-zA-Z0-9_-]{1,80}$/.test(id))) return NextResponse.json({ error: "Invalid content identifier." }, { status: 400 });
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const extension = path.extname(file.name).toLowerCase();
+    const image = ["committeePhoto", "speakerPhoto"].includes(kind);
+    const allowed = image ? [".jpg", ".jpeg", ".png", ".webp"] : [".pdf", ".doc", ".docx"];
+    const signatures: Record<string, boolean> = {
+      ".pdf": buffer.subarray(0, 5).toString() === "%PDF-",
+      ".doc": buffer.subarray(0, 8).equals(Buffer.from([208,207,17,224,161,177,26,225])),
+      ".docx": buffer[0] === 80 && buffer[1] === 75 && buffer[2] === 3 && buffer[3] === 4,
+      ".png": buffer.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])),
+      ".jpg": buffer[0] === 255 && buffer[1] === 216,
+      ".jpeg": buffer[0] === 255 && buffer[1] === 216,
+      ".webp": buffer.subarray(0,4).toString() === "RIFF" && buffer.subarray(8,12).toString() === "WEBP"
+    };
+    if (!allowed.includes(extension) || !signatures[extension]) return NextResponse.json({ error: "Unsupported file contents." }, { status: 400 });
 
-    let current: Record<string, any> = { ...DEFAULTS };
+    fs.mkdirSync(path.dirname(SETTINGS_FILE), { recursive: true });
+    let current: Settings = { ...DEFAULTS };
     if (fs.existsSync(SETTINGS_FILE)) {
       try {
         current = JSON.parse(fs.readFileSync(SETTINGS_FILE, "utf8"));
@@ -235,7 +296,7 @@ export async function POST(request: Request) {
       if (!fs.existsSync(uploadsDir)) {
         fs.mkdirSync(uploadsDir, { recursive: true });
       }
-      const safeName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+      const safeName = randomUUID() + extension;
       const filePath = path.join(uploadsDir, safeName);
       fs.writeFileSync(filePath, buffer);
 
@@ -247,6 +308,7 @@ export async function POST(request: Request) {
       };
 
       fs.writeFileSync(SETTINGS_FILE, JSON.stringify(current, null, 2), "utf8");
+      await prisma.auditLog.create({ data: { action: "admin.document.uploaded", entity: "FileAsset" } });
       invalidateCache();
 
       return NextResponse.json({
@@ -262,7 +324,7 @@ export async function POST(request: Request) {
       if (!fs.existsSync(uploadsDir)) {
         fs.mkdirSync(uploadsDir, { recursive: true });
       }
-      const safeName = `${memberId}-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+      const safeName = randomUUID() + extension;
       const filePath = path.join(uploadsDir, safeName);
       fs.writeFileSync(filePath, buffer);
 
@@ -273,12 +335,13 @@ export async function POST(request: Request) {
       };
 
       if (Array.isArray(current.committee)) {
-        current.committee = current.committee.map((m: any) =>
+        current.committee = current.committee.map((m: PublishedContent) =>
           m.id === memberId ? { ...m, photo: photoObj } : m
         );
       }
 
       fs.writeFileSync(SETTINGS_FILE, JSON.stringify(current, null, 2), "utf8");
+      await prisma.auditLog.create({ data: { action: "admin.photo.uploaded", entity: "FileAsset" } });
       invalidateCache();
 
       return NextResponse.json({
@@ -294,7 +357,7 @@ export async function POST(request: Request) {
       if (!fs.existsSync(uploadsDir)) {
         fs.mkdirSync(uploadsDir, { recursive: true });
       }
-      const safeName = `${speakerId}-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+      const safeName = randomUUID() + extension;
       const filePath = path.join(uploadsDir, safeName);
       fs.writeFileSync(filePath, buffer);
 
@@ -305,12 +368,13 @@ export async function POST(request: Request) {
       };
 
       if (Array.isArray(current.speakers)) {
-        current.speakers = current.speakers.map((s: any) =>
+        current.speakers = current.speakers.map((s: PublishedContent) =>
           s.id === speakerId ? { ...s, photo: photoObj } : s
         );
       }
 
       fs.writeFileSync(SETTINGS_FILE, JSON.stringify(current, null, 2), "utf8");
+      await prisma.auditLog.create({ data: { action: "admin.photo.uploaded", entity: "FileAsset" } });
       invalidateCache();
 
       return NextResponse.json({
@@ -321,7 +385,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ error: "Unsupported upload kind" }, { status: 400 });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || "Upload failed" }, { status: 500 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof PaymentError ? err.message : "Upload failed" }, { status: err instanceof PaymentError ? err.status : 503 });
   }
 }

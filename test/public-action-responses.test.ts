@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const { register, contact, abstract, verify } = vi.hoisted(() => ({
   register: vi.fn(),
   contact: vi.fn(),
@@ -39,6 +39,29 @@ const base = {
   terms: true
 };
 describe("public action responses", () => {
+  afterEach(() => vi.unstubAllEnvs());
+  it("continues to provider availability after saving even when PayPal is off", async () => {
+    vi.stubEnv("PAYPAL_ENABLED", "false");
+    register.mockResolvedValue({
+      id: "saved-id",
+      totalAmountCents: 100,
+      isQuoteRequired: false
+    });
+    expect(await submitHansciRegistrationAction(base)).toMatchObject({
+      ok: true,
+      checkoutRegistrationId: "saved-id"
+    });
+  });
+  it("keeps quote requests out of payment checkout", async () => {
+    register.mockResolvedValue({
+      id: "quote-id",
+      totalAmountCents: 100,
+      isQuoteRequired: true
+    });
+    expect(
+      (await submitHansciRegistrationAction(base)).checkoutRegistrationId
+    ).toBeUndefined();
+  });
   beforeEach(() => {
     register.mockReset();
     contact.mockReset();

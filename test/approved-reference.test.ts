@@ -1,3 +1,4 @@
+const { adaptReference } = require("../scripts/reference-adaptations.cjs");
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { source as registration } from "../components/approved-reference/registration-source";
@@ -46,8 +47,8 @@ describe("approved reference fidelity", () => {
     ["index.html", registration],
     ["abstract.html", abstracts]
   ] as const) {
-    it(`preserves the complete ${file} markup, CSS and script`, () => {
-      const html = readFileSync(`Hansci_Novum/user-website/public/${file}`, "utf8");
+    it(`preserves ${file} with explicit ICGIT integration adaptations`, () => {
+      const html = adaptReference(file === "index.html" ? "registration" : "abstracts", readFileSync(`Hansci_Novum/user-website/public/${file}`, "utf8"));
       const body = html.match(/<body>([\s\S]*?)<\/body>/)![1];
       expect(source.markup).toBe(body.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, ""));
       expect(source.css).toBe(
@@ -65,9 +66,9 @@ describe("approved reference fidelity", () => {
     ["sessions", "scientific-tracks"],
     ["committee", "organizing-committee"]
   ]) {
-    it(`preserves every ${name} JSX string and stylesheet`, () => {
+    it(`preserves ${name} JSX and styles with explicit ICGIT adaptations`, () => {
       const folder = `Hansci_Novum/user-website/editable-page-sources/${slug}/app`;
-      const original = readFileSync(`${folder}/page.jsx`, "utf8");
+      const original = adaptReference(name, readFileSync(`${folder}/page.jsx`, "utf8"));
       const integrated = readFileSync(
         `components/approved-reference/${name}-design.tsx`,
         "utf8"

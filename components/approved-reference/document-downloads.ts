@@ -10,7 +10,7 @@ export function normalizeDocumentDownloads(root: ShadowRoot | Element) {
     }
     const sample = /(^|\/)sample-abstract\.txt$/.test(url.pathname);
     const brochure = /(^|\/)icgit-2026-brochure\.txt$/.test(url.pathname);
-    let target = sample
+    const target = sample
       ? "/ICGIT/api/assets?kind=sampleAbstract"
       : brochure
         ? "/ICGIT/api/assets?kind=brochure"

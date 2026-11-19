@@ -9,6 +9,14 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://ci:ci@127.0.0.1:1/conference_ci_test?schema=public
+      DIRECT_URL: postgresql://ci:ci@127.0.0.1:1/conference_ci_test?schema=public
+      PAYPAL_TEST_DOCKER: "false"
+      PAYPAL_SANDBOX_INTEGRATION: "false"
+      PAYPAL_ENABLED: "false"
+      PAYPAL_CAPTURE_ENABLED: "false"
+      PAYPAL_LIVE_APPROVED: "false"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,8 +27,14 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Generate Prisma client
+        run: npm run prisma:generate
       - name: Typecheck
         run: npm run typecheck
+      - name: Unit and regression tests
+        run: npm test -- --dir test
+      - name: Admin portal core tests
+        run: node --test Hansci/admin-portal/tests/core.test.mjs hansci-novum-admin-portal/tests/core.test.mjs
       - name: Lint
         run: npm run lint
       - name: Build

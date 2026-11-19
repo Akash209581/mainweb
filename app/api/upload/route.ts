@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma/client";
 import fs from "fs";
 import path from "path";
+import { requireAdminMutation } from "@/lib/security/admin-mutation";
+import { PaymentError } from "@/lib/paypal/config";
+import { limitRequests, readBody } from "@/lib/security/checkout";
 
 export async function POST(request: Request) {
   if (!(await hasAdminSession()))
@@ -14,11 +17,14 @@ export async function POST(request: Request) {
     );
 
   try {
-    const formData = await request.formData();
+    await requireAdminMutation(request);
+    await limitRequests("admin-upload", 10);
+    const bounded = new Request(request.url, { method: "POST", headers: request.headers, body: new Uint8Array(await readBody(request, 11 * 1024 * 1024)) });
+    const formData = await bounded.formData();
     const file = formData.get("file") as File | null;
     const folder = (formData.get("folder") as string) || "branding";
 
-    if (!file) {
+    if (!(file instanceof File)) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
@@ -81,8 +87,6 @@ export async function POST(request: Request) {
       fileAssetId: fileAsset.id
     });
   } catch (error: unknown) {
-    console.error("File upload error:", error);
-    const message = error instanceof Error ? error.message : "Failed to upload file";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: error instanceof PaymentError ? error.message : "Failed to upload file" }, { status: error instanceof PaymentError ? error.status : 503 });
   }
 }

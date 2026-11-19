@@ -9,6 +9,12 @@ const buckets = new Map<string, RateLimitState>();
 
 export function enforceRateLimit(key: string, limit: number, windowMs: number): void {
   const now = Date.now();
+  if (buckets.size >= 10_000) {
+    for (const [bucketKey, state] of buckets) {
+      if (state.resetAt <= now) buckets.delete(bucketKey);
+    }
+    if (!buckets.has(key) && buckets.size >= 10_000) throw new RateLimitError();
+  }
   const current = buckets.get(key);
 
   if (!current || current.resetAt <= now) {

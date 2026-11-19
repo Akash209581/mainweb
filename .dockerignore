@@ -7,3 +7,20 @@ node_modules
 docker-compose.yml
 Dockerfile
 README.md
+
+# Keep nested applications' dependencies, credentials and runtime data out of images.
+**/node_modules
+**/.next
+**/.git
+**/.env
+**/.env.*
+scratch
+storage
+backups
+public/uploads
+**/data
+*.tsbuildinfo
+
+.next-build
+
+.next-sandbox

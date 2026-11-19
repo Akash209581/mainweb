@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma/client";
 import { logger } from "@/lib/logging/logger";
-import type { PaymentStatus } from "@prisma/client";
+import { randomUUID } from "crypto";
 
 export interface ChargeRequest {
   registrationId: string;
@@ -16,24 +16,12 @@ export interface RefundRequest {
 
 export class PaymentService {
   async charge(request: ChargeRequest) {
+    if (request.provider !== "BANK_TRANSFER") throw new Error("Mock card payment processing is disabled. Use the verified payment integration.");
     logger.info("Initializing payment charge request", {
       metadata: { registrationId: request.registrationId, provider: request.provider }
     });
 
-    // Mock processing logic based on provider choice
-    let transactionStatus: PaymentStatus = "PENDING";
-    const referenceId = request.providerRef ?? `TXN-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
-
-    if (request.provider === "STRIPE") {
-      // Mock Stripe success response
-      transactionStatus = "PAID";
-    } else if (request.provider === "RAZORPAY") {
-      // Mock Razorpay success response
-      transactionStatus = "PAID";
-    } else if (request.provider === "BANK_TRANSFER") {
-      // Bank transfers remain pending until manual validation
-      transactionStatus = "PENDING";
-    }
+    const referenceId = request.providerRef ?? `TXN-${randomUUID()}`;
 
     // Save payment record to postgres database
     return prisma.payment.create({
@@ -42,23 +30,14 @@ export class PaymentService {
         provider: request.provider,
         providerRef: referenceId,
         amountCents: request.amountCents,
-        status: transactionStatus,
-        paidAt: transactionStatus === "PAID" ? new Date() : null
+        status: "PENDING",
+        paidAt: null
       }
     });
   }
 
-  async refund(request: RefundRequest) {
-    logger.info("Initializing refund process", {
-      metadata: { paymentId: request.paymentId }
-    });
-
-    return prisma.payment.update({
-      where: { id: request.paymentId },
-      data: {
-        status: "FAILED" // Marks payment failed/refunded in local schema enum status
-      }
-    });
+  async refund(_request: RefundRequest): Promise<never> {
+    throw new Error("Refunds require verified provider processing and reconciliation.");
   }
 }
 

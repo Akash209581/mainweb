@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS conference_records(id TEXT PRIMARY KEY,owner_id TEXT 
 CREATE INDEX IF NOT EXISTS records_owner_created ON conference_records(owner_id,created_at);
 CREATE TABLE IF NOT EXISTS site_settings(id TEXT PRIMARY KEY,value TEXT NOT NULL,updated_at TEXT NOT NULL);`)}return connection}
 export const DB = {
+ close() { if(connection) { connection.close(); connection=undefined; } },
  prepare(sql) {
   return {
    bind(...values) {

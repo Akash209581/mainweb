@@ -1,0 +1,435 @@
+.page {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 32px, 680px);
+  margin: 0 auto;
+  padding: 120px 0 72px;
+  color: #17243e;
+}
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px;
+  border: 1px solid #e6e8f1;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 16px 60px -24px rgb(34 25 77 / 18%);
+}
+.heading {
+  display: grid;
+  gap: 10px;
+}
+.eyebrow {
+  color: #6d3dde;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.heading h1,
+.providerTitle {
+  margin: 0;
+  color: #182039;
+  font-size: clamp(26px, 4vw, 34px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+.heading p {
+  margin: 0;
+  color: #647089;
+}
+.amountCard {
+  padding: 24px 26px;
+  border: 1px solid #d9cafb;
+  border-radius: 18px;
+  background: linear-gradient(120deg, #f0e8ff, #f8f5ff 75%);
+  box-shadow: inset 4px 0 0 #7c3aed;
+}
+.amountLabel {
+  color: #62429a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.amountRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 8px 0;
+}
+.amount {
+  color: #5820ad;
+  font-size: clamp(40px, 7vw, 60px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.currency {
+  padding: 5px 9px;
+  border: 1px solid #d5c1f4;
+  border-radius: 7px;
+  background: #ffffffb3;
+  color: #634299;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+}
+.amountHint {
+  color: #716184;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.methods {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.legend {
+  width: 100%;
+  margin-bottom: 16px;
+  color: #1d2942;
+  font-size: 18px;
+  font-weight: 700;
+}
+.method {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #dce2ed;
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    box-shadow 0.15s;
+}
+.method:hover {
+  border-color: #a78bda;
+}
+.method:focus-within {
+  outline: 2px solid #7c3aed;
+  outline-offset: 3px;
+}
+.selected {
+  border-color: #8b5cf6;
+  background: #faf7ff;
+  box-shadow: 0 0 0 1px #8b5cf6;
+}
+.unavailable {
+  background: #f8fafc;
+  color: #6b768c;
+  cursor: not-allowed;
+}
+.unavailable:hover {
+  border-color: #dce2ed;
+}
+.radio {
+  width: 18px;
+  height: 18px;
+  margin: 6px 0 0;
+  flex-shrink: 0;
+  accent-color: #7c3aed;
+}
+.methodBody {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 10px;
+}
+.methodHeading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.logo {
+  width: 76px;
+  height: 28px;
+  object-fit: contain;
+}
+.methodName {
+  font-size: 14px;
+  font-weight: 600;
+}
+.badge,
+.selectedBadge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #e9edf3;
+  color: #647089;
+  font-size: 11px;
+  font-weight: 600;
+}
+.selectedBadge {
+  color: #6430ad;
+  background: #eee5ff;
+}
+.description {
+  color: #68778f;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.notice {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid #e5e9f0;
+  border-radius: 10px;
+  background: #f7f9fc;
+  color: #526079;
+}
+.primaryButton {
+  width: 100%;
+  min-height: 50px;
+  padding: 14px 20px;
+  border: 0;
+  border-radius: 10px;
+  background: #7431df;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.primaryButton:hover {
+  background: #6023bf;
+}
+.primaryButton:disabled {
+  background: #e9e3f3;
+  color: #867b9b;
+  cursor: not-allowed;
+}
+.primaryButton:focus-visible,
+.secondaryLink:focus-visible,
+.returnLink a:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 4px;
+}
+.secondaryLink {
+  align-self: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #6941aa;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.secondaryLink:disabled {
+  color: #8991a0;
+  cursor: not-allowed;
+}
+.returnLink {
+  margin: 0;
+  padding-top: 18px;
+  border-top: 1px solid #edf0f5;
+  text-align: center;
+  color: #647089;
+}
+.returnLink a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.providerPanel {
+  display: grid;
+  gap: 24px;
+}
+.providerPanel > p {
+  margin: 0;
+}
+@media (max-width: 480px) {
+  .page {
+    padding-top: 104px;
+    padding-bottom: 40px;
+  }
+  .panel {
+    padding: 22px 18px;
+    gap: 22px;
+    border-radius: 18px;
+  }
+  .amountCard {
+    padding: 22px 20px;
+  }
+  .method {
+    padding: 14px 12px;
+    gap: 10px;
+  }
+  .methodHeading {
+    gap: 8px;
+  }
+  .brand {
+    gap: 8px;
+  }
+  .methodName {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .method,
+  .primaryButton {
+    transition: none;
+  }
+}
+/* Desktop checkout stays compact enough for laptop-height viewports. */
+@media (min-width: 768px) {
+  .page {
+    width: min(100% - 40px, 840px);
+    padding: 104px 0 24px;
+  }
+  .panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 16px 24px;
+    padding: 24px;
+    border-radius: 20px;
+  }
+  .heading {
+    gap: 6px;
+  }
+  .heading h1,
+  .providerTitle {
+    font-size: 28px;
+  }
+  .amountCard {
+    padding: 14px 18px;
+    border-radius: 14px;
+  }
+  .amountRow {
+    gap: 10px;
+    margin: 4px 0;
+  }
+  .amount {
+    font-size: 44px;
+  }
+  .amountHint {
+    font-size: 11px;
+  }
+  .methods {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .legend {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  .method {
+    height: 100%;
+    gap: 10px;
+    padding: 14px;
+  }
+  .methodBody {
+    gap: 8px;
+  }
+  .brand {
+    gap: 8px;
+  }
+  .logo {
+    width: 68px;
+    height: 26px;
+  }
+  .notice,
+  .primaryButton,
+  .panel > .providerPanel {
+    grid-column: 1 / -1;
+  }
+  .notice {
+    padding: 10px 14px;
+  }
+  .primaryButton {
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+  .secondaryLink {
+    text-align: center;
+    font-size: 12px;
+  }
+  .returnLink {
+    grid-column: 2;
+    padding: 0;
+    border: 0;
+  }
+  .providerPanel {
+    gap: 16px;
+  }
+}
+@media (min-width: 768px) and (max-height: 700px) {
+  .page {
+    padding-top: 92px;
+    padding-bottom: 12px;
+  }
+  .panel {
+    gap: 10px 20px;
+    padding: 16px 20px;
+  }
+  .heading h1,
+  .providerTitle {
+    font-size: 26px;
+  }
+  .amountCard {
+    padding: 10px 16px;
+  }
+  .amount {
+    font-size: 36px;
+  }
+  .amountHint {
+    display: none;
+  }
+  .method {
+    padding: 10px 12px;
+  }
+  .methodBody {
+    gap: 6px;
+  }
+  .description {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .legend {
+    margin-bottom: 8px;
+  }
+  .notice {
+    padding: 8px 12px;
+  }
+  .primaryButton {
+    min-height: 40px;
+    padding: 8px 16px;
+  }
+}
+
+.successNotice {
+  display: grid;
+  gap: 6px;
+  padding: 20px;
+  border: 1px solid #a7dfbe;
+  border-radius: 12px;
+  background: #effbf3;
+  color: #17603a;
+}
+.successNotice strong {
+  font-size: 22px;
+  line-height: 1.3;
+}
+.successNotice span {
+  font-size: 14px;
+  line-height: 1.6;
+}

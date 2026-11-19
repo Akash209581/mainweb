@@ -34,9 +34,11 @@ export function verifySubmissionChallenge(token: unknown, answer: unknown) {
     !timingSafeEqual(Buffer.from(signature), Buffer.from(expected))
   )
     throw new ValidationError("Invalid verification challenge. Request a new challenge.");
-  let data: any;
+  let data: { a: number; b: number; expires: number; nonce: string };
   try {
-    data = JSON.parse(Buffer.from(content, "base64url").toString());
+    const parsed: unknown = JSON.parse(Buffer.from(content, "base64url").toString());
+    if (!parsed || typeof parsed !== "object" || !("a" in parsed) || !("b" in parsed) || !("expires" in parsed) || !("nonce" in parsed) || typeof parsed.a !== "number" || typeof parsed.b !== "number" || typeof parsed.expires !== "number" || typeof parsed.nonce !== "string") throw new Error("Invalid challenge payload");
+    data = parsed as typeof data;
   } catch {
     throw new ValidationError("Invalid verification challenge.");
   }

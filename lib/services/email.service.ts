@@ -1,3 +1,4 @@
+import { sendSmtpEmail, smtpConfigured } from "@/lib/email/smtp";
 import { Resend } from "resend";
 import { getPublicAppUrl } from "@/lib/config/env";
 import { logger } from "@/lib/logging/logger";
@@ -20,22 +21,35 @@ class ResendEmailProvider implements EmailProvider {
   }
 
   async send(payload: EmailPayload): Promise<void> {
-    await this.resend.emails.send({
+    const result = await this.resend.emails.send({
       from: "ICGIT 2026 <noreply@icgit2026.org>",
       ...payload
     });
+    if (result.error) throw new Error("Email provider rejected delivery.");
   }
 }
 
 class NullEmailProvider implements EmailProvider {
   async send(payload: EmailPayload): Promise<void> {
     logger.info("Email provider not configured; skipped send", {
-      metadata: { to: payload.to, subject: payload.subject }
+      metadata: { subject: payload.subject }
+    });
+  }
+}
+
+class SmtpEmailProvider implements EmailProvider {
+  async send(payload: EmailPayload): Promise<void> {
+    await sendSmtpEmail({
+      from: process.env.SMTP_FROM || process.env.PAYMENT_EMAIL_FROM || "",
+      ...payload
     });
   }
 }
 
 function getEmailProvider(): EmailProvider {
+  if (process.env.EMAIL_PROVIDER === "smtp") {
+    return smtpConfigured() ? new SmtpEmailProvider() : new NullEmailProvider();
+  }
   const apiKey = process.env.RESEND_API_KEY;
   return apiKey ? new ResendEmailProvider(apiKey) : new NullEmailProvider();
 }
@@ -47,7 +61,7 @@ export class EmailService {
     await this.provider.send({
       to,
       subject: "ICGIT 2026 registration received",
-      html: `<p>Hello ${name},</p><p>Your ICGIT 2026 registration request has been received.</p>`
+      html: `<p>Hello ${escapeHtml(name)},</p><p>Your ICGIT 2026 registration request has been received. Payment and accommodation are not yet confirmed.</p>`
     });
   }
 
@@ -55,7 +69,7 @@ export class EmailService {
     await this.provider.send({
       to,
       subject: "ICGIT 2026 abstract received",
-      html: `<p>Your abstract <strong>${title}</strong> has been submitted for review.</p>`
+      html: `<p>Your abstract <strong>${escapeHtml(title)}</strong> has been submitted for review.</p>`
     });
   }
 
@@ -63,7 +77,7 @@ export class EmailService {
     await this.provider.send({
       to,
       subject: "ICGIT 2026 abstract accepted",
-      html: `<p>Your abstract <strong>${title}</strong> has been accepted. Visit ${getPublicAppUrl()} for updates.</p>`
+      html: `<p>Your abstract <strong>${escapeHtml(title)}</strong> has been accepted. Visit ${escapeHtml(getPublicAppUrl())} for updates.</p>`
     });
   }
 
@@ -71,9 +85,18 @@ export class EmailService {
     await this.provider.send({
       to,
       subject: "ICGIT 2026 inquiry received",
-      html: `<p>Hello ${name},</p><p>The organizing team has received your inquiry.</p>`
+      html: `<p>Hello ${escapeHtml(name)},</p><p>The organizing team has received your inquiry.</p>`
     });
   }
 }
 
 export const emailService = new EmailService();
+export function escapeHtml(value: string) {
+  return value.replace(
+    /[&<>"']/g,
+    (character) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        character
+      ]!
+  );
+}

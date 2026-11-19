@@ -19,7 +19,7 @@ export async function savePublicAbstract(payload: unknown, file: File | undefine
     }
   });
   const config = settings.find((s) => s.key === "abstract_settings")?.value as
-    Record<string, any> | undefined;
+    Record<string, unknown> | undefined;
   const maxMB = Number(config?.maxFileSizeMb ?? config?.maxFileMB ?? 5);
   if (!Number.isFinite(maxMB) || maxMB < 1 || maxMB > 10)
     throw new ValidationError("The abstract upload limit is not configured correctly.");
@@ -29,7 +29,7 @@ export async function savePublicAbstract(payload: unknown, file: File | undefine
   if (
     !["Other", "Other / interdisciplinary"].includes(data.track) &&
     !(Array.isArray(tracks)
-      ? tracks.some((t: any) => t.published !== false && t.name === data.track)
+      ? tracks.some((t) => t !== null && typeof t === "object" && !Array.isArray(t) && t.published !== false && t.name === data.track)
       : defaultTracks.includes(data.track))
   )
     throw new ValidationError("Select a published scientific track.");

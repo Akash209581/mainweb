@@ -77,6 +77,8 @@ export async function referenceFetch(
     } else {
       return Response.json({ error: "Unsupported submission kind" }, { status: 400 });
     }
+    if (result.ok && "checkoutRegistrationId" in result && typeof result.checkoutRegistrationId === "string")
+      window.location.assign(basePath + "/checkout/" + encodeURIComponent(result.checkoutRegistrationId));
     return Response.json(result.ok ? result : { error: result.message }, {
       status: result.ok ? 200 : result.status || 400
     });

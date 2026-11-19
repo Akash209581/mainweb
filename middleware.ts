@@ -33,6 +33,14 @@ export default function middleware(request: NextRequest) {
     // 2. In-memory Rate Limiting
     const ip = (request as any).ip || request.headers.get("x-forwarded-for") || "127.0.0.1";
     const now = Date.now();
+    if (rateLimitMap.size >= 10_000) {
+      for (const [key, state] of rateLimitMap) {
+        if (state.resetTime <= now) rateLimitMap.delete(key);
+      }
+      if (!rateLimitMap.has(ip) && rateLimitMap.size >= 10_000) {
+        return applySecurityHeaders(NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 }));
+      }
+    }
     const record = rateLimitMap.get(ip);
 
     if (!record) {

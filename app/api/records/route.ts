@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma/client";
 import fs from "fs";
 import path from "path";
+import { requireAdminMutation } from "@/lib/security/admin-mutation";
 
 export const dynamic = "force-dynamic";
 
@@ -142,11 +143,11 @@ export async function PATCH(request: Request) {
   if (!await hasAdminSession()) return NextResponse.json({ error: 'Administrator authentication required. Use the conference admin portal.' }, { status: 401 });
 
   try {
+    await requireAdminMutation(request);
     const { id, status, notes } = await request.json();
     return NextResponse.json({ ok: true, id, status, notes });
   } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : "Failed to update record";
-    return NextResponse.json({ error: msg }, { status: 400 });
+    return NextResponse.json({ error: "Unable to update record. Verify your administrator session." }, { status: 403 });
   }
 }
 

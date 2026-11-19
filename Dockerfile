@@ -19,6 +19,7 @@ RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+RUN mkdir -p /app/storage /app/public/uploads /app/backups /data/backups && chown -R nextjs:nodejs /app/storage /app/public/uploads /app/backups /data/backups
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000

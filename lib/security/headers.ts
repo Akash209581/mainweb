@@ -5,16 +5,17 @@ export function applySecurityHeaders(response: NextResponse): NextResponse {
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  if (process.env.NODE_ENV === "production") response.headers.set("Strict-Transport-Security", "max-age=31536000");
   response.headers.set(
     "Content-Security-Policy",
     [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://www.paypalobjects.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https://images.unsplash.com https://maps.geoapify.com https://*.google.com https://*.googleapis.com https://*.gstatic.com",
       "font-src 'self' data: https://fonts.gstatic.com",
-      "connect-src 'self' ws: wss: https://api.resend.com",
-      "frame-src 'self' https://www.google.com https://maps.google.com https://*.google.com",
+      "connect-src 'self' ws: wss: https://api.resend.com https://*.paypal.com https://*.paypalobjects.com",
+      "frame-src 'self' https://www.google.com https://maps.google.com https://*.google.com https://*.paypal.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'"

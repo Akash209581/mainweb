@@ -1,3 +1,5 @@
+import { publicConferenceWhere } from "@/lib/config/conference";
+import { currentUser } from "@/lib/auth/server";
 import { PublicInputValidation } from '@/components/public-input-validation';
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -10,7 +12,6 @@ import { DynamicTheme } from "@/components/theme/dynamic-theme";
 import { CONFERENCE } from "@/constants/conference";
 import { prisma } from "@/lib/prisma/client";
 import { memoize } from "@/lib/cache";
-import { ClientBlocker } from "@/components/security/client-blocker";
 import { LiveContentWatcher } from "@/components/common/live-content-watcher";
 import { PageChrome } from "@/components/layout/page-chrome";
 import "./globals.css";
@@ -37,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
       async () => {
         const [c, sSetting, aTheme, bSetting] = await Promise.all([
           prisma.conference.findFirst({
-            where: { deletedAt: null },
+            where: publicConferenceWhere(),
             include: { venue: true }
           }),
           prisma.systemSetting.findFirst({
@@ -101,9 +102,6 @@ export async function generateMetadata(): Promise<Metadata> {
         title: metaTitle,
         description: metaDescription,
         images: themeTokens.ogImageUrl ? [themeTokens.ogImageUrl] : undefined
-      },
-      alternates: {
-        canonical: "/"
       }
     };
   } catch (error) {
@@ -123,7 +121,8 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const { menuItems, branding, themeTokens, conferenceInfo, footerContent, faviconUrl } = await memoize(
+  const sessionUser = await currentUser();
+  const { menuItems, branding, themeTokens, conferenceInfo, footerContent, faviconUrl, eventDates } = await memoize(
     "layout_settings_live",
     60000,
     async () => {
@@ -136,7 +135,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             where: { isActive: true }
           }),
           prisma.conference.findFirst({
-            where: { deletedAt: null },
+            where: publicConferenceWhere(),
             include: { venue: true }
           }),
           prisma.systemSetting.findFirst({
@@ -166,7 +165,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         };
 
         let rawMenuItems = dbMenuSetting?.value as Array<{ label: string; href: string }> | undefined;
-        let fileBranding: any = null;
+        let fileBranding: { logoUrl?: string; logoText?: string; brandName?: string; brandSubtitle?: string } | null = null;
         try {
           const fs = await import("fs");
           const path = await import("path");
@@ -212,6 +211,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           branding,
           themeTokens: activeTheme?.tokens || null,
           conferenceInfo,
+          eventDates: { start: conf?.startDate?.toISOString() || "2026-12-08", end: conf?.endDate?.toISOString() || "2026-12-10", mode: conf?.mode || "HYBRID" },
           footerContent: (footerSetting?.value as FooterProps["footerContent"]) || undefined,
           faviconUrl
         };
@@ -219,7 +219,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         console.error("Layout fetch error:", e);
         let fallbackMenu = undefined;
         let fallbackBranding = undefined;
-        let fallbackConference: FooterConferenceInfo = {
+        const fallbackConference: FooterConferenceInfo = {
           name: "ICGIT 2026",
           fullName: "International Conference on Global Innovation and Technology 2026",
           dates: "December 8–10, 2026",
@@ -259,6 +259,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           branding: fallbackBranding,
           themeTokens: null,
           conferenceInfo: fallbackConference,
+          eventDates: { start: "2026-12-08", end: "2026-12-10", mode: "HYBRID" },
           footerContent: undefined,
           faviconUrl: "/ICGIT/favicon.ico"
         };
@@ -275,9 +276,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     "@context": "https://schema.org",
     "@type": "Event",
     name: confName,
-    startDate: "2026-12-08",
-    endDate: "2026-12-10",
-    eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
+    startDate: eventDates.start,
+    endDate: eventDates.end,
+    eventAttendanceMode: eventDates.mode === "VIRTUAL" ? "https://schema.org/OnlineEventAttendanceMode" : eventDates.mode === "OFFLINE" ? "https://schema.org/OfflineEventAttendanceMode" : "https://schema.org/MixedEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
     location: {
       "@type": "Place",
@@ -307,10 +308,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className="min-h-screen antialiased">
-        <AuthProvider>
+        <AuthProvider user={sessionUser}>
           <PublicInputValidation/>
           <LiveContentWatcher intervalMs={30000} />
-          <ClientBlocker />
           <PageChrome
             particles={<ClientParticles />}
             header={<Header items={menuItems} branding={branding} />}

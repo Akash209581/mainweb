@@ -31,6 +31,6 @@ export async function GET() {
       }
     );
   } catch (error) {
-    return NextResponse.json({ version: Date.now() });
+    return NextResponse.json({ error: "Content status temporarily unavailable." }, { status: 503, headers: { "Cache-Control": "no-store" } });
   }
 }

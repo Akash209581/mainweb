@@ -1,3 +1,4 @@
+import { publicConferenceWhere } from "@/lib/config/conference";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma/client";
 import { HomeClient, type ConferenceInfo, DEFAULT_FALLBACK_SPEAKERS, DEFAULT_FALLBACK_TRACKS } from "@/components/home/home-client";
@@ -14,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     try {
       const [conf, seoSetting] = await Promise.all([
         prisma.conference.findFirst({
-          where: { deletedAt: null },
+          where: publicConferenceWhere(),
           include: { venue: true }
         }),
         prisma.systemSetting.findFirst({
@@ -66,19 +67,19 @@ export default async function HomePage() {
       try {
         const [speakers, tracks, homeSetting, conf, activeTheme] = await Promise.all([
           prisma.speaker.findMany({
-            where: { deletedAt: null },
+            where: { deletedAt: null, conference: publicConferenceWhere() },
             include: { organization: true, imageAsset: true },
             orderBy: { sortOrder: "asc" }
           }),
           prisma.track.findMany({
-            where: { deletedAt: null },
+            where: { deletedAt: null, conference: publicConferenceWhere() },
             orderBy: { name: "asc" }
           }),
           prisma.systemSetting.findFirst({
             where: { key: "page_content_home" }
           }),
           prisma.conference.findFirst({
-            where: { deletedAt: null },
+            where: publicConferenceWhere(),
             include: { venue: true }
           }),
           prisma.themeSetting.findFirst({
@@ -185,7 +186,7 @@ export default async function HomePage() {
         }
 
         const committeeMembers = savedSettings?.committee
-          ? savedSettings.committee.map((m: any) => ({
+          ? savedSettings.committee.map((m) => ({
               ...m,
               photo: typeof m.photo === "object" && m.photo ? m.photo.url : (m.photo || null)
             }))
@@ -240,7 +241,7 @@ export default async function HomePage() {
         };
 
         const committeeMembers = savedSettings?.committee
-          ? savedSettings.committee.map((m: any) => ({
+          ? savedSettings.committee.map((m) => ({
               ...m,
               photo: typeof m.photo === "object" && m.photo ? m.photo.url : (m.photo || null)
             }))

@@ -21,7 +21,7 @@ export function NotificationBell() {
   useEffect(() => {
     if (!isLoaded || !user) return;
 
-    const eventSource = new EventSource(`/ICGIT/hanvo/notifications?clerkId=${user.id}`);
+    const eventSource = new EventSource("/ICGIT/hanvo/notifications");
 
     eventSource.onmessage = (event) => {
       try {

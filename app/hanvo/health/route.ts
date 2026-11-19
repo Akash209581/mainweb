@@ -17,7 +17,7 @@ export async function GET() {
       {
         status: "DOWN",
         database: "DISCONNECTED",
-        error: error instanceof Error ? error.message : "Database connection failed",
+        error: "Database connection failed",
         timestamp: new Date().toISOString()
       },
       { status: 500 }

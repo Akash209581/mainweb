@@ -23,6 +23,7 @@ export interface RegistrationActionResult {
   isQuoteRequired?: boolean;
   totalAmountCents?: number;
   status?: number;
+  checkoutRegistrationId?: string;
 }
 
 export async function submitRegistrationAction(
@@ -124,7 +125,10 @@ export async function submitHansciRegistrationAction(
       message: "Registration saved successfully.",
       referenceNumber: reg.referenceNumber || reg.id,
       isQuoteRequired: reg.isQuoteRequired,
-      totalAmountCents: reg.totalAmountCents
+      totalAmountCents: reg.totalAmountCents,
+      // The next page displays server-validated provider availability, including
+      // disabled methods. Navigating there must not enable a payment operation.
+      checkoutRegistrationId: !reg.isQuoteRequired && reg.totalAmountCents > 0 ? reg.id : undefined
     };
   } catch (error) {
     releaseVerification?.();
@@ -153,6 +157,10 @@ export async function updateRegistrationStatusAction(
 ): Promise<ActionState> {
   try {
     await requireRole(["ADMIN", "SUPER_ADMIN"]);
+
+    if (status === "CONFIRMED") return { ok: false, message: "Registration confirmation requires a verified payment.", status: 409 };
+    const paid = await prisma.payment.findFirst({ where: { registrationId, provider: "PAYPAL" } });
+    if (paid) return { ok: false, message: "PayPal registrations must be changed through payment reconciliation.", status: 409 };
 
     await prisma.registration.update({
       where: { id: registrationId },

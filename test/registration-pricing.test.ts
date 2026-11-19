@@ -49,6 +49,7 @@ describe("registration server pricing", () => {
     expect(r.accommodationFeeCents).toBe(35000);
     expect(r.totalAmountCents).toBe(67123);
     expect(r.phone).toBe("+911234567890");
+    expect(r.status).toBe("PENDING");
   });
   it("preserves a configured zero accommodation rate", async () => {
     pricing.mockResolvedValue({

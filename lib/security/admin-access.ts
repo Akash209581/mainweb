@@ -12,8 +12,7 @@ export async function hasAdminSession() {
     origin = h.get("origin");
   if (origin) {
     const expected =
-      process.env.PUBLIC_APP_ORIGIN ||
-      (h.get("x-forwarded-proto") || "http") + "://" + h.get("host");
+      process.env.PUBLIC_APP_ORIGIN;
     if (origin !== expected) return false;
   }
   return true;

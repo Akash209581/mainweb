@@ -31,13 +31,13 @@ export default async function SpeakersPage({ searchParams }: SpeakersPageProps) 
   const search = (params.search ?? "").toLowerCase().trim();
   const direction = (params.direction === "desc" ? "desc" : "asc") as "asc" | "desc";
 
-  let settingsSpeakers: any[] = [];
+  let settingsSpeakers: Array<{ name: string; role: string; topic: string; organizationName?: string; published?: boolean; photo?: { url?: string } }> = [];
   try {
     const sf = path.join(process.cwd(), "storage", "settings.json");
     if (fs.existsSync(sf)) {
       const data = JSON.parse(fs.readFileSync(sf, "utf8"));
       if (Array.isArray(data.speakers) && data.speakers.length > 0) {
-        settingsSpeakers = data.speakers.filter((s: any) => s.published !== false);
+        settingsSpeakers = data.speakers.filter((s: { published?: boolean }) => s.published !== false);
       }
     }
   } catch {}

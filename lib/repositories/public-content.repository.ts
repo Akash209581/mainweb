@@ -1,3 +1,4 @@
+import { publicConferenceWhere } from "@/lib/config/conference";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma/client";
 import { memoize } from "@/lib/cache";
@@ -18,6 +19,7 @@ export async function listSpeakers(options: QueryOptions) {
   return memoize(cacheKey, 60000, async () => {
     try {
       const where: Prisma.SpeakerWhereInput = {
+      conference: publicConferenceWhere(),
         deletedAt: null,
         ...(options.search
           ? {
@@ -52,6 +54,7 @@ export async function listSpeakers(options: QueryOptions) {
 export async function listAgenda(options: QueryOptions) {
   try {
     const where: Prisma.AgendaItemWhereInput = {
+      agendaDay: { deletedAt: null, conference: publicConferenceWhere() },
       deletedAt: null,
       ...(options.search
         ? {
@@ -87,6 +90,7 @@ export async function listTracks(options: QueryOptions) {
   return memoize(cacheKey, 60000, async () => {
     try {
       const where: Prisma.TrackWhereInput = {
+      conference: publicConferenceWhere(),
         deletedAt: null,
         ...(options.search
           ? {
@@ -119,6 +123,7 @@ export async function listTracks(options: QueryOptions) {
 export async function listSponsors(options: QueryOptions) {
   try {
     const where: Prisma.SponsorWhereInput = {
+      conference: publicConferenceWhere(),
       deletedAt: null,
       ...(options.search
         ? {
@@ -153,6 +158,7 @@ export async function listCommittee(options: QueryOptions) {
   return memoize(cacheKey, 60000, async () => {
     try {
       const where: Prisma.CommitteeMemberWhereInput = {
+      conference: publicConferenceWhere(),
         deletedAt: null,
         ...(options.search
           ? {

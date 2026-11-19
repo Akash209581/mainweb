@@ -6,6 +6,7 @@
 
 # Next.js Build Output
 /.next/
+/.next-build/
 /out/
 /build
 /dist
@@ -59,3 +60,5 @@ Thumbs.db
 # Temporary & Scratch scripts
 /scratch/
 test_*.js
+
+/.next-sandbox/

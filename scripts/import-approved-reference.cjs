@@ -1,4 +1,5 @@
 ﻿const fs = require('fs');
+const {adaptReference}=require('./reference-adaptations.cjs');
 const {adaptBrochureVerification}=require('./adapt-brochure-verification.cjs');
 const path = require('path');
 const sourceRoot = path.join(process.cwd(), 'Hansci_Novum/user-website');
@@ -10,7 +11,7 @@ let component;
 let title;
 let description;
 if (name === 'registration' || name === 'abstracts') {
- const html = fs.readFileSync(path.join(sourceRoot,'public',name === 'registration' ? 'index.html' : 'abstract.html'),'utf8');
+ const html = adaptReference(name, fs.readFileSync(path.join(sourceRoot,'public',name === 'registration' ? 'index.html' : 'abstract.html'),'utf8'));
  const css = [...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m=>m[1]).join('\n');
  const body = html.match(/<body>([\s\S]*?)<\/body>/)[1];
  const script = [...body.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n') + '\n' + fs.readFileSync(path.join(sourceRoot,'public/site-content.js'),'utf8');
@@ -23,7 +24,7 @@ if (name === 'registration' || name === 'abstracts') {
 } else {
  const slug = {brochure:'brochure',sessions:'scientific-tracks',committee:'organizing-committee'}[name];
  const dir = path.join(sourceRoot,'editable-page-sources',slug,'app');
- let jsx = fs.readFileSync(path.join(dir,'page.jsx'),'utf8');
+ let jsx = adaptReference(name, fs.readFileSync(path.join(dir,'page.jsx'),'utf8'));
  jsx = '// @ts-nocheck -- Preserve supplied JSX verbatim; only network/document adapters differ.\n' + jsx;
  jsx = jsx.replace("import {useState,useEffect,useRef} from 'react';", "import {useState,useEffect,useRef} from 'react';\nimport {referenceFetch as fetch} from './transport';\nimport {useReferenceDocument} from './surface';");
  jsx = jsx.replace("import {useState,useEffect} from 'react';", "import {useState,useEffect} from 'react';\nimport {referenceFetch as fetch} from './transport';");

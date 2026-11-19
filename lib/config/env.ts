@@ -16,7 +16,7 @@ let parsedEnv: ServerEnv | null = null;
 if (typeof window === "undefined") {
   const result = serverEnvSchema.safeParse(process.env);
   if (!result.success) {
-    const errorDetails = result.error.errors
+    const errorDetails = result.error.issues
       .map((e) => `${e.path.join(".")}: ${e.message}`)
       .join(", ");
     throw new Error(`Invalid environment configuration: ${errorDetails}`);

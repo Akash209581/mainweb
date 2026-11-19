@@ -6,6 +6,7 @@ import type {
 import type { FileVisibility, Registration } from "@prisma/client";
 import { prisma } from "@/lib/prisma/client";
 import { NotFoundError,ValidationError } from "@/lib/errors/app-error";
+import { randomBytes } from "crypto";
 
 export async function createContactMessage(
   input: ContactInput,
@@ -36,7 +37,7 @@ const ROOM_RATES: Record<string, Record<string, number>> = {
   double: { EUR: 160, USD: 180, GBP: 140 }
 };
 
-export async function createRegistration(input: RegistrationInput, userId?: string) {
+export async function createRegistration(input: RegistrationInput, userId?: string, guestCheckoutHash?: string) {
   const firstName = input.first || input.fullName?.split(" ")[0] || "";
   const lastName = input.last || input.fullName?.split(" ").slice(1).join(" ") || "";
   const fullName = ((firstName && lastName ? `${firstName} ${lastName}` : input.fullName) || "").trim() || "Participant";
@@ -55,7 +56,7 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
         }
       }
     });
-    const pricing = saved?.value as Record<string, any> | undefined;
+    const pricing = saved?.value as Record<string, Record<string, number>> & { accommodation?: Record<string, Record<string, number>> } | undefined;
     const validRate = (value: unknown): value is number =>
       typeof value === "number" &&
       Number.isFinite(value) &&
@@ -74,6 +75,7 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
             roomRates[room][code] = pricing.accommodation[room][code];
     }
   } catch {
+    if (process.env.PAYPAL_ENABLED === "true") throw new ValidationError("Registration pricing is unavailable. Try again later.");
     /* Retain existing fallback rates if saved configuration is unavailable. */
   }
   const isQuoteRequired =
@@ -96,19 +98,19 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
     const diffTime = Math.max(0, checkOutDate.getTime() - checkInDate.getTime());
     const nights = Math.round(diffTime / (1000 * 60 * 60 * 24));
     const roomRate = (roomRates[input.room] && roomRates[input.room][currency]) ?? 120;
-    accommodationFeeCents = Math.round(nights * (input.rooms || 1) * roomRate * 100);
+    accommodationFeeCents = nights * (input.rooms || 1) * Math.round(roomRate * 100);
   }
 
   const totalAmountCents = isQuoteRequired
     ? 0
     : registrationFeeCents + accommodationFeeCents;
   if(!Number.isSafeInteger(totalAmountCents)||totalAmountCents>2147483647)throw new ValidationError("The requested total is too large. Contact the secretariat for a quote.");
-  const randomDigits = Math.floor(100000 + Math.random() * 900000);
+  const randomDigits = randomBytes(12).toString("hex").toUpperCase();
   const referenceNumber = `HNS-${new Date().getFullYear()}-${randomDigits}`;
 
   try {
     return await prisma.$transaction(async (tx) => {
-      let conference = await tx.conference.findUnique({
+      const conference = await tx.conference.findUnique({
         where: { slug: input.conferenceSlug }
       });
       if (!conference || conference.deletedAt) throw new NotFoundError("Conference not found.");
@@ -134,6 +136,7 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
           userId,
           registrationPackageId: packageId || null,
           referenceNumber,
+          guestCheckoutHash,
           fullName,
           firstName,
           lastName,
@@ -168,7 +171,7 @@ export async function createRegistration(input: RegistrationInput, userId?: stri
           billingAddress: input.address || null,
           taxId: input.taxid || null,
           poNumber: input.po || null,
-          status: isQuoteRequired ? "PENDING" : "CONFIRMED"
+          status: "PENDING"
         }
       });
 
@@ -205,15 +208,10 @@ export async function createAbstractSubmission(
   authorId: string
 ) {
   return prisma.$transaction(async (tx) => {
-    let conference = await tx.conference.findUnique({
+    const conference = await tx.conference.findUnique({
       where: { slug: input.conferenceSlug }
     });
-    if (!conference) {
-      conference = await tx.conference.findFirst({
-        where: { deletedAt: null }
-      });
-    }
-    if (!conference) {
+    if (!conference || conference.deletedAt) {
       throw new NotFoundError("Conference not found.");
     }
 

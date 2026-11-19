@@ -26,7 +26,7 @@ export async function GET(request: Request) {
       const row = await prisma.systemSetting.findUnique({
         where: { conferenceId_key: { conferenceId: conference.id, key: "document_assets" } }
       });
-      asset = (row?.value as Record<string, any> | undefined)?.[kind] || null;
+      asset = (row?.value as Record<string, { fileName: string; storageKey?: string; key?: string }> | undefined)?.[kind] || null;
     }
   } catch {
     // Continue to fallback
