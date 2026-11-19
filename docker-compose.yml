@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   next-app:
     build:
@@ -14,9 +12,20 @@ services:
       - NODE_ENV=production
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      
+
     volumes:
       - ${STORAGE_PATH:-./storage}:/app/storage
       - ${UPLOADS_PATH:-./public/uploads}:/app/public/uploads
       - ${BACKUPS_PATH:-./backups}:/app/backups
       - ${BACKUPS_PATH:-./backups}:/data/backups
+
+  db-migrate:
+    profiles: ["tools"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrations
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

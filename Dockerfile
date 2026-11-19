@@ -3,6 +3,14 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
+# Explicit maintenance image; never applies database changes at web startup.
+FROM deps AS migrations
+COPY prisma ./prisma
+COPY scripts/database-preflight.cjs ./scripts/database-preflight.cjs
+RUN npx prisma generate
+ENTRYPOINT ["node", "scripts/database-preflight.cjs"]
+CMD ["--check"]
+
 FROM node:22-alpine AS builder
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
