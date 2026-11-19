@@ -1,3 +1,4 @@
+import { isCountryName } from "./countries";
 import { z } from "zod";
 export const personNameSchema = z
   .string()
@@ -17,37 +18,12 @@ export const phoneSchema = z
     const n = v.replace(/\D/g, "").length;
     return n >= 7 && n <= 15;
   }, "Enter a phone number containing 7-15 digits, including the country code.");
-const countryNames = new Set<string>();
-const display = new Intl.DisplayNames(["en"], { type: "region" });
-for (let a = 65; a <= 90; a++)
-  for (let b = 65; b <= 90; b++) {
-    const code = String.fromCharCode(a, b),
-      name = display.of(code);
-    if (
-      name &&
-      name !== code &&
-      !["EU", "UN", "EZ", "QO", "XA", "XB", "ZZ"].includes(code)
-    )
-      countryNames.add(name);
-  }
-for (const name of [
-  "United States of America",
-  "South Korea",
-  "North Korea",
-  "Russia",
-  "Vietnam",
-  "Turkey",
-  "Czech Republic",
-  "Ivory Coast",
-  "Vatican City"
-])
-  countryNames.add(name);
 export const countryNameSchema = z
   .string()
   .trim()
   .min(1)
   .max(100)
-  .refine((v) => countryNames.has(v), "Choose a valid country / region.");
+  .refine(isCountryName, "Choose a valid country / region.");
 export function boundedInteger(min: number, max: number) {
   return z.preprocess(
     (v) => (typeof v === "string" ? (/^\d+$/.test(v.trim()) ? Number(v) : NaN) : v),
